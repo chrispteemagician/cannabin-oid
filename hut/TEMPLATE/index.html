@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- ============================================================
+         VILLAGER HUT — CANNABIN-OID
+
+         TO CREATE A NEW HUT:
+         1. Copy this entire TEMPLATE folder
+         2. Rename the folder to the member's handle (lowercase, no spaces)
+         3. Edit the 6 lines marked EDIT: below
+         4. Deploy to Netlify
+
+         No AI needed. No database needed. Static HTML. Works forever.
+         ============================================================ -->
+
+    <!-- EDIT 1: Change the member's name -->
+    <title><!-- MEMBER_NAME --> | The Dispensary — Cannabin-Oid</title>
+    <meta name="description" content="<!-- MEMBER_NAME --> — Villager in The Dispensary. Cannabin-Oid. No ads. No algorithms. Just you.">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg: #0a1a0a;
+            --deep: #0f2410;
+            --primary: #16a34a;
+            --primary-light: #22c55e;
+            --gold: #c9a227;
+            --gold-dark: #a07d1c;
+            --gold-soft: rgba(201,162,39,0.15);
+            --cream: #f0f7f0;
+            --text: #c8e6c8;
+            --text-muted: #6b9e6b;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            font-size: 18px;
+            line-height: 1.7;
+        }
+
+        .font-hand { font-family: 'Caveat', cursive; }
+
+        .card {
+            background: rgba(22,163,74,0.05);
+            border: 1px solid rgba(22,163,74,0.15);
+            border-radius: 16px;
+            padding: 2rem;
+        }
+
+        .badge {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+            color: var(--bg);
+            font-weight: 700;
+            font-size: 0.85rem;
+            padding: 0.35rem 1.1rem;
+            border-radius: 100px;
+            letter-spacing: 0.05em;
+        }
+
+        .kudos-number {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--gold);
+            line-height: 1;
+        }
+
+        .kudos-label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .qr-container {
+            background: white;
+            border-radius: 16px;
+            padding: 1.5rem;
+            display: inline-block;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.8rem 2rem;
+            border-radius: 100px;
+            font-weight: 600;
+            font-size: 1rem;
+            text-decoration: none;
+            cursor: pointer;
+            border: none;
+            font-family: 'Outfit', sans-serif;
+            transition: all 0.2s ease;
+            min-height: 48px;
+        }
+
+        .btn-green {
+            background: linear-gradient(135deg, var(--primary), #15803d);
+            color: white;
+        }
+
+        .btn-green:hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(22,163,74,0.3); }
+
+        .btn-quiet {
+            background: var(--gold-soft);
+            color: var(--gold);
+            border: 1px solid rgba(201,162,39,0.3);
+        }
+
+        .btn-quiet:hover { background: rgba(201,162,39,0.2); }
+
+        .divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(22,163,74,0.2), transparent);
+            margin: 2rem 0;
+        }
+
+        .calm-note {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            opacity: 0.7;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(16px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-up { animation: fadeUp 0.5s ease forwards; opacity: 0; }
+        .fade-up:nth-child(2) { animation-delay: 0.1s; }
+        .fade-up:nth-child(3) { animation-delay: 0.2s; }
+        .fade-up:nth-child(4) { animation-delay: 0.3s; }
+        .fade-up:nth-child(5) { animation-delay: 0.4s; }
+        .fade-up:nth-child(6) { animation-delay: 0.5s; }
+
+        @media (max-width: 640px) {
+            body { font-size: 17px; }
+            .card { padding: 1.5rem; }
+        }
+    </style>
+</head>
+
+<body>
+    <div style="max-width: 520px; margin: 0 auto; padding: 2rem 1rem 3rem;">
+
+        <!-- ==========================================
+             SECTION 1: HEADER
+             ========================================== -->
+        <div class="fade-up" style="text-align: center; margin-bottom: 2rem;">
+
+            <!-- EDIT 2: Change member number -->
+            <span class="badge">🌱 Villager #<!-- MEMBER_NUMBER --> — The Dispensary</span>
+
+            <!-- EDIT 3: Change the member's name -->
+            <h1 class="font-hand" style="font-size: 2.8rem; color: var(--cream); margin: 1rem 0 0.3rem; line-height: 1.2;">
+                <!-- MEMBER_NAME -->
+            </h1>
+
+            <!-- EDIT 4: Change the one-liner -->
+            <p style="color: var(--text-muted); font-size: 1.1rem; font-style: italic;">
+                <!-- ONE_LINER -->
+            </p>
+        </div>
+
+
+        <!-- ==========================================
+             SECTION 2: BIO + KUDOS
+             ========================================== -->
+        <div class="card fade-up" style="margin-bottom: 1.5rem; text-align: center;">
+
+            <!-- EDIT 5: Write their bio (2-3 sentences) -->
+            <p style="color: var(--text); margin-bottom: 1.5rem;" id="bioText">
+                <!-- Write 2-3 sentence bio here. Who are they? What's their thing?
+                     Example: "Prescribed cannabis patient. Terpene nerd. Here for the science and the community."
+                     Example: "Self-medicating for 15 years. Finally found the right strains. Sharing what works." -->
+            </p>
+
+            <div class="divider" style="margin: 1rem 0;"></div>
+
+            <div style="display: flex; justify-content: center; gap: 2.5rem;">
+                <div style="text-align: center;">
+                    <div class="kudos-number" id="kudosCount">10</div>
+                    <div class="kudos-label">Kudos</div>
+                </div>
+                <div style="text-align: center;">
+                    <div class="kudos-number" id="referralCount">0</div>
+                    <div class="kudos-label">Introduced</div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- ==========================================
+             SECTION 3: QR CODE (auto-generates from URL)
+             ========================================== -->
+        <div class="card fade-up" style="margin-bottom: 1.5rem; text-align: center;">
+
+            <p style="color: var(--text-muted); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 1rem;">
+                Your QR Code
+            </p>
+
+            <div class="qr-container">
+                <img id="qrImage" alt="QR Code" style="width: 180px; height: 180px; display: block;" src="">
+            </div>
+
+            <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 0.8rem;" id="profileUrl">
+                cannabin-oid.co.uk/hut/<!-- MEMBER_SLUG -->
+            </p>
+
+            <a id="qrDownload" download="cannabin-oid-qr.png" class="btn btn-quiet" style="margin-top: 1rem; display: inline-block; font-size: 0.9rem; padding: 0.5rem 1.5rem;">
+                Download QR
+            </a>
+        </div>
+
+
+        <!-- ==========================================
+             SECTION 4: LINK
+             ========================================== -->
+        <!-- EDIT 6: Add their one link (SpicyLister preferred, or website). Remove section if none. -->
+        <div class="fade-up" style="text-align: center; margin-bottom: 1.5rem;" id="linkSection">
+            <a href="<!-- LINK_URL -->" target="_blank" rel="noopener" class="btn btn-green" style="font-size: 0.95rem;">
+                🌿 <!-- LINK_LABEL -->
+            </a>
+        </div>
+
+
+        <!-- ==========================================
+             SECTION 5: JOIN CTA (visitors who aren't members)
+             ========================================== -->
+        <div class="card fade-up" style="margin-bottom: 2rem; text-align: center; border-color: rgba(201,162,39,0.2);">
+
+            <p class="font-hand" style="font-size: 1.6rem; color: var(--gold); margin-bottom: 0.5rem;">
+                Want a space in the Dispensary?
+            </p>
+
+            <p style="font-size: 0.95rem; margin-bottom: 1.2rem; color: var(--text-muted);">
+                No ads. No algorithms. No drama. Just your corner of the village.
+                Villager huts from £3/month.
+            </p>
+
+            <a href="https://www.patreon.com/cannabinoid" class="btn btn-green" target="_blank" rel="noopener">
+                Join the Dispensary
+            </a>
+        </div>
+
+
+        <!-- ==========================================
+             FOOTER
+             ========================================== -->
+        <div class="divider"></div>
+
+        <footer style="text-align: center; padding-bottom: 2rem;">
+
+            <p style="margin-bottom: 1.2rem;">
+                <a href="https://cannabin-oid.co.uk" style="color: var(--text-muted); text-decoration: none; font-size: 0.9rem;">
+                    ← Back to Cannabin-Oid
+                </a>
+                <span style="color: var(--text-muted); opacity: 0.3; margin: 0 0.5rem;">·</span>
+                <a href="https://cannabin-oid.co.uk/hut/" style="color: var(--text-muted); text-decoration: none; font-size: 0.9rem;">
+                    Hut Directory
+                </a>
+                <span style="color: var(--text-muted); opacity: 0.3; margin: 0 0.5rem;">·</span>
+                <a href="https://cannabin-oid.co.uk/hamlet/doc" style="color: var(--text-muted); text-decoration: none; font-size: 0.9rem;">
+                    Doc's Den
+                </a>
+            </p>
+
+            <p class="calm-note">No ads. No algorithms. Just you.</p>
+            <p class="calm-note" style="margin-top: 0.3rem;">A quiet space in a noisy world.</p>
+
+            <p style="color: var(--text-muted); opacity: 0.3; font-size: 0.75rem; margin-top: 1.5rem;">
+                Built with 💚 by The Chris P Trinity
+            </p>
+        </footer>
+
+    </div>
+
+
+    <script>
+        // ============================================================
+        // SUPABASE CONFIG
+        // ============================================================
+        const SUPABASE_URL = 'https://pdnjeynugptnavkdbmxh.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBkbmpleW51Z3B0bmF2a2RibXhoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzc4MTk2MDIsImV4cCI6MjA1MzM5NTYwMn0.ioaR3LPf5r-GXIsMXLt0GKGt47gV_MbsPVLCpmnFv_U';
+
+        let supabase;
+        try { supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY); }
+        catch(e) { console.log('Supabase static mode'); }
+
+        // ── Detect slug from URL path ──
+        const pathParts = window.location.pathname.split('/').filter(Boolean);
+        const SLUG = pathParts[pathParts.length - 1] === 'index.html'
+            ? pathParts[pathParts.length - 2]
+            : pathParts[pathParts.length - 1] || 'member';
+        const PROFILE_URL = `cannabin-oid.co.uk/hut/${SLUG}`;
+        const FULL_URL = `https://${PROFILE_URL}`;
+
+        // ── QR code (green) ──
+        const qrImg = document.getElementById('qrImage');
+        if (qrImg) {
+            qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(FULL_URL)}&bgcolor=ffffff&color=16a34a`;
+        }
+
+        const qrDl = document.getElementById('qrDownload');
+        if (qrDl && qrImg) qrDl.href = qrImg.src;
+
+        const profileUrlEl = document.getElementById('profileUrl');
+        if (profileUrlEl) profileUrlEl.textContent = PROFILE_URL;
+
+        // ── Load kudos from Supabase ──
+        async function loadKudos() {
+            if (!supabase) return;
+            try {
+                const { count } = await supabase
+                    .from('hamlet_signups')
+                    .select('*', { count: 'exact', head: true })
+                    .eq('hamlet', SLUG)
+                    .eq('village', 'cannabin-oid');
+                if (count !== null) {
+                    document.getElementById('referralCount').textContent = count;
+                    document.getElementById('kudosCount').textContent = 10 + (count * 10);
+                }
+            } catch(e) { /* silently skip */ }
+        }
+
+        loadKudos();
+    </script>
+
+</body>
+</html>

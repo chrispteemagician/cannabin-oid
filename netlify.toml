@@ -1,0 +1,21 @@
+# Static site - no build required
+[build]
+  command = "echo 'Static site - no build needed'"
+  publish = "."
+
+[build.environment]
+  SECRETS_SCAN_OMIT_KEYS = "SUPABASE_API_KEY"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+
+[[redirects]]
+  from = "/auth/patreon"
+  to = "/index.html"
+  status = 200
+
+[functions]
+  directory = "netlify/functions"

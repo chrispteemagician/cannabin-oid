@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Villager Huts — The Dispensary | Cannabin-Oid</title>
+    <meta name="description" content="The Villager Huts of The Dispensary. No ads. No algorithms. Just people.">
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg: #0a1a0a;
+            --primary: #16a34a;
+            --primary-light: #22c55e;
+            --gold: #c9a227;
+            --gold-dark: #a07d1c;
+            --cream: #f0f7f0;
+            --text: #c8e6c8;
+            --text-muted: #6b9e6b;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            font-size: 18px;
+            line-height: 1.7;
+        }
+
+        .font-hand { font-family: 'Caveat', cursive; }
+
+        .header {
+            text-align: center;
+            padding: 3rem 1rem 2rem;
+            border-bottom: 1px solid rgba(22,163,74,0.15);
+            margin-bottom: 2rem;
+        }
+
+        .container {
+            max-width: 760px;
+            margin: 0 auto;
+            padding: 0 1.5rem 3rem;
+        }
+
+        .hut-card {
+            background: rgba(22,163,74,0.05);
+            border: 1px solid rgba(22,163,74,0.15);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            text-decoration: none;
+            color: inherit;
+            transition: border-color 0.2s, transform 0.2s;
+        }
+
+        .hut-card:hover {
+            border-color: rgba(22,163,74,0.4);
+            transform: translateY(-2px);
+        }
+
+        .hut-info h3 {
+            font-weight: 700;
+            color: var(--cream);
+            font-size: 1.1rem;
+            margin-bottom: 0.2rem;
+        }
+
+        .hut-info p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .badge {
+            display: inline-block;
+            background: rgba(201,162,39,0.15);
+            color: var(--gold);
+            font-size: 0.75rem;
+            padding: 0.2rem 0.7rem;
+            border-radius: 100px;
+            white-space: nowrap;
+        }
+
+        .arrow {
+            color: var(--primary);
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .cta {
+            text-align: center;
+            padding: 2rem;
+            background: rgba(22,163,74,0.05);
+            border: 1px solid rgba(201,162,39,0.2);
+            border-radius: 16px;
+            margin-bottom: 2rem;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.8rem 2rem;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1rem;
+            text-decoration: none;
+            background: linear-gradient(135deg, var(--primary), #15803d);
+            color: white;
+            margin-top: 1rem;
+            transition: all 0.2s;
+        }
+
+        .btn:hover { transform: translateY(-2px); }
+
+        #loading {
+            text-align: center;
+            color: var(--text-muted);
+            padding: 3rem;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem 1rem;
+            border-top: 1px solid rgba(22,163,74,0.1);
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        footer a { color: var(--primary-light); text-decoration: none; }
+    </style>
+</head>
+
+<body>
+
+    <div class="header">
+        <p class="font-hand" style="font-size: 2.8rem; color: var(--gold); margin-bottom: 0.3rem;">The Huts</p>
+        <p style="color: var(--text-muted);">Villager presences in The Dispensary · No ads · No algorithms</p>
+    </div>
+
+    <div class="container">
+
+        <div class="cta">
+            <p class="font-hand" style="font-size: 1.8rem; color: var(--primary-light); margin-bottom: 0.5rem;">
+                Your corner of the Dispensary
+            </p>
+            <p style="color: var(--text-muted); font-size: 0.95rem;">
+                Villager huts from £3/month. Static page. QR code. Your one link. Done.
+            </p>
+            <a href="/hut/signup" class="btn">🌱 Claim Your Hut</a>
+        </div>
+
+        <div id="loading">Loading huts...</div>
+        <div id="hutList"></div>
+
+        <div style="text-align:center; margin-top:1rem;">
+            <a href="/hamlet/" style="color:var(--text-muted); font-size:0.9rem; text-decoration:none;">
+                → View Elder + Founder Hamlets
+            </a>
+        </div>
+
+    </div>
+
+    <footer>
+        <a href="https://cannabin-oid.co.uk">← Cannabin-Oid</a> ·
+        <a href="/hamlet/doc">Doc's Den</a> ·
+        <a href="https://www.patreon.com/cannabinoid">Patreon</a>
+        <p style="margin-top:0.8rem; opacity:0.4; font-size:0.75rem;">Built with 💚 by The Chris P Trinity</p>
+    </footer>
+
+    <script>
+        const SUPABASE_URL = 'https://pdnjeynugptnavkdbmxh.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBkbmpleW51Z3B0bmF2a2RibXhoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzc4MTk2MDIsImV4cCI6MjA1MzM5NTYwMn0.ioaR3LPf5r-GXIsMXLt0GKGt47gV_MbsPVLCpmnFv_U';
+
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        async function loadHuts() {
+            const { data, error } = await supabase
+                .from('cannabinoid_members')
+                .select('slug, name, one_liner, member_number, created_at')
+                .eq('tier', 'villager')
+                .eq('active', true)
+                .order('created_at', { ascending: false });
+
+            document.getElementById('loading').style.display = 'none';
+
+            if (error || !data || data.length === 0) {
+                document.getElementById('hutList').innerHTML =
+                    `<p style="text-align:center; color:var(--text-muted); padding:2rem;">No huts yet — be the first.</p>`;
+                return;
+            }
+
+            const list = document.getElementById('hutList');
+            data.forEach(hut => {
+                const card = document.createElement('a');
+                card.href = `/hut/${hut.slug}`;
+                card.className = 'hut-card';
+                card.innerHTML = `
+                    <div class="hut-info">
+                        <h3>${escHtml(hut.name)}</h3>
+                        ${hut.one_liner ? `<p>${escHtml(hut.one_liner)}</p>` : ''}
+                    </div>
+                    <div style="display:flex; align-items:center; gap:0.75rem; flex-shrink:0;">
+                        ${hut.member_number ? `<span class="badge">🌱 #${hut.member_number}</span>` : ''}
+                        <span class="arrow">→</span>
+                    </div>
+                `;
+                list.appendChild(card);
+            });
+        }
+
+        function escHtml(str) {
+            return (str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+        }
+
+        loadHuts();
+    </script>
+
+</body>
+</html>

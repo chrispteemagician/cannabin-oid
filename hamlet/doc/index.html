@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doc's Den | The Terp's Sanctum | Cannabin-Oid</title>
+    <meta name="description" content="Doc Strange's hamlet on Cannabin-Oid. Man, myth, leg end. Stage hypnotist since 1992. GlowGadgets Bristol. Legal cannabis patient. Driving to Bilbao April 2026.">
+    <link rel="icon" type="image/jpeg" href="../../cannabin-oid.jpg">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --midnight: #030a03;
+            --deep: #071407;
+            --primary: #16a34a;
+            --primary-light: #22c55e;
+            --gold: #d4a017;
+            --gold-dark: #b8860b;
+            --forest: #14532d;
+            --forest-dark: #0f3d22;
+            --cream: #f0f7f0;
+            --text: #c8e6c8;
+            --text-muted: #6b9e6b;
+            --flame: #22c55e;
+            --candle: #86efac;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(180deg, var(--midnight) 0%, var(--deep) 50%, var(--midnight) 100%);
+            color: var(--text);
+            min-height: 100vh;
+            font-size: 18px;
+            line-height: 1.7;
+        }
+        .font-hand { font-family: 'Caveat', cursive; }
+        .container { max-width: 800px; margin: 0 auto; padding: 20px; }
+
+        /* Header */
+        .hamlet-header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--forest-dark) 100%);
+            text-align: center;
+            padding: 50px 20px;
+            border-radius: 0 0 30px 30px;
+            border: 4px solid var(--gold);
+            border-top: none;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.4), 0 0 80px rgba(22,163,74,0.15);
+            margin-bottom: 30px;
+        }
+        .hamlet-header h1 {
+            font-family: 'Caveat', cursive;
+            font-size: clamp(2.5rem, 8vw, 4rem);
+            color: var(--cream);
+            margin-bottom: 10px;
+            text-shadow: 0 0 30px rgba(34,197,94,0.3);
+        }
+        .hamlet-header .subtitle {
+            font-size: 1.2rem;
+            color: rgba(240,247,240,0.8);
+            font-style: italic;
+        }
+        .hamlet-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%);
+            color: var(--forest-dark);
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 16px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+        }
+
+        /* Cards */
+        .card {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 20px;
+        }
+        .card h2 {
+            font-family: 'Caveat', cursive;
+            font-size: 2rem;
+            margin-bottom: 15px;
+            color: var(--gold);
+            text-shadow: 0 0 20px rgba(212,160,23,0.2);
+        }
+
+        /* Forest card */
+        .card-forest {
+            background: linear-gradient(135deg, var(--forest) 0%, var(--forest-dark) 100%);
+            border: 4px solid var(--forest-dark);
+            color: var(--cream);
+            box-shadow: 0 6px 0 rgba(0,0,0,0.2), 0 0 40px rgba(22,163,74,0.08);
+        }
+        .card-forest h2 { color: var(--candle); }
+
+        /* Ember card */
+        .card-ember {
+            background: linear-gradient(135deg, rgba(22,163,74,0.08) 0%, rgba(7,20,7,0.95) 100%);
+            border: 2px solid rgba(22,163,74,0.25);
+            box-shadow: 0 0 40px rgba(22,163,74,0.06);
+        }
+
+        /* Journey */
+        .journey-flow { text-align: center; padding: 20px 0; }
+        .journey-stage { margin-bottom: 8px; }
+        .journey-name {
+            font-family: 'Caveat', cursive;
+            font-size: 1.8rem;
+            color: var(--flame);
+            text-shadow: 0 0 20px rgba(34,197,94,0.2);
+        }
+        .journey-role {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            letter-spacing: 1px;
+        }
+        .journey-arrow {
+            font-size: 1.5rem;
+            color: var(--gold-dark);
+            margin: 5px 0;
+            opacity: 0.6;
+        }
+
+        /* Craft grid */
+        .craft-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin: 20px 0;
+        }
+        .craft-item {
+            background: rgba(0,0,0,0.25);
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+        }
+        .craft-item .icon { font-size: 28px; margin-bottom: 8px; }
+        .craft-item .name { font-weight: 600; font-size: 0.95rem; color: var(--cream); }
+        .craft-item .desc { font-size: 16px; color: var(--text-muted); }
+
+        /* Kit grid */
+        .kit-section { margin-bottom: 25px; }
+        .kit-section h3 {
+            font-family: 'Caveat', cursive;
+            font-size: 1.6rem;
+            color: var(--flame);
+            margin-bottom: 12px;
+        }
+        .kit-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+        .kit-item {
+            background: rgba(0,0,0,0.25);
+            border-radius: 12px;
+            padding: 18px;
+            text-align: center;
+        }
+        .kit-item .kit-name {
+            font-weight: 700;
+            color: var(--cream);
+            margin-bottom: 4px;
+            font-size: 1rem;
+        }
+        .kit-item .kit-role {
+            font-size: 15px;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+            font-style: italic;
+        }
+        .kit-item .kit-note {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+        }
+        .kit-item a {
+            display: inline-block;
+            color: var(--gold);
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 600;
+        }
+        .kit-item a:hover { text-decoration: underline; }
+
+        /* Quote cards */
+        .quote-card {
+            background: rgba(22,163,74,0.07);
+            border-left: 3px solid var(--primary);
+            padding: 20px 25px;
+            margin-bottom: 15px;
+            border-radius: 0 12px 12px 0;
+            font-style: italic;
+            color: var(--cream);
+            line-height: 1.8;
+        }
+        .quote-card:last-of-type { margin-bottom: 0; }
+
+        /* Links */
+        .link-list { list-style: none; padding: 0; margin: 15px 0; }
+        .link-list li { margin-bottom: 10px; }
+        .link-list a {
+            color: var(--gold);
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .link-list a:hover { color: var(--candle); text-decoration: underline; }
+
+        /* Form */
+        .form-group { margin-bottom: 20px; }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--cream);
+        }
+        .form-group input {
+            width: 100%;
+            padding: 16px 20px;
+            font-size: 18px;
+            border: 2px solid rgba(255,255,255,0.15);
+            border-radius: 12px;
+            background: rgba(0,0,0,0.3);
+            color: white;
+            font-family: 'Outfit', sans-serif;
+        }
+        .form-group input:focus { outline: none; border-color: var(--primary); }
+        .form-group input::placeholder { color: rgba(255,255,255,0.35); }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 16px 32px;
+            font-size: 18px;
+            font-weight: 700;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            min-height: 56px;
+            font-family: 'Outfit', sans-serif;
+        }
+        .btn:hover { transform: translateY(-2px); }
+        .btn:active { transform: scale(0.98); }
+        .btn-gold {
+            background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%);
+            color: var(--forest-dark);
+            width: 100%;
+        }
+        .btn-green {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: white;
+            width: 100%;
+        }
+        .btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+        /* Success */
+        .success-message { text-align: center; padding: 40px 20px; }
+        .success-message h2 {
+            font-family: 'Caveat', cursive;
+            font-size: 2.5rem;
+            color: var(--gold);
+            margin-bottom: 20px;
+        }
+        .success-message p { font-size: 1.1rem; margin-bottom: 15px; }
+        .hidden { display: none !important; }
+
+        /* Footer */
+        .hamlet-footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-muted);
+        }
+        .hamlet-footer a { color: var(--gold); text-decoration: none; }
+        .hamlet-footer a:hover { text-decoration: underline; }
+
+        /* Terp Stories placeholder */
+        .stories-placeholder {
+            text-align: center;
+            padding: 40px 20px;
+            border: 2px dashed rgba(22,163,74,0.25);
+            border-radius: 16px;
+        }
+
+        @media (max-width: 600px) {
+            .craft-grid { grid-template-columns: 1fr; }
+            .kit-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- SPANNABIS BANNER -->
+    <a href="#dispensary" style="display:block;background:linear-gradient(90deg,#15803d,#16a34a,#15803d);text-align:center;padding:16px 20px;font-weight:700;font-size:20px;color:white;text-decoration:none;line-height:1.4;">
+        &#x1F690; Doc&rsquo;s driving to Bilbao &mdash; Spannabis April&nbsp;17&ndash;19&nbsp;2026<br>
+        <span style="font-weight:400;font-size:17px;opacity:0.95;">Education booth &middot; AI strain ID &middot; 500 self-medicators helped toward legal prescriptions &darr;</span>
+    </a>
+
+    <!-- SIGN IN BAR -->
+    <div style="background:rgba(0,0,0,0.4);text-align:center;padding:10px 16px;font-size:16px;">
+        <a href="https://cannabin-oid.co.uk/#sectionJoin" style="color:var(--gold);text-decoration:none;font-weight:600;">Already a member? Sign In at Cannabin-Oid &rarr;</a>
+    </div>
+
+    <!-- 1. HEADER -->
+    <div class="hamlet-header">
+        <div class="hamlet-badge">&#x1F33F; Man. Myth. Leg End.</div>
+        <h1>Doc&rsquo;s Den</h1>
+        <p class="subtitle">The Terp&rsquo;s Sanctum</p>
+        <p style="font-size:1.05rem;color:rgba(240,247,240,0.75);margin-top:14px;max-width:500px;margin-left:auto;margin-right:auto;">
+            Stage hypnotist. Raver. Shaman. Legal patient. Terpene obsessive.<br>
+            <em style="color:var(--candle);">I ain&rsquo;t called Doc for nothing.</em>
+        </p>
+    </div>
+
+    <div class="container">
+
+        <!-- 2. THE JOURNEY -->
+        <div class="card card-ember">
+            <h2>&#x1F331; The Journey</h2>
+            <div class="journey-flow">
+
+                <div class="journey-stage">
+                    <div class="journey-name">Doc Strange</div>
+                    <div class="journey-role">Age 11, Blackburn &middot; CB radio handle &middot; The name before the names</div>
+                </div>
+                <div class="journey-arrow">&darr;</div>
+
+                <div class="journey-stage">
+                    <div class="journey-name">Corfu 1992</div>
+                    <div class="journey-role">Rucksack &middot; Ripped jeans &middot; 8 volunteers &middot; &ldquo;You Show &rsquo;Em Kid&rdquo;</div>
+                </div>
+                <div class="journey-arrow">&darr;</div>
+
+                <div class="journey-stage">
+                    <div class="journey-name">GlowGadgets (1999&ndash;2003)</div>
+                    <div class="journey-role">Bristol rave scene &middot; PLUR &middot; The water boy &middot; The one who looked out for everyone</div>
+                </div>
+                <div class="journey-arrow">&darr;</div>
+
+                <div class="journey-stage">
+                    <div class="journey-name">A Strange Way to Stage Hypnosis</div>
+                    <div class="journey-role">2014 &middot; The Honest Hypnotist&rsquo;s Guide &middot; Gave his act away &middot; Just like Jay Louis did for him</div>
+                </div>
+                <div class="journey-arrow">&darr;</div>
+
+                <div class="journey-stage">
+                    <div class="journey-name">25 Years Self-Medicating</div>
+                    <div class="journey-role">The medicine that made everything possible &middot; Before it had a name</div>
+                </div>
+                <div class="journey-arrow">&darr;</div>
+
+                <div class="journey-stage">
+                    <div class="journey-name">Legal Patient</div>
+                    <div class="journey-role">2 years ago &middot; &ldquo;Took 20 minutes. About &pound;50. Changed what I could say out loud.&rdquo;</div>
+                </div>
+                <div class="journey-arrow">&darr;</div>
+
+                <div class="journey-stage">
+                    <div class="journey-name">The Dude. Abiding.</div>
+                    <div class="journey-role">Bilbao April 2026 &middot; Tending basecamp &middot; The fire is already burning</div>
+                </div>
+
+            </div>
+            <p style="text-align:center;color:var(--text-muted);font-style:italic;margin-top:20px;">
+                Chris prepared for the shows. Doc made the rest possible. Now they&rsquo;re starting to look like each other.
+            </p>
+        </div>
+
+        <!-- 3. THE CRAFT -->
+        <div class="card">
+            <h2>&#x1F3A9; The Craft</h2>
+            <p style="margin-bottom:15px;">
+                <strong>Magic Circle member</strong> &middot; <strong>Stage hypnotist since 1992</strong> &middot; <strong>GlowGadgets founder</strong> &middot; <strong>Legal patient 2 years</strong>
+            </p>
+            <p style="margin-bottom:15px; color:var(--text-muted);">
+                The name Doc Strange has been on CB radio handles, pub posters, Corfu beach bars, Blackpool residencies, Tenerife apartments, rave stalls, hypnosis books, and now an AI strain ID booth in Bilbao. Not bad for a lad from Blackburn with a rucksack.
+            </p>
+            <div class="craft-grid">
+                <div class="craft-item">
+                    <div class="icon">&#x1F3A9;</div>
+                    <div class="name">Stage Hypnotist</div>
+                    <div class="desc">Corfu &rarr; Blackpool &rarr; Tenerife &rarr; everywhere</div>
+                </div>
+                <div class="craft-item">
+                    <div class="icon">&#x1F4D6;</div>
+                    <div class="name">A Strange Way to Stage Hypnosis</div>
+                    <div class="desc">The honest guide. <a href="https://docstrange.co.uk" target="_blank" style="color:var(--gold);">docstrange.co.uk</a></div>
+                </div>
+                <div class="craft-item">
+                    <div class="icon">&#x1F389;</div>
+                    <div class="name">GlowGadgets</div>
+                    <div class="desc">Bristol rave. PLUR. Community first. <a href="https://glowgadgets.co.uk" target="_blank" style="color:var(--gold);">glowgadgets.co.uk</a></div>
+                </div>
+                <div class="craft-item">
+                    <div class="icon">&#x1F33F;</div>
+                    <div class="name">Terpene Obsessive</div>
+                    <div class="desc">Strain ID by nose. 25 years of research.</div>
+                </div>
+                <div class="craft-item">
+                    <div class="icon">&#x1F916;</div>
+                    <div class="name">AI Strain ID</div>
+                    <div class="desc">Cannabin-Oid&rsquo;s intelligence</div>
+                </div>
+                <div class="craft-item">
+                    <div class="icon">&#x1F690;</div>
+                    <div class="name">The Van</div>
+                    <div class="desc">UK &rarr; Bilbao &rarr; Spannabis &rarr; 500 people helped</div>
+                </div>
+                <div class="craft-item">
+                    <div class="icon">&#x1F48A;</div>
+                    <div class="name">Prescription Pathway</div>
+                    <div class="desc">Self-medicating? You don&rsquo;t have to. Get prescribed.</div>
+                </div>
+                <div class="craft-item">
+                    <div class="icon">&#x1FA84;</div>
+                    <div class="name">Magic Circle</div>
+                    <div class="desc">Yes. The magician IS the cannabis educator.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. THE PHILOSOPHY -->
+        <div class="card card-forest">
+            <h2>&#x1F9D9; The Shaman &amp; The Dude</h2>
+            <p style="margin-bottom:15px; font-size:1.05rem;">
+                I&rsquo;ve been looking after people since I was 11 years old with a CB radio in Blackburn. At raves I was the water boy. On stage I made sure nobody fell off a barstool. In 25 years of self-medication I took my own notes. Now I&rsquo;m legal and the notes have a purpose.
+            </p>
+            <p style="margin-bottom:15px;">
+                The cannabis didn&rsquo;t make me a carer. The caring was always there. The cannabis just made it sustainable. Made the performing possible. Made the hypnosis sharper. Made the music make sense at 4am in Lakota when the whole room was breathing together.
+            </p>
+            <p style="margin-bottom:15px; font-weight:600; color:var(--candle);">
+                Do no harm. Take no shit. Look after your subjects as though they were small children who need you to protect them.
+            </p>
+            <p style="margin-bottom:15px;">
+                That&rsquo;s from the hypnosis book. Wrote it in 2014. Still true. Applies to cannabis education, to rave communities, to prescription pathways, to every single person who messages me saying &ldquo;I&rsquo;ve been doing this for years and I feel like a criminal.&rdquo;
+            </p>
+            <p style="margin-bottom:15px;">
+                Chris was always on the go. Preparing. Performing. Delivering. Doc was the rest. The medicine. The naughty dopamine that said <em>breathe, mate, you&rsquo;re alright</em>. Now Chris is learning to rest like Doc does. And Doc is learning to abide. Meeting somewhere in the middle. That&rsquo;s the shaman finding the Dude.
+            </p>
+            <p style="font-style:italic; color:var(--candle);">
+                The Dude abides. Doc just helps everyone get there.
+            </p>
+        </div>
+
+        <!-- 5. DOC'S KIT -->
+        <div class="card">
+            <h2>&#x1F33F; Doc&rsquo;s Kit</h2>
+            <p style="margin-bottom:20px; color:var(--text-muted);">
+                25 years of trial, error, and terpene forensics went into this list. Every item Doc uses or has used. UK prescription patients only need a dry herb vaporizer &mdash; these are the ones worth knowing about.
+            </p>
+            <p style="margin-bottom:20px; font-size:15px; color:var(--text-muted);">
+                Affiliate links support the village through small commissions. Thank you.
+            </p>
+
+            <!-- Arizer Family -->
+            <div class="kit-section">
+                <h3>&#x1F4AA; The Arizer Family</h3>
+                <div class="kit-grid">
+                    <div class="kit-item">
+                        <div class="kit-name">Arizer Solo 2</div>
+                        <div class="kit-role">The Daily Driver</div>
+                        <div class="kit-note">Doc&rsquo;s go-to. Consistent, reliable, glass stem. Plug in, pack, go.</div>
+                        <a href="https://www.amazon.co.uk/s?k=Arizer+Solo+2+vaporizer&tag=chrdocstrcromh-21" target="_blank">Find on Amazon &rarr;</a>
+                    </div>
+                    <div class="kit-item">
+                        <div class="kit-name">Arizer Solo 3 v2</div>
+                        <div class="kit-role">The Dream Machine</div>
+                        <div class="kit-note">If you&rsquo;re going to treat yourself, treat yourself properly. The upgrade Doc actually wants.</div>
+                        <a href="https://www.amazon.co.uk/s?k=Arizer+Solo+3+vaporizer&tag=chrdocstrcromh-21" target="_blank">Find on Amazon &rarr;</a>
+                    </div>
+                    <div class="kit-item">
+                        <div class="kit-name">Arizer Air SE</div>
+                        <div class="kit-role">The Budget Portable</div>
+                        <div class="kit-note">Same Arizer DNA, lighter on the wallet. Portable and punchy.</div>
+                        <a href="https://www.amazon.co.uk/s?k=Arizer+Air+SE+vaporizer&tag=chrdocstrcromh-21" target="_blank">Find on Amazon &rarr;</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Storz & Bickel -->
+            <div class="kit-section">
+                <h3>&#x1F3ED; Storz &amp; Bickel</h3>
+                <div class="kit-grid">
+                    <div class="kit-item">
+                        <div class="kit-name">Mighty+</div>
+                        <div class="kit-role">Premium Portable</div>
+                        <div class="kit-note">German engineering. Big clouds, precise temps. Worth every penny.</div>
+                        <a href="https://www.amazon.co.uk/s?k=Storz+Bickel+Mighty+vaporizer&tag=chrdocstrcromh-21" target="_blank">Find on Amazon &rarr;</a>
+                    </div>
+                    <div class="kit-item">
+                        <div class="kit-name">Volcano Hybrid</div>
+                        <div class="kit-role">The Party Piece</div>
+                        <div class="kit-note">Fill the bag. Pass it round. This is how you host. The Volcano is for parties.</div>
+                        <a href="https://www.amazon.co.uk/s?k=Volcano+Hybrid+vaporizer&tag=chrdocstrcromh-21" target="_blank">Find on Amazon &rarr;</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ritual & Entry -->
+            <div class="kit-section">
+                <h3>&#x1F525; The Ritual &amp; The Entry Point</h3>
+                <div class="kit-grid">
+                    <div class="kit-item">
+                        <div class="kit-name">Dynavap</div>
+                        <div class="kit-role">The One-Hitter Legend</div>
+                        <div class="kit-note">For smokers who want to vape but keep the ritual. It&rsquo;s a skill. Learn it and you&rsquo;ll never look back.</div>
+                        <a href="https://www.amazon.co.uk/s?k=Dynavap+vaporizer&tag=chrdocstrcromh-21" target="_blank">Find on Amazon &rarr;</a>
+                    </div>
+                    <div class="kit-item">
+                        <div class="kit-name">Storm Vape</div>
+                        <div class="kit-role">Cheap &amp; Cheerful</div>
+                        <div class="kit-note">Not glamorous. Gets the job done. Great entry point if you&rsquo;re just starting out.</div>
+                        <a href="https://www.amazon.co.uk/s?k=Storm+dry+herb+vaporizer&tag=chrdocstrcromh-21" target="_blank">Find on Amazon &rarr;</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Maintenance & Storage -->
+            <div class="kit-section">
+                <h3>&#x1F9F9; Keep It Clean &amp; Keep It Quiet</h3>
+                <div class="kit-grid">
+                    <div class="kit-item">
+                        <div class="kit-name">ISO 99% Isopropyl</div>
+                        <div class="kit-role">The Cleaning Essential</div>
+                        <div class="kit-note">Clean your kit. Clean it properly. 99% only &mdash; don&rsquo;t mess about with weaker stuff.</div>
+                        <a href="https://www.amazon.co.uk/s?k=isopropyl+alcohol+99%25&tag=chrdocstrcromh-21" target="_blank">Find on Amazon &rarr;</a>
+                    </div>
+                    <div class="kit-item">
+                        <div class="kit-name">Carbon Smell-Proof Bags</div>
+                        <div class="kit-role">Basic Discretion</div>
+                        <div class="kit-note">They work. They wear out. Replace them before you think you need to. Check the seals.</div>
+                        <a href="https://www.amazon.co.uk/s?k=smell+proof+carbon+lined+bags&tag=chrdocstrcromh-21" target="_blank">Find on Amazon &rarr;</a>
+                    </div>
+                    <div class="kit-item" style="grid-column: 1 / -1;">
+                        <div class="kit-name">Turkey Basting Bags &#x1F983;</div>
+                        <div class="kit-role">Doc&rsquo;s Actual Pro Tip</div>
+                        <div class="kit-note" style="max-width:500px;margin:0 auto 10px;">
+                            You want <em>proper</em> smell-proof? Turkey basting bags. Double bag it. Airtight. Cheap. Nobody&rsquo;s going to suspect the person carrying oven bags.<br><br>
+                            <strong style="color:var(--candle);">Of course, once you&rsquo;re legally prescribed &mdash; you don&rsquo;t need to worry about any of this.</strong><br>
+                            That&rsquo;s the whole point. <a href="https://cannabin-oid.co.uk" target="_blank" style="color:var(--gold);">Get legal &rarr;</a>
+                        </div>
+                        <a href="https://www.amazon.co.uk/s?k=large+turkey+basting+bags&tag=chrdocstrcromh-21" target="_blank">Find on Amazon &rarr;</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 6. TERP STORIES (Placeholder — table spec pending) -->
+        <div class="card card-ember">
+            <h2>&#x1F4AC; Terp Stories</h2>
+            <p style="margin-bottom:20px;">
+                Real stories from real people who self-medicated for years and found the legal route. Upbeat. Honest. Not graphic. The kind of stories you tell your mates when you want them to stop feeling like criminals.
+            </p>
+            <div class="stories-placeholder">
+                <p style="font-size: 2rem; margin-bottom: 12px;">&#x1F33F;</p>
+                <p style="font-family:'Caveat',cursive;font-size:1.8rem;color:var(--candle);margin-bottom:10px;">The board is being built.</p>
+                <p style="color:var(--text-muted);max-width:400px;margin:0 auto;">
+                    Terp Stories is coming &mdash; a community noticeboard for self-medicators who found the legal route. Stories go in, get reviewed, and glow brighter as people vote them up.
+                </p>
+                <p style="margin-top:15px;color:var(--text-muted);font-size:16px;">
+                    Got a story? <a href="mailto:chris@chrisptee.co.uk" style="color:var(--gold);">Send it to Doc directly</a> while the board is being wired up.
+                </p>
+            </div>
+        </div>
+
+        <!-- 7. SACRED QUOTES -->
+        <div class="card">
+            <h2>&#x1F4DC; Words From the Den</h2>
+            <div class="quote-card">
+                &ldquo;COMPLETE HONESTY. The majority of people make this seem a lot more complicated than it really is. I promised you complete honesty.&rdquo;
+            </div>
+            <div class="quote-card">
+                &ldquo;Do no harm. Take no shit. Look after your subjects as though they were small children who need you to protect them.&rdquo;
+            </div>
+            <div class="quote-card">
+                &ldquo;The ONLY Secret to Hypnosis is that there is NO Secret to Hypnosis.&rdquo; Same goes for cannabis prescriptions. There is no secret. It&rsquo;s legal. It works. Get prescribed.
+            </div>
+            <div class="quote-card">
+                &ldquo;I ain&rsquo;t called Doc for nothing. The CB handle I got at 11 years old turned out to be the most accurate thing anyone ever called me.&rdquo;
+            </div>
+            <div class="quote-card">
+                &ldquo;Get Out There Kid and Knock &rsquo;Em Dead.&rdquo; &mdash; Doc, to anyone reading the hypnosis book. Doc, to every self-medicator scared to book their first consultation. Same energy.
+            </div>
+            <p style="text-align:right;margin-top:15px;color:var(--text-muted);">
+                &mdash; Chris Doc Strange &middot; <a href="https://docstrange.co.uk" target="_blank" style="color:var(--gold);">docstrange.co.uk</a>
+            </p>
+        </div>
+
+        <!-- 8. LISTENING ROOM -->
+        <div class="card card-ember">
+            <h2>&#x1F3B5; The Listening Room</h2>
+            <p style="margin-bottom:15px;">
+                Same tunes. Different medicine. Pull up a chair.
+            </p>
+            <div style="border-radius:16px;overflow:hidden;margin-bottom:15px;">
+                <iframe
+                    width="100%"
+                    height="400"
+                    src="https://www.youtube.com/embed/videoseries?list=PLsdxQ9BV5h1KqWtgQbYq1gjXf9ocanzZg"
+                    title="Doc's Listening Room"
+                    frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen
+                    style="border:none;border-radius:16px;"
+                ></iframe>
+            </div>
+            <p style="font-style:italic;color:var(--text-muted);">
+                This is what plays in the van on the way to Bilbao.
+            </p>
+        </div>
+
+        <!-- 9. JOIN THE DISPENSARY -->
+        <div class="card card-forest" id="dispensary">
+            <h2>&#x1F33F; Join the Dispensary</h2>
+            <p style="margin-bottom:20px;">
+                Not a mailing list. A community. Self-medicators, legal patients, curious minds, and people who&rsquo;ve been doing this quietly for years and deserve to do it loudly.
+            </p>
+            <ul style="margin-bottom:25px;padding-left:20px;line-height:2;">
+                <li>Access to Cannabin-Oid&rsquo;s AI strain identification</li>
+                <li>Prescription pathway support &mdash; Doc knows the route</li>
+                <li>Updates from the Spannabis Bilbao trip</li>
+                <li>Terp Stories when the board goes live</li>
+                <li>World domination through kindness &mdash; always</li>
+            </ul>
+
+            <form id="hamlet-form">
+                <input type="hidden" name="ref" value="doc">
+                <input type="hidden" name="hamlet" value="doc">
+
+                <div class="form-group">
+                    <label for="name">Your Name</label>
+                    <input type="text" id="name" name="name" placeholder="What should we call you?" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" placeholder="you@example.com" required>
+                </div>
+
+                <button type="submit" class="btn btn-gold" id="submit-btn">
+                    <span id="btn-text">Join the Dispensary</span>
+                    <span id="btn-loading" class="hidden">One moment...</span>
+                </button>
+
+                <p style="font-size:16px;color:rgba(240,247,240,0.55);margin-top:15px;text-align:center;">
+                    Free forever. Legal route info always free. No dark patterns.
+                </p>
+            </form>
+        </div>
+
+        <!-- Success -->
+        <div class="card card-forest hidden" id="success-card">
+            <div class="success-message">
+                <h2>&#x1F33F; Welcome to the Dispensary</h2>
+                <p>You&rsquo;re in, <span id="welcome-name">friend</span>.</p>
+                <p>Doc&rsquo;s been keeping the fire burning. Good to have you here.</p>
+                <p style="color:var(--gold);font-weight:600;margin:20px 0;">
+                    Welcome to the village.
+                </p>
+
+                <hr style="border:none;border-top:1px solid rgba(255,255,255,0.15);margin:30px 0;">
+
+                <p style="margin-bottom:15px;">
+                    Ready to get legal? The prescription route takes about 20 minutes and costs around &pound;50 for the first consultation.
+                </p>
+                <a href="https://cannabin-oid.co.uk" class="btn btn-green" target="_blank">
+                    Get Legal at Cannabin-Oid &rarr;
+                </a>
+            </div>
+        </div>
+
+        <!-- 10. PATREON -->
+        <div class="card" style="border: 2px solid rgba(249,115,22,0.3); background: linear-gradient(135deg, rgba(249,115,22,0.06) 0%, rgba(7,20,7,0.95) 100%);">
+            <h2 style="color:#fb923c;">&#x1F3A8; Support the Village</h2>
+            <p style="margin-bottom:20px;">
+                Cannabin-Oid is free forever. The AI strain ID, the prescription pathway, the clinic directory &mdash; all free. Always. If you want to go deeper, Patreon unlocks the pro layer.
+            </p>
+
+            <div class="craft-grid" style="margin-bottom:20px;">
+                <div class="craft-item" style="border: 1px solid rgba(249,115,22,0.2);">
+                    <div class="icon">&#x1F3E1;</div>
+                    <div class="name" style="color:#fed7aa;">Villager &mdash; &pound;3/mo</div>
+                    <div class="desc">Full community access &middot; Kudos &middot; Village member forever</div>
+                </div>
+                <div class="craft-item" style="border: 1px solid rgba(249,115,22,0.3);">
+                    <div class="icon">&#x2694;&#xFE0F;</div>
+                    <div class="name" style="color:#fed7aa;">Elder &mdash; &pound;7/mo</div>
+                    <div class="desc">Full prescription guide &middot; Dosing guides &middot; Condition-specific support</div>
+                </div>
+                <div class="craft-item" style="grid-column: 1 / -1; border: 2px solid rgba(249,115,22,0.4); background: rgba(249,115,22,0.08);">
+                    <div class="icon">&#x1F3DB;&#xFE0F;</div>
+                    <div class="name" style="color:#fb923c; font-size:1.05rem;">Founder &mdash; &pound;15/mo</div>
+                    <div class="desc">Everything &middot; Founding member status forever &middot; Direct access to Doc &middot; Spannabis updates first</div>
+                </div>
+            </div>
+
+            <a href="https://www.patreon.com/chrisptee" target="_blank" rel="noopener"
+               style="display:flex;align-items:center;justify-content:center;gap:10px;padding:16px 32px;font-size:18px;font-weight:700;border:none;border-radius:12px;cursor:pointer;text-decoration:none;min-height:56px;font-family:'Outfit',sans-serif;background:linear-gradient(135deg,#ea580c 0%,#f97316 100%);color:white;width:100%;box-sizing:border-box;">
+                &#x1F3A8; Support on Patreon
+            </a>
+            <p style="text-align:center;font-size:15px;color:var(--text-muted);margin-top:12px;">
+                Coffeeware model &mdash; take what you need, give what you can. No pressure.
+            </p>
+        </div>
+
+        <!-- 10b. SHARE DOC'S DEN -->
+        <div class="card" style="text-align:center;">
+            <h2 style="color:var(--primary-light);">&#x1F4F1; Share Doc&rsquo;s Den</h2>
+            <p style="color:var(--text-muted);margin-bottom:20px;">
+                Know someone who&rsquo;s been self-medicating quietly for years? Send them here.
+            </p>
+            <div id="qrcode" style="display:inline-block;padding:14px;background:#fff;border-radius:12px;margin-bottom:14px;"></div>
+            <p style="font-family:'Caveat',cursive;font-size:1.3rem;color:var(--candle);">cannabin-oid.co.uk/hamlet/doc</p>
+            <button onclick="copyHamletLink()" style="margin-top:12px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);color:var(--text);padding:10px 24px;border-radius:8px;cursor:pointer;font-family:'Outfit',sans-serif;font-size:16px;" id="copy-btn">
+                &#x1F4CB; Copy Link
+            </button>
+        </div>
+
+        <!-- 11. FOOTER -->
+        <div class="hamlet-footer">
+            <p style="font-family:'Caveat',cursive;font-size:1.6rem;color:var(--candle);margin-bottom:15px;">
+                Man. Myth. Leg End.
+            </p>
+            <ul class="link-list" style="display:flex;flex-wrap:wrap;gap:15px;justify-content:center;margin-bottom:20px;">
+                <li>&#x1F33F; <a href="https://cannabin-oid.co.uk" target="_blank">Cannabin-Oid</a></li>
+                <li>&#x1F3A9; <a href="https://docstrange.co.uk" target="_blank">DocStrange.co.uk</a></li>
+                <li>&#x1F389; <a href="https://glowgadgets.co.uk" target="_blank">GlowGadgets</a></li>
+                <li>&#x1FA84; <a href="https://magic-oid.co.uk" target="_blank">Magic-Oid</a></li>
+                <li>&#x1F525; <a href="https://feelfamous.com" target="_blank">FeelFamous</a></li>
+            </ul>
+            <p style="margin-bottom:15px;">
+                <a href="https://cannabin-oid.co.uk" class="btn btn-green" style="display:inline-flex;width:auto;padding:12px 28px;font-size:17px;" target="_blank">
+                    &#x1F48A; Get Legal &rarr;
+                </a>
+            </p>
+            <p style="font-size:15px;max-width:500px;margin:0 auto;font-style:italic;line-height:1.8;">
+                &ldquo;If I don&rsquo;t see you in the week, I&rsquo;ll see you in the window.&rdquo;<br>
+                &mdash; Doc x
+            </p>
+        </div>
+
+    </div>
+
+    <script>
+        const SUPABASE_URL = 'https://pdnjeynugptnavkdbmxh.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBkbmpleW51Z3B0bmF2a2RibXhoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkwMTEzMDAsImV4cCI6MjA4NDU4NzMwMH0.GawisR01EykMtdauBMxenmHF2NXDMzDOJl8WgzkwFQo';
+        const client = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        const form = document.getElementById('hamlet-form');
+        const submitBtn = document.getElementById('submit-btn');
+        const btnText = document.getElementById('btn-text');
+        const btnLoading = document.getElementById('btn-loading');
+        const signupCard = document.getElementById('dispensary');
+        const successCard = document.getElementById('success-card');
+        const welcomeName = document.getElementById('welcome-name');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const name = document.getElementById('name').value.trim();
+            const email = document.getElementById('email').value.trim();
+
+            if (!name || !email) return;
+
+            submitBtn.disabled = true;
+            btnText.classList.add('hidden');
+            btnLoading.classList.remove('hidden');
+
+            try {
+                const { error } = await client.from('hamlet_signups').insert([{
+                    name: name,
+                    email: email,
+                    hamlet: 'doc',
+                    ref: 'doc',
+                    created_at: new Date().toISOString()
+                }]);
+
+                if (error && error.code !== '23505') {
+                    console.error('Signup error:', error);
+                }
+
+                welcomeName.textContent = name;
+                signupCard.classList.add('hidden');
+                successCard.classList.remove('hidden');
+                successCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+            } catch (err) {
+                console.error('Unexpected error:', err);
+                welcomeName.textContent = name;
+                signupCard.classList.add('hidden');
+                successCard.classList.remove('hidden');
+            }
+        });
+
+        // QR code
+        new QRCode(document.getElementById('qrcode'), {
+            text: 'https://cannabin-oid.co.uk/hamlet/doc',
+            width: 180,
+            height: 180,
+            colorDark: '#000000',
+            colorLight: '#ffffff',
+            correctLevel: QRCode.CorrectLevel.M
+        });
+
+        function copyHamletLink() {
+            navigator.clipboard.writeText('https://cannabin-oid.co.uk/hamlet/doc').then(() => {
+                const btn = document.getElementById('copy-btn');
+                btn.textContent = '✅ Copied!';
+                setTimeout(() => { btn.textContent = '📋 Copy Link'; }, 2000);
+            });
+        }
+    </script>
+
+</body>
+</html>

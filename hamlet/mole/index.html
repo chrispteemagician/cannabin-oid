@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Mole Hole | Ian Gilson | GenXcess | Cannabin-Oid</title>
+    <meta name="description" content="Ian Gilson — The Holy Mole. GenXcess. Creator and writer of The Strange Mole Show. Comedy partner to Doc Strange. Top medicator. The Dude, abiding.">
+    <link rel="icon" type="image/jpeg" href="../../cannabin-oid.jpg">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --midnight: #030a03;
+            --deep: #071407;
+            --primary: #16a34a;
+            --primary-light: #22c55e;
+            --gold: #c9a227;
+            --gold-dark: #a07d1c;
+            --forest: #14532d;
+            --forest-dark: #0f3d22;
+            --cream: #f0f7f0;
+            --text: #c8e6c8;
+            --text-muted: #6b9e6b;
+            --flame: #22c55e;
+            --candle: #86efac;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(180deg, var(--midnight) 0%, var(--deep) 50%, var(--midnight) 100%);
+            color: var(--text);
+            min-height: 100vh;
+            font-size: 18px;
+            line-height: 1.7;
+        }
+        .font-hand { font-family: 'Caveat', cursive; }
+        .container { max-width: 800px; margin: 0 auto; padding: 20px; }
+
+        /* Header */
+        .hamlet-header {
+            background: linear-gradient(135deg, var(--forest) 0%, var(--midnight) 60%, var(--forest-dark) 100%);
+            text-align: center;
+            padding: 50px 20px;
+            border-radius: 0 0 30px 30px;
+            border: 4px solid var(--gold);
+            border-top: none;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.5), 0 0 80px rgba(22,163,74,0.12);
+            margin-bottom: 30px;
+        }
+        .hamlet-header h1 {
+            font-family: 'Caveat', cursive;
+            font-size: clamp(2.5rem, 8vw, 4rem);
+            color: var(--cream);
+            margin-bottom: 10px;
+            text-shadow: 0 0 30px rgba(34,197,94,0.3);
+        }
+        .hamlet-header .subtitle {
+            font-size: 1.2rem;
+            color: rgba(240,247,240,0.8);
+            font-style: italic;
+        }
+        .hamlet-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%);
+            color: var(--forest-dark);
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 16px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+        }
+
+        /* Cards */
+        .card {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 20px;
+        }
+        .card h2 {
+            font-family: 'Caveat', cursive;
+            font-size: 2rem;
+            margin-bottom: 15px;
+            color: var(--gold);
+        }
+
+        /* Forest card */
+        .card-forest {
+            background: linear-gradient(135deg, var(--forest) 0%, var(--forest-dark) 100%);
+            border: 4px solid var(--forest-dark);
+            color: var(--cream);
+            box-shadow: 0 6px 0 rgba(0,0,0,0.2), 0 0 40px rgba(22,163,74,0.08);
+        }
+        .card-forest h2 { color: var(--candle); }
+
+        /* Ember card */
+        .card-ember {
+            background: linear-gradient(135deg, rgba(22,163,74,0.08) 0%, rgba(7,20,7,0.95) 100%);
+            border: 2px solid rgba(22,163,74,0.25);
+            box-shadow: 0 0 40px rgba(22,163,74,0.06);
+        }
+
+        /* Show card */
+        .card-show {
+            background: linear-gradient(135deg, rgba(201,162,39,0.08) 0%, rgba(7,20,7,0.95) 100%);
+            border: 2px solid rgba(201,162,39,0.25);
+        }
+
+        /* Journey */
+        .journey-flow { text-align: center; padding: 20px 0; }
+        .journey-stage { margin-bottom: 8px; }
+        .journey-name {
+            font-family: 'Caveat', cursive;
+            font-size: 1.8rem;
+            color: var(--flame);
+            text-shadow: 0 0 20px rgba(34,197,94,0.2);
+        }
+        .journey-role {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            letter-spacing: 1px;
+        }
+        .journey-arrow {
+            font-size: 1.5rem;
+            color: var(--gold-dark);
+            margin: 5px 0;
+            opacity: 0.6;
+        }
+
+        /* Craft grid */
+        .craft-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin: 20px 0;
+        }
+        .craft-item {
+            background: rgba(0,0,0,0.25);
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+        }
+        .craft-item .icon { font-size: 28px; margin-bottom: 8px; }
+        .craft-item .name { font-weight: 600; font-size: 0.95rem; color: var(--cream); }
+        .craft-item .desc { font-size: 16px; color: var(--text-muted); }
+
+        /* Kit grid */
+        .kit-section { margin-bottom: 25px; }
+        .kit-section h3 {
+            font-family: 'Caveat', cursive;
+            font-size: 1.6rem;
+            color: var(--flame);
+            margin-bottom: 12px;
+        }
+        .kit-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+        .kit-item {
+            background: rgba(0,0,0,0.25);
+            border-radius: 12px;
+            padding: 18px;
+            text-align: center;
+        }
+        .kit-item .kit-name { font-weight: 700; color: var(--cream); margin-bottom: 4px; font-size: 1rem; }
+        .kit-item .kit-role { font-size: 15px; color: var(--text-muted); margin-bottom: 10px; font-style: italic; }
+        .kit-item .kit-note { font-size: 14px; color: var(--text-muted); margin-bottom: 10px; }
+        .kit-item a { display: inline-block; color: var(--gold); text-decoration: none; font-size: 15px; font-weight: 600; }
+        .kit-item a:hover { text-decoration: underline; }
+
+        /* Quote cards */
+        .quote-card {
+            background: rgba(22,163,74,0.07);
+            border-left: 3px solid var(--primary);
+            padding: 20px 25px;
+            margin-bottom: 15px;
+            border-radius: 0 12px 12px 0;
+            font-style: italic;
+            color: var(--cream);
+            line-height: 1.8;
+        }
+
+        /* Links */
+        .link-list { list-style: none; padding: 0; margin: 15px 0; }
+        .link-list li { margin-bottom: 10px; }
+        .link-list a { color: var(--gold); text-decoration: none; font-weight: 600; }
+        .link-list a:hover { color: var(--candle); text-decoration: underline; }
+
+        /* Form */
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 600; color: var(--cream); }
+        .form-group input {
+            width: 100%;
+            padding: 16px 20px;
+            font-size: 18px;
+            border: 2px solid rgba(255,255,255,0.15);
+            border-radius: 12px;
+            background: rgba(0,0,0,0.3);
+            color: white;
+            font-family: 'Outfit', sans-serif;
+        }
+        .form-group input:focus { outline: none; border-color: var(--primary); }
+        .form-group input::placeholder { color: rgba(255,255,255,0.35); }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 16px 32px;
+            font-size: 18px;
+            font-weight: 700;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            min-height: 56px;
+            font-family: 'Outfit', sans-serif;
+        }
+        .btn:hover { transform: translateY(-2px); }
+        .btn:active { transform: scale(0.98); }
+        .btn-gold { background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%); color: var(--forest-dark); width: 100%; }
+        .btn-green { background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%); color: white; width: 100%; }
+        .btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+        /* Success */
+        .success-message { text-align: center; padding: 40px 20px; }
+        .success-message h2 { font-family: 'Caveat', cursive; font-size: 2.5rem; color: var(--gold); margin-bottom: 20px; }
+        .success-message p { font-size: 1.1rem; margin-bottom: 15px; }
+        .hidden { display: none !important; }
+
+        /* Footer */
+        .hamlet-footer { text-align: center; padding: 40px 20px; color: var(--text-muted); }
+        .hamlet-footer a { color: var(--gold); text-decoration: none; }
+        .hamlet-footer a:hover { text-decoration: underline; }
+
+        /* QR */
+        .qr-section {
+            text-align: center;
+            padding: 28px;
+            background: white;
+            border-radius: 16px;
+            margin-bottom: 20px;
+        }
+        .qr-section h3 { color: var(--forest-dark); font-family: 'Caveat', cursive; font-size: 1.6rem; margin-bottom: 12px; }
+        .qr-section p { color: #555; font-size: 14px; }
+
+        @media (max-width: 600px) {
+            .craft-grid { grid-template-columns: 1fr; }
+            .kit-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- SIGN IN BAR -->
+    <div style="background:rgba(0,0,0,0.4);text-align:center;padding:10px 16px;font-size:16px;">
+        <a href="https://cannabin-oid.co.uk" style="color:var(--gold);text-decoration:none;font-weight:600;">Cannabin-Oid &mdash; The Dispensary &rarr;</a>
+        <span style="color:var(--text-muted);margin:0 12px;">&middot;</span>
+        <a href="/hamlet/doc" style="color:var(--text-muted);text-decoration:none;font-size:15px;">Doc&rsquo;s Den &rarr;</a>
+    </div>
+
+    <!-- 1. HEADER -->
+    <div class="hamlet-header">
+        <div class="hamlet-badge">🦡 Founder #2 &mdash; The Dispensary</div>
+        <h1>The Mole Hole</h1>
+        <p class="subtitle">Ian Gilson &middot; The Holy Mole &middot; GenXcess</p>
+        <p style="font-size:1.05rem;color:rgba(240,247,240,0.75);margin-top:14px;max-width:520px;margin-left:auto;margin-right:auto;">
+            Creator. Writer. Comedy partner. Top medicator.<br>
+            <em style="color:var(--candle);">The Dude abides. He always has.</em>
+        </p>
+    </div>
+
+    <div class="container">
+
+        <!-- 2. THE JOURNEY -->
+        <div class="card card-ember">
+            <h2>🌿 The Journey</h2>
+            <div class="journey-flow">
+
+                <div class="journey-stage">
+                    <div class="journey-name">Ian Gilson</div>
+                    <div class="journey-role">The name behind the mole &middot; Gen X &middot; Was always the funny one</div>
+                </div>
+                <div class="journey-arrow">&darr;</div>
+
+                <div class="journey-stage">
+                    <div class="journey-name">The Holy Mole</div>
+                    <div class="journey-role">Underground. Knows where everything is. Emerges when it matters.</div>
+                </div>
+                <div class="journey-arrow">&darr;</div>
+
+                <div class="journey-stage">
+                    <div class="journey-name">GenXcess</div>
+                    <div class="journey-role">Gen X in excess &middot; The ones who survived the transition &middot; <a href="https://genxcess.co.uk" target="_blank" style="color:var(--gold);">genxcess.co.uk</a></div>
+                </div>
+                <div class="journey-arrow">&darr;</div>
+
+                <div class="journey-stage">
+                    <div class="journey-name">The Strange Mole Show</div>
+                    <div class="journey-role">Created it. Wrote it. His comedy. His world. Doc just turns up and says things.</div>
+                </div>
+                <div class="journey-arrow">&darr;</div>
+
+                <div class="journey-stage">
+                    <div class="journey-name">The Goddess Plant</div>
+                    <div class="journey-role">Top medicator. Always was. Knew it before it had a name.</div>
+                </div>
+                <div class="journey-arrow">&darr;</div>
+
+                <div class="journey-stage">
+                    <div class="journey-name">The Dude. Abiding.</div>
+                    <div class="journey-role">Founder #2 &middot; The Dispensary &middot; Holding it down from the Mole Hole</div>
+                </div>
+
+            </div>
+            <p style="text-align:center;color:var(--text-muted);font-style:italic;margin-top:20px;">
+                Doc and the Mole. Two Dudes. Same plant. Different tunnels. Same destination.
+            </p>
+        </div>
+
+        <!-- 3. THE CRAFT -->
+        <div class="card">
+            <h2>🎭 The Craft</h2>
+            <p style="margin-bottom:15px;">
+                <strong>Creator &amp; writer</strong> &middot; <strong>The Strange Mole Show</strong> &middot; <strong>GenXcess</strong> &middot; <strong>Comedy partner to Doc Strange</strong>
+            </p>
+            <p style="margin-bottom:15px; color:var(--text-muted);">
+                The Strange Mole Show didn&rsquo;t write itself. Ian did that. Doc is the comedy partner &mdash; the hypnotist, the showman, the one who goes on stage. Ian is the one who makes it make sense. The writer behind the wizard. The mole who dug the tunnel the rabbit runs down.
+            </p>
+            <div class="craft-grid">
+                <div class="craft-item">
+                    <div class="icon">🦡</div>
+                    <div class="name">The Strange Mole Show</div>
+                    <div class="desc">Created &amp; written by Ian &middot; <a href="https://strangemole.co.uk" target="_blank" style="color:var(--gold);">strangemole.co.uk</a></div>
+                </div>
+                <div class="craft-item">
+                    <div class="icon">📺</div>
+                    <div class="name">GenXcess</div>
+                    <div class="desc">Gen X culture, comedy, and excess &middot; <a href="https://genxcess.co.uk" target="_blank" style="color:var(--gold);">genxcess.co.uk</a></div>
+                </div>
+                <div class="craft-item">
+                    <div class="icon">🎙️</div>
+                    <div class="name">Comedy Partner</div>
+                    <div class="desc">The straight man to Doc&rsquo;s straight face. Or the other way round. Hard to tell.</div>
+                </div>
+                <div class="craft-item">
+                    <div class="icon">✍️</div>
+                    <div class="name">The Writer</div>
+                    <div class="desc">Scripts, concepts, characters. The architecture of the joke.</div>
+                </div>
+                <div class="craft-item">
+                    <div class="icon">🌿</div>
+                    <div class="name">Top Medicator</div>
+                    <div class="desc">Knows the plant. Respects the plant. Treated it as the goddess it is.</div>
+                </div>
+                <div class="craft-item">
+                    <div class="icon">🎳</div>
+                    <div class="name">The Dude</div>
+                    <div class="desc">Abides. Always has. The rug ties the room together.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. THE MOLE AND THE STRANGE -->
+        <div class="card card-forest">
+            <h2>🎭 The Mole &amp; The Strange</h2>
+            <p style="margin-bottom:15px; font-size:1.05rem;">
+                Two Dudes. Two different approaches to the same medicine, the same comedy, the same Gen X inheritance. Doc goes on stage. Ian writes the stage. Doc says the thing. Ian figured out what the thing was.
+            </p>
+            <p style="margin-bottom:15px;">
+                Comedy partnerships work because one person sees what the other can&rsquo;t. Ian sees it. He&rsquo;s been underground long enough to know where the roots go. The Holy Mole doesn&rsquo;t emerge for nothing &mdash; when he comes up, it&rsquo;s because something&rsquo;s worth saying.
+            </p>
+            <p style="margin-bottom:15px; font-weight:600; color:var(--candle);">
+                The Strange Mole Show is Ian&rsquo;s creation. Doc is just glad he gets to be in it.
+            </p>
+            <p style="margin-bottom:15px;">
+                GenXcess is what happens when a generation that survived everything &mdash; Thatcher, rave, the internet, mobile phones, peak TV, and now legal weed &mdash; finally gets to talk about it all at once. Ian built the space. Gen X has a lot to say.
+            </p>
+            <p style="font-style:italic; color:var(--candle);">
+                The Dude abides. The Mole digs. The plant makes both of them better at it.
+            </p>
+        </div>
+
+        <!-- 5. THE PLANT -->
+        <div class="card card-ember">
+            <h2>🌿 The Goddess Plant</h2>
+            <p style="margin-bottom:15px;">
+                Ian&rsquo;s been at it longer than most people have been aware that it was medicine. Top medicator isn&rsquo;t a self-awarded title &mdash; it&rsquo;s a track record. Years of understanding what works, what doesn&rsquo;t, what the plant is actually doing.
+            </p>
+            <p style="margin-bottom:15px; color:var(--text-muted);">
+                The goddess plant doesn&rsquo;t ask your permission to work. She just does. Ian figured that out early. Respected it early. And now the world is slowly catching up to what the Mole has known for years.
+            </p>
+            <p style="margin-bottom:15px; font-weight: 600; color: var(--candle);">
+                Self-medicating isn&rsquo;t a lifestyle choice. It&rsquo;s a medical decision made without a doctor because the doctors weren&rsquo;t ready yet.
+            </p>
+            <p style="color:var(--text-muted);">
+                The legal route is open now. If Ian&rsquo;s story sounds like yours &mdash; years of knowing, years of doing it quietly, years of feeling like you needed to justify it &mdash; then you already know. You just need the paperwork.
+            </p>
+            <p style="margin-top:20px;">
+                <a href="https://cannabin-oid.co.uk" target="_blank" class="btn btn-green" style="display:inline-flex;width:auto;padding:14px 28px;">
+                    🌿 Get Legal at Cannabin-Oid &rarr;
+                </a>
+            </p>
+        </div>
+
+        <!-- 6. THE SHOW -->
+        <div class="card card-show">
+            <h2>🎬 The Strange Mole Show</h2>
+            <p style="margin-bottom:20px; color:var(--text-muted);">
+                Ian&rsquo;s creation. Doc&rsquo;s playground. Comedy for people who&rsquo;ve been around long enough to find it funny.
+            </p>
+            <div class="craft-grid" style="margin-bottom:20px;">
+                <div class="craft-item" style="border: 1px solid rgba(201,162,39,0.2);">
+                    <div class="icon">✍️</div>
+                    <div class="name" style="color:var(--gold);">Creator &amp; Writer</div>
+                    <div class="desc">Ian. The whole architecture. The characters. The arc.</div>
+                </div>
+                <div class="craft-item" style="border: 1px solid rgba(201,162,39,0.2);">
+                    <div class="icon">🎩</div>
+                    <div class="name" style="color:var(--gold);">Doc Strange</div>
+                    <div class="desc">Comedy partner. The hypnotist in the mix. Does what Ian tells him.</div>
+                </div>
+            </div>
+            <div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:10px;">
+                <a href="https://strangemole.co.uk" target="_blank" rel="noopener"
+                   style="display:inline-flex;align-items:center;gap:8px;padding:12px 20px;border-radius:10px;background:rgba(201,162,39,0.12);border:1px solid rgba(201,162,39,0.3);color:var(--gold);font-weight:600;text-decoration:none;font-size:16px;">
+                    🦡 strangemole.co.uk
+                </a>
+                <a href="https://genxcess.co.uk" target="_blank" rel="noopener"
+                   style="display:inline-flex;align-items:center;gap:8px;padding:12px 20px;border-radius:10px;background:rgba(22,163,74,0.08);border:1px solid rgba(22,163,74,0.2);color:var(--primary-light);font-weight:600;text-decoration:none;font-size:16px;">
+                    📺 genxcess.co.uk
+                </a>
+            </div>
+        </div>
+
+        <!-- 7. THE KIT -->
+        <div class="card">
+            <h2>🌿 The Mole&rsquo;s Kit</h2>
+            <p style="margin-bottom:20px; color:var(--text-muted);">
+                Years of use went into this knowledge. UK prescription patients need a dry herb vaporizer. These are the ones worth knowing about.
+                Affiliate links support the village.
+            </p>
+
+            <div class="kit-section">
+                <h3>💪 The Arizer Family</h3>
+                <div class="kit-grid">
+                    <div class="kit-item">
+                        <div class="kit-name">Arizer Solo 2</div>
+                        <div class="kit-role">The Reliable One</div>
+                        <div class="kit-note">Doc&rsquo;s daily driver. Worth having in the Mole Hole too. Consistent and clean.</div>
+                        <a href="https://www.amazon.co.uk/s?k=Arizer+Solo+2+vaporizer&tag=chrdocstrcromh-21" target="_blank">Find on Amazon &rarr;</a>
+                    </div>
+                    <div class="kit-item">
+                        <div class="kit-name">Mighty+</div>
+                        <div class="kit-role">German Engineering</div>
+                        <div class="kit-note">When you want it done properly. Precise temps, big clouds. The pro choice.</div>
+                        <a href="https://www.amazon.co.uk/s?k=Storz+Bickel+Mighty+vaporizer&tag=chrdocstrcromh-21" target="_blank">Find on Amazon &rarr;</a>
+                    </div>
+                    <div class="kit-item">
+                        <div class="kit-name">Dynavap</div>
+                        <div class="kit-role">The Ritual</div>
+                        <div class="kit-note">No battery. Indestructible. For when the ceremony is part of the medicine.</div>
+                        <a href="https://www.amazon.co.uk/s?k=Dynavap+vaporizer&tag=chrdocstrcromh-21" target="_blank">Find on Amazon &rarr;</a>
+                    </div>
+                    <div class="kit-item">
+                        <div class="kit-name">ISO 99%</div>
+                        <div class="kit-role">Keep It Clean</div>
+                        <div class="kit-note">Clean your kit. 99% only. Non-negotiable. Respect the tool.</div>
+                        <a href="https://www.amazon.co.uk/s?k=isopropyl+alcohol+99%25&tag=chrdocstrcromh-21" target="_blank">Find on Amazon &rarr;</a>
+                    </div>
+                </div>
+            </div>
+
+            <p style="text-align:center; font-size:15px; color:var(--text-muted); margin-top:10px;">
+                Affiliate links use Doc&rsquo;s Amazon ID. Want yours?
+                <a href="https://magic-oid.co.uk/hamlet/doc#amazon-guide" target="_blank" style="color:var(--gold);">How to change it &rarr;</a>
+            </p>
+        </div>
+
+        <!-- 8. WORDS FROM THE MOLE HOLE -->
+        <div class="card">
+            <h2>📜 Words From the Mole Hole</h2>
+            <div class="quote-card">
+                &ldquo;The Dude abides. Not because he has to. Because he&rsquo;s figured something out that the rest of the room hasn&rsquo;t caught up to yet.&rdquo;
+            </div>
+            <div class="quote-card">
+                &ldquo;Gen X didn&rsquo;t get the memo that we were supposed to be cynical. We were just watching carefully.&rdquo;
+            </div>
+            <div class="quote-card">
+                &ldquo;The plant was always medicine. We didn&rsquo;t need a clinic to tell us. We needed the clinic to make it official.&rdquo;
+            </div>
+            <div class="quote-card">
+                &ldquo;Comedy is just truth with better timing. Same goes for cannabis. The truth was always there. The timing is finally right.&rdquo;
+            </div>
+            <p style="text-align:right;margin-top:15px;color:var(--text-muted);">
+                &mdash; The Holy Mole &middot; <a href="https://strangemole.co.uk" target="_blank" style="color:var(--gold);">strangemole.co.uk</a>
+            </p>
+        </div>
+
+        <!-- 9. JOIN THE DISPENSARY -->
+        <div class="card card-forest" id="dispensary">
+            <h2>🌿 Join the Dispensary</h2>
+            <p style="margin-bottom:20px;">
+                The Mole Hole is part of the Dispensary. Sign up through Ian and he earns kudos. You get access to Cannabin-Oid&rsquo;s AI strain ID, prescription pathway, and the community Doc and Ian built.
+            </p>
+            <ul style="margin-bottom:25px;padding-left:20px;line-height:2;">
+                <li>AI strain identification &mdash; free forever</li>
+                <li>Prescription pathway support</li>
+                <li>Updates from The Strange Mole Show</li>
+                <li>GenXcess &mdash; your culture, finally</li>
+                <li>World domination through kindness &mdash; always</li>
+            </ul>
+
+            <form id="hamlet-form">
+                <input type="hidden" name="ref" value="mole">
+                <input type="hidden" name="hamlet" value="mole">
+
+                <div class="form-group">
+                    <label for="name">Your Name</label>
+                    <input type="text" id="name" name="name" placeholder="What should we call you?" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" placeholder="you@example.com" required>
+                </div>
+
+                <button type="submit" class="btn btn-gold" id="submit-btn">
+                    <span id="btn-text">Join the Dispensary</span>
+                    <span id="btn-loading" class="hidden">One moment...</span>
+                </button>
+
+                <p style="font-size:16px;color:rgba(240,247,240,0.55);margin-top:15px;text-align:center;">
+                    Free forever. No dark patterns. Just the Dispensary.
+                </p>
+            </form>
+        </div>
+
+        <!-- Success -->
+        <div class="card card-forest hidden" id="success-card">
+            <div class="success-message">
+                <h2>🦡 You&rsquo;re in the Mole Hole!</h2>
+                <p>Welcome, <span id="welcome-name">friend</span>.</p>
+                <p>The Holy Mole appreciates the visit. The Dispensary is glad you&rsquo;re here.</p>
+                <p style="color:var(--gold);font-weight:600;margin:20px 0;">
+                    World domination through kindness.
+                </p>
+                <hr style="border:none;border-top:1px solid rgba(255,255,255,0.15);margin:30px 0;">
+                <p style="margin-bottom:15px;">
+                    Been self-medicating for years? The prescription route takes about 20 minutes and &pound;50.
+                </p>
+                <a href="https://cannabin-oid.co.uk" class="btn btn-green" target="_blank">
+                    Get Legal at Cannabin-Oid &rarr;
+                </a>
+            </div>
+        </div>
+
+        <!-- 10. QR CODE -->
+        <div class="qr-section">
+            <h3>🦡 Scan for the Mole Hole</h3>
+            <img
+                src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://cannabin-oid.co.uk/hamlet/mole&bgcolor=ffffff&color=16a34a"
+                alt="QR Code for The Mole Hole"
+                width="200"
+                height="200"
+                style="border:4px solid #16a34a;border-radius:12px;margin:12px auto;display:block;"
+            />
+            <p>cannabin-oid.co.uk/hamlet/mole</p>
+        </div>
+
+        <!-- 11. PATREON -->
+        <div class="card" style="border: 2px solid rgba(249,115,22,0.3); background: linear-gradient(135deg, rgba(249,115,22,0.06) 0%, rgba(7,20,7,0.95) 100%);">
+            <h2 style="color:#fb923c;">🎨 Support the Village</h2>
+            <p style="margin-bottom:20px;">
+                The Dispensary runs on Patreon. Free forever for the basics. If you want the full prescription guide, the deeper community, and Founder access &mdash; this is where it happens.
+            </p>
+            <div class="craft-grid" style="margin-bottom:20px;">
+                <div class="craft-item" style="border: 1px solid rgba(249,115,22,0.2);">
+                    <div class="icon">🌱</div>
+                    <div class="name" style="color:#fed7aa;">Villager &mdash; &pound;3/mo</div>
+                    <div class="desc">Hut. QR. Your corner of the village.</div>
+                </div>
+                <div class="craft-item" style="border: 1px solid rgba(249,115,22,0.3);">
+                    <div class="icon">🌿</div>
+                    <div class="name" style="color:#fed7aa;">Elder &mdash; &pound;7/mo</div>
+                    <div class="desc">Hamlet. Story. Links. Kudos. The full presence.</div>
+                </div>
+                <div class="craft-item" style="grid-column: 1 / -1; border: 2px solid rgba(249,115,22,0.4); background: rgba(249,115,22,0.08);">
+                    <div class="icon">🌿</div>
+                    <div class="name" style="color:#fb923c; font-size:1.05rem;">Founder &mdash; &pound;15/mo</div>
+                    <div class="desc">Everything. Kit grid. SpicyLister. Direct access. Founding status. Ian&rsquo;s tier.</div>
+                </div>
+            </div>
+            <a href="https://www.patreon.com/cannabinoid" target="_blank" rel="noopener"
+               style="display:flex;align-items:center;justify-content:center;gap:10px;padding:16px 32px;font-size:18px;font-weight:700;border:none;border-radius:12px;cursor:pointer;text-decoration:none;min-height:56px;font-family:'Outfit',sans-serif;background:linear-gradient(135deg,#ea580c 0%,#f97316 100%);color:white;width:100%;box-sizing:border-box;">
+                🎨 Support on Patreon
+            </a>
+            <p style="text-align:center;font-size:15px;color:var(--text-muted);margin-top:12px;">
+                Coffeeware model &mdash; take what you need, give what you can.
+            </p>
+        </div>
+
+        <!-- 12. FOOTER -->
+        <div class="hamlet-footer">
+            <p style="font-family:'Caveat',cursive;font-size:1.6rem;color:var(--candle);margin-bottom:15px;">
+                The Dude abides. The Mole digs. The plant does the rest.
+            </p>
+            <ul class="link-list" style="display:flex;flex-wrap:wrap;gap:15px;justify-content:center;margin-bottom:20px;">
+                <li>🦡 <a href="https://strangemole.co.uk" target="_blank">StrangeMole.co.uk</a></li>
+                <li>📺 <a href="https://genxcess.co.uk" target="_blank">GenXcess.co.uk</a></li>
+                <li>🌿 <a href="https://cannabin-oid.co.uk" target="_blank">Cannabin-Oid</a></li>
+                <li>🎩 <a href="/hamlet/doc" target="_blank">Doc&rsquo;s Den</a></li>
+                <li>🏘️ <a href="/hamlet/" target="_blank">All Hamlets</a></li>
+            </ul>
+            <p style="font-size:15px;max-width:500px;margin:0 auto;font-style:italic;line-height:1.8;">
+                &ldquo;The Dude abides.&rdquo;<br>
+                &mdash; The Holy Mole x<br>
+                <span style="font-size:13px;color:var(--text-muted);">Elder of the Dispensary &mdash; Doc Strange</span>
+            </p>
+            <p style="margin-top:20px;font-size:13px;opacity:0.3;">
+                Built with 💚 by The Chris P Trinity
+            </p>
+        </div>
+
+    </div>
+
+    <script>
+        const SUPABASE_URL = 'https://pdnjeynugptnavkdbmxh.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBkbmpleW51Z3B0bmF2a2RibXhoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzc4MTk2MDIsImV4cCI6MjA1MzM5NTYwMn0.ioaR3LPf5r-GXIsMXLt0GKGt47gV_MbsPVLCpmnFv_U';
+        const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        const form = document.getElementById('hamlet-form');
+        const submitBtn = document.getElementById('submit-btn');
+        const btnText = document.getElementById('btn-text');
+        const btnLoading = document.getElementById('btn-loading');
+        const signupCard = document.getElementById('dispensary');
+        const successCard = document.getElementById('success-card');
+        const welcomeName = document.getElementById('welcome-name');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const name = document.getElementById('name').value.trim();
+            const email = document.getElementById('email').value.trim();
+
+            if (!name || !email) return;
+
+            submitBtn.disabled = true;
+            btnText.classList.add('hidden');
+            btnLoading.classList.remove('hidden');
+
+            try {
+                const { error } = await client.from('hamlet_signups').insert([{
+                    name: name,
+                    email: email,
+                    hamlet: 'mole',
+                    ref: 'mole',
+                    village: 'cannabin-oid',
+                    created_at: new Date().toISOString()
+                }]);
+
+                if (error && error.code !== '23505') {
+                    console.error('Signup error:', error);
+                }
+
+                welcomeName.textContent = name.split(' ')[0];
+                signupCard.classList.add('hidden');
+                successCard.classList.remove('hidden');
+                successCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+            } catch (err) {
+                console.error('Unexpected error:', err);
+                welcomeName.textContent = name.split(' ')[0];
+                signupCard.classList.add('hidden');
+                successCard.classList.remove('hidden');
+            }
+        });
+    </script>
+
+</body>
+</html>

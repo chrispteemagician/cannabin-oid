@@ -1,0 +1,1976 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Cannabin-Oid | Your Path From Self-Medication to Prescription</title>
+    <meta name="description" content="AI-powered cannabis strain identification, terpene analysis, and your pathway to legal medical cannabis prescriptions through Alternaleaf, Sapphire, and UK clinics. Harm reduction. Education. Community.">
+    <meta name="theme-color" content="#16a34a">
+    <link rel="icon" type="image/jpeg" href="cannabin-oid.jpg">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { font-family: 'Poppins', sans-serif; margin: 0; background: #f0fdf4; }
+        .header-gradient { background: linear-gradient(135deg, #16a34a 0%, #15803d 100%); }
+        .btn { min-height: 48px; font-weight: 600; border-radius: 12px; border: none; cursor: pointer; transition: all 0.15s; touch-action: manipulation; display: inline-flex; align-items: center; justify-content: center; padding: 12px 24px; text-decoration: none; }
+        .btn:active { transform: scale(0.97); }
+        .btn-primary { background: linear-gradient(135deg, #16a34a 0%, #15803d 100%); color: white; }
+        .btn-gold { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: black; font-weight: 700; }
+        .btn-green { background: #16a34a; color: white; }
+        .btn-outline { background: white; border: 2px solid #16a34a; color: #16a34a; }
+        .btn-blue { background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); color: white; }
+        .btn-clinic { background: linear-gradient(135deg, #059669 0%, #047857 100%); color: white; font-weight: 700; }
+        .card { background: white; border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); padding: 24px; margin-bottom: 20px; }
+        .upload-box { background: white; border: 3px dashed #cbd5e1; border-radius: 16px; padding: 32px 16px; text-align: center; cursor: pointer; transition: all 0.2s; min-height: 140px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .upload-box:hover { border-color: #16a34a; background: #f0fdf4; }
+        .upload-box:active { transform: scale(0.98); }
+        .tab-btn { flex: 1; padding: 14px; font-weight: 600; font-size: 14px; border: none; background: transparent; cursor: pointer; min-height: 52px; }
+        .tab-btn.active { background: white; color: #16a34a; font-weight: 700; border-bottom: 3px solid #16a34a; }
+        .tab-btn:not(.active) { color: #64748b; border-bottom: 3px solid transparent; }
+        .usecase-btn { background: #f0fdf4; border: 2px solid #bbf7d0; border-radius: 12px; padding: 10px 6px; text-align: center; cursor: pointer; transition: all 0.15s; min-height: 70px; width: 100%; }
+        .usecase-btn.active { background: #dcfce7; border-color: #16a34a; }
+        .usecase-btn:hover { border-color: #16a34a; }
+        .w3w-suggestion { padding: 10px 14px; cursor: pointer; border-bottom: 1px solid #e2e8f0; font-size: 1rem; }
+        .w3w-suggestion:last-child { border-bottom: none; }
+        .w3w-suggestion:hover { background: #f0fdf4; }
+        .offer-card { background: linear-gradient(135deg, #14532d 0%, #166534 100%); color: white; border-radius: 24px; padding: 32px; position: relative; overflow: hidden; }
+        .offer-card::before { content: ''; position: absolute; top: -50%; right: -50%; width: 100%; height: 100%; background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%); }
+        .clinic-card { background: white; border-radius: 16px; padding: 20px; border: 2px solid #e5e7eb; transition: all 0.15s; }
+        .clinic-card:hover { border-color: #16a34a; box-shadow: 0 4px 12px rgba(22,163,74,0.15); }
+        .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 700; text-transform: uppercase; }
+        .badge-featured { background: linear-gradient(135deg, #16a34a, #059669); color: white; }
+        .badge-founder { background: linear-gradient(135deg, #f59e0b, #d97706); color: black; }
+        .village-section { border-left: 4px solid #16a34a; padding-left: 16px; margin-bottom: 24px; }
+        .street-link { display: block; padding: 16px; background: white; border-radius: 12px; margin-bottom: 8px; text-decoration: none; color: #1f2937; border: 2px solid #e5e7eb; transition: all 0.15s; }
+        .street-link:hover { border-color: #16a34a; background: #f0fdf4; }
+        .result-card { background: linear-gradient(135deg, #16a34a 0%, #15803d 100%); color: white; border-radius: 24px; padding: 24px; }
+        .loading-spinner { animation: spin 1s linear infinite; }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        .pulse { animation: pulse 2s ease-in-out infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
+        .hidden { display: none !important; }
+        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); display: flex; align-items: center; justify-content: center; z-index: 100; padding: 16px; }
+        .modal-content { background: white; border-radius: 24px; padding: 32px; max-width: 420px; width: 100%; }
+        .countdown { font-family: monospace; font-size: 14px; background: rgba(255,255,255,0.2); padding: 8px 16px; border-radius: 8px; display: inline-block; }
+        .step-number { width: 36px; height: 36px; border-radius: 50%; background: #16a34a; color: white; display: inline-flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; flex-shrink: 0; }
+        @media (max-width: 640px) { .card { padding: 20px; } .offer-card { padding: 24px; } }
+        .chat-container { max-height: 400px; overflow-y: auto; scroll-behavior: smooth; }
+        .chat-bubble { max-width: 85%; padding: 12px 16px; border-radius: 16px; margin-bottom: 8px; font-size: 14px; line-height: 1.5; word-wrap: break-word; }
+        .chat-user { background: #16a34a; color: white; margin-left: auto; border-bottom-right-radius: 4px; }
+        .chat-terp { background: white; color: #1f2937; border: 2px solid #e5e7eb; border-bottom-left-radius: 4px; }
+        .chat-typing span { animation: blink 1.4s infinite; display: inline-block; }
+        .chat-typing span:nth-child(2) { animation-delay: 0.2s; }
+        .chat-typing span:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes blink { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
+        .qa-item { border: 2px solid #e5e7eb; border-radius: 16px; margin-bottom: 8px; overflow: hidden; transition: border-color 0.15s; }
+        .qa-item:hover { border-color: #16a34a; }
+        .qa-question { padding: 16px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-weight: 600; font-size: 14px; }
+        .qa-answer { max-height: 0; overflow: hidden; transition: max-height 0.3s ease, padding 0.3s ease; padding: 0 16px; font-size: 14px; color: #4b5563; }
+        .qa-answer.open { max-height: 500px; padding: 0 16px 16px; }
+        .section-fade { opacity: 0; transform: translateY(20px); transition: opacity 0.4s, transform 0.4s; }
+        .section-fade.visible { opacity: 1; transform: translateY(0); }
+    </style>
+</head>
+<body>
+    <!-- Age Verification Modal -->
+    <div id="ageModal" class="modal-overlay hidden">
+        <div class="modal-content text-center">
+            <h2 class="text-2xl font-bold text-gray-800 mb-3">Welcome to Cannabin-Oid</h2>
+            <p class="text-gray-600 mb-6">Medical cannabis education and prescription pathway guidance. If you're self-medicating, we can help you get legal.</p>
+            <div class="space-y-3">
+                <button onclick="confirmAge('adult')" class="w-full btn btn-green">I'm 18+ (Continue)</button>
+                <button onclick="confirmAge('parent')" class="w-full btn" style="background:#3b82f6;color:white">I'm a Parent/Guardian</button>
+                <button onclick="confirmAge('under18')" class="w-full btn btn-primary">I'm Under 18</button>
+            </div>
+            <p class="text-xs text-gray-500 mt-6">Medical science focus. Harm reduction. No facilitation of illegal activity.</p>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="header-gradient text-white text-center py-8 px-4">
+        <img src="cannabin-oid.jpg" alt="Cannabin-Oid" class="w-20 h-20 mx-auto rounded-2xl shadow-xl mb-3" onerror="this.style.display='none'">
+        <h1 class="text-4xl sm:text-5xl font-extrabold mb-1">Cannabin-Oid</h1>
+        <p class="text-lg font-semibold opacity-95">Self-Medicating? Get Prescribed.</p>
+        <p class="text-sm opacity-80 mt-1">Your pathway from street to prescription.</p>
+    </header>
+
+    <!-- Prescription Pathway Banner -->
+    <div class="bg-gradient-to-r from-blue-600 to-blue-800 text-white text-center py-3 px-4">
+        <p class="text-sm font-bold">
+            Medical cannabis is LEGAL in the UK with a prescription.
+            <a href="#" onclick="showSection('getlegal');return false" class="underline ml-1">Find out how →</a>
+        </p>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <div class="bg-gray-100 border-b sticky top-0 z-40">
+        <div class="max-w-2xl mx-auto flex">
+            <button onclick="showSection('oracle')" class="tab-btn active" id="tab-oracle">Identify</button>
+            <button onclick="showSection('askterp')" class="tab-btn" id="tab-askterp">Ask Terp</button>
+            <button onclick="showSection('village')" class="tab-btn" id="tab-village">Village</button>
+            <button onclick="showSection('getlegal')" class="tab-btn" id="tab-getlegal">Get Legal</button>
+            <button onclick="showSection('meet')" class="tab-btn" id="tab-meet">📍 Meet</button>
+            <button onclick="window.location='/story.html'" class="tab-btn">📖 Our Story</button>
+            <button onclick="showSection('admin')" class="tab-btn hidden" id="tab-admin">God Mode</button>
+        </div>
+    </div>
+
+    <!-- User Status Bar -->
+    <div id="userBar" class="hidden bg-gradient-to-r from-green-100 to-emerald-100 py-2 px-4">
+        <div class="max-w-2xl mx-auto flex items-center justify-between text-sm">
+            <div class="font-semibold text-green-800">
+                <span id="userBadge"></span> <span id="userName"></span> &bull; <span id="userKudos">0</span> Kudos
+            </div>
+            <button onclick="signOut()" class="text-green-600 underline text-xs">Sign out</button>
+        </div>
+    </div>
+
+    <main class="max-w-2xl mx-auto px-4 py-6">
+
+        <!-- SECTION: Identify (The Oracle) -->
+        <div id="section-oracle">
+            <div class="card">
+                <div class="flex gap-2 mb-4">
+                    <button onclick="setMode('identify')" id="modeIdentify" class="flex-1 btn btn-primary text-sm">Identify Strain</button>
+                    <button onclick="setMode('roast')" id="modeRoast" class="flex-1 btn btn-outline text-sm">Critique My Grow</button>
+                </div>
+
+                <h2 class="text-xl font-bold text-gray-800 mb-2 text-center" id="oracleTitle">Strain Identification</h2>
+                <p class="text-gray-500 text-sm text-center mb-6" id="oracleSubtitle">Upload a photo for AI-powered medical analysis</p>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="upload-box" onclick="document.getElementById('cameraInput').click()">
+                        <div class="text-4xl mb-2">📷</div>
+                        <p class="font-bold text-gray-700 text-sm">Camera</p>
+                    </div>
+                    <div class="upload-box" onclick="document.getElementById('galleryInput').click()">
+                        <div class="text-4xl mb-2">🖼️</div>
+                        <p class="font-bold text-gray-700 text-sm">Gallery</p>
+                    </div>
+                </div>
+
+                <input type="file" id="cameraInput" accept="image/*" capture="environment" class="hidden" onchange="handleUpload(this)">
+                <input type="file" id="galleryInput" accept="image/*" class="hidden" onchange="handleUpload(this)">
+            </div>
+
+            <!-- Self-Medication Recognition Card -->
+            <div class="card" style="background: linear-gradient(135deg, #1e40af 0%, #1d4ed8 100%); color: white;">
+                <h3 class="text-xl font-bold mb-3">Think You're Just "Smoking Weed"?</h3>
+                <p class="text-white/90 text-sm mb-3">You might be managing symptoms you don't have names for yet:</p>
+                <div class="grid grid-cols-2 gap-2 text-sm text-white/90 mb-4">
+                    <div>&#8226; ADHD (focus, executive function)</div>
+                    <div>&#8226; Autism (sensory overload)</div>
+                    <div>&#8226; Anxiety / Depression</div>
+                    <div>&#8226; Chronic pain</div>
+                    <div>&#8226; PTSD</div>
+                    <div>&#8226; Sleep disorders</div>
+                </div>
+                <p class="text-white/90 text-sm mb-4">If cannabis helps you more than alcohol, there's probably a medical reason. You're not "getting high" - you're medicating.</p>
+                <a href="#" onclick="showSection('getlegal');return false" class="btn btn-gold w-full text-center">
+                    You Could Be Prescribed Legally →
+                </a>
+            </div>
+
+            <!-- What We Analyze -->
+            <div class="card bg-gradient-to-r from-green-50 to-emerald-50">
+                <h3 class="font-bold text-gray-800 mb-3">What Cannabin-Oid Analyzes:</h3>
+                <ul class="text-sm text-gray-600 space-y-2">
+                    <li>🌿 Strain identification (genetics, lineage)</li>
+                    <li>🧪 Terpene profile analysis (myrcene, limonene, etc.)</li>
+                    <li>💊 Medical applications (evidence-based)</li>
+                    <li>🌱 Growing characteristics</li>
+                    <li>⚠️ Quality assessment &amp; harm reduction alerts</li>
+                    <li>🔬 Synthetic cannabinoid detection warnings</li>
+                </ul>
+                <p class="text-xs text-gray-500 mt-3">Educational purposes only. Always consult healthcare providers for medical decisions.</p>
+            </div>
+
+            <!-- Village Broadcast -->
+            <div id="broadcastSection" class="card hidden" style="background: linear-gradient(135deg, #14532d 0%, #166534 100%); color: white; padding: 0; overflow: hidden;">
+                <div id="emergencyBanner" class="hidden bg-red-600 text-white text-center py-2 font-bold text-sm">
+                    EMERGENCY BROADCAST
+                </div>
+                <div class="p-4">
+                    <p class="font-bold text-sm mb-3 opacity-80" id="broadcastTitle">Village Broadcast</p>
+                    <div class="relative mx-auto" style="padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 12px; max-width: 400px;">
+                        <iframe
+                            id="broadcastVideo"
+                            src=""
+                            style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen>
+                        </iframe>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Villagers -->
+            <div class="card">
+                <h3 class="font-bold text-gray-800 mb-3">Recent Arrivals</h3>
+                <div id="activityList" class="space-y-2 text-sm text-gray-600">
+                    <p class="text-gray-400">Loading...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION: Ask Terp (Chatbot) -->
+        <div id="section-askterp" class="hidden">
+            <div class="card" style="background: linear-gradient(135deg, #14532d 0%, #166534 100%); color: white; text-align: center;">
+                <div class="text-5xl mb-3">🧪</div>
+                <h2 class="text-2xl font-bold mb-1">Ask Terp</h2>
+                <p class="text-white/80 text-sm">Your mate who also happens to have a PhD in biochemistry</p>
+                <p class="text-white/60 text-xs mt-1">Terpene scientist. Slang fluent. Harm reduction always.</p>
+            </div>
+
+            <!-- Quick Questions -->
+            <div class="card">
+                <p class="text-sm font-semibold text-gray-600 mb-3">Quick asks:</p>
+                <div class="flex flex-wrap gap-2">
+                    <button onclick="askTerpQuick('What strain is good for sleep?')" class="text-xs px-3 py-2 bg-green-50 border border-green-200 rounded-full text-green-700 font-semibold hover:bg-green-100 transition">Sleep strains?</button>
+                    <button onclick="askTerpQuick('How do I know if my weed is laced?')" class="text-xs px-3 py-2 bg-red-50 border border-red-200 rounded-full text-red-700 font-semibold hover:bg-red-100 transition">Is my stuff safe?</button>
+                    <button onclick="askTerpQuick('How do I get prescribed in the UK?')" class="text-xs px-3 py-2 bg-blue-50 border border-blue-200 rounded-full text-blue-700 font-semibold hover:bg-blue-100 transition">Get prescribed?</button>
+                    <button onclick="askTerpQuick('What are terpenes and why do they matter?')" class="text-xs px-3 py-2 bg-purple-50 border border-purple-200 rounded-full text-purple-700 font-semibold hover:bg-purple-100 transition">What are terpenes?</button>
+                    <button onclick="askTerpQuick('Indica vs sativa - what is the difference really?')" class="text-xs px-3 py-2 bg-amber-50 border border-amber-200 rounded-full text-amber-700 font-semibold hover:bg-amber-100 transition">Indica vs sativa?</button>
+                    <button onclick="askTerpQuick('Can I drive if I am prescribed cannabis?')" class="text-xs px-3 py-2 bg-gray-100 border border-gray-200 rounded-full text-gray-700 font-semibold hover:bg-gray-200 transition">Driving rules?</button>
+                </div>
+            </div>
+
+            <!-- Chat Window -->
+            <div class="card" style="padding: 16px;">
+                <div id="chatMessages" class="chat-container" style="min-height: 200px; padding: 8px;">
+                    <div class="flex items-start gap-2 mb-3">
+                        <span class="text-2xl flex-shrink-0">🧪</span>
+                        <div class="chat-bubble chat-terp">
+                            Yo! I'm Terp. Ask me anything about cannabis — strains, terpenes, getting prescribed, harm reduction, UK law, whatever's on your mind. No judgment, just good info from your favourite terpene nerd. Fire away bruv!
+                        </div>
+                    </div>
+                </div>
+                <div class="flex gap-2 mt-3">
+                    <input type="text" id="terpInput" placeholder="Ask Terp anything..."
+                        class="flex-1 px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-green-500 focus:outline-none text-sm"
+                        onkeydown="if(event.key==='Enter')askTerp()">
+                    <button onclick="askTerp()" class="btn btn-green px-6" style="min-height: 44px;">Send</button>
+                </div>
+                <p class="text-xs text-gray-400 mt-2 text-center">Terp is AI-powered. Not medical advice. Always consult your prescriber.</p>
+            </div>
+
+            <!-- Q&A Section -->
+            <div class="card">
+                <h3 class="font-bold text-gray-800 mb-4">Common Questions</h3>
+
+                <div class="qa-item" onclick="toggleQA(this)">
+                    <div class="qa-question"><span>Is cannabis legal in the UK?</span><span>+</span></div>
+                    <div class="qa-answer">Medical cannabis has been legal in the UK since November 2018 (rescheduled to Schedule 2). You need a prescription from a specialist doctor. Recreational cannabis is still Class B — possession can get you up to 5 years, supply up to 14 years. BUT if you're self-medicating for a genuine condition, you may well qualify for a legal prescription. That's what Cannabin-Oid is here to help with.</div>
+                </div>
+
+                <div class="qa-item" onclick="toggleQA(this)">
+                    <div class="qa-question"><span>What's a terpene and why should I care?</span><span>+</span></div>
+                    <div class="qa-answer">Terpenes are the aromatic compounds that give cannabis (and all plants) their smell and flavour. But they do WAY more than that. Myrcene makes you sleepy. Limonene lifts your mood. Caryophyllene reduces inflammation (it's literally a CB2 receptor agonist). The "entourage effect" means terpenes and cannabinoids work together — the whole plant is more than the sum of its parts. When people say "this strain hits different," they're talking about the terpene profile whether they know it or not.</div>
+                </div>
+
+                <div class="qa-item" onclick="toggleQA(this)">
+                    <div class="qa-question"><span>Will my GP find out if I get prescribed?</span><span>+</span></div>
+                    <div class="qa-answer">Most private cannabis clinics will ask for your GP Summary Care Record as part of the consultation. Some clinics notify your GP, some don't by default but recommend it. You can discuss this with your prescriber. Many patients do tell their GP and find them surprisingly supportive — especially when you frame it as moving from self-medication to legitimate treatment. Your GP cannot override your private prescription.</div>
+                </div>
+
+                <div class="qa-item" onclick="toggleQA(this)">
+                    <div class="qa-question"><span>Can I drive while prescribed cannabis?</span><span>+</span></div>
+                    <div class="qa-answer">Legally, prescribed cannabis patients have a "statutory medical defence" under the Drug Driving Act 2015 — meaning you won't automatically fail a drug-drive test. HOWEVER, you must not be impaired while driving. If an officer believes you're impaired, you can still be prosecuted. Practically: don't drive while medicated. Wait until the effects have fully worn off. Keep your prescription evidence in the car. Many patients medicate in the evening and drive fine the next day.</div>
+                </div>
+
+                <div class="qa-item" onclick="toggleQA(this)">
+                    <div class="qa-question"><span>Indica vs sativa — what's the real difference?</span><span>+</span></div>
+                    <div class="qa-answer">Here's the secret: the indica/sativa distinction is mostly about plant shape (short and bushy vs tall and lanky), not effects. What actually determines how a strain affects you is its terpene and cannabinoid profile. A high-myrcene strain will be sedating regardless of whether it's labelled "indica" or "sativa". A high-limonene strain will be uplifting. Modern cannabis science focuses on chemotypes (chemical profiles) rather than the old indica/sativa labels. That said, the labels are still useful as rough guides — just know the real story is in the terps.</div>
+                </div>
+
+                <div class="qa-item" onclick="toggleQA(this)">
+                    <div class="qa-question"><span>How do I know if my stuff is laced or contaminated?</span><span>+</span></div>
+                    <div class="qa-answer">Warning signs: chemical/metallic taste, unusually strong effects from a small amount, effects that feel "wrong" or synthetic, uniform appearance lacking natural variation, strange texture. If you suspect synthetic cannabinoids (Spice/K2) — BIN IT. They're genuinely dangerous and have killed people. Other contamination: white fuzzy patches (mold), overly dense buds with no trichomes (PGR), gritty texture (silica/glass). This is the #1 reason to get prescribed — lab-tested, pharmacy-dispensed medicine means you know exactly what you're getting.</div>
+                </div>
+
+                <div class="qa-item" onclick="toggleQA(this)">
+                    <div class="qa-question"><span>How much does getting prescribed cost?</span><span>+</span></div>
+                    <div class="qa-answer">Initial consultation: typically 49-150 quid depending on the clinic. Follow-ups: 49-80 quid. Medication: 150-350 per month depending on your prescription. Prescription/dispensing fee: 0-30 quid. So roughly 200-500 to get started, then 150-350 monthly for medicine. Several clinics have affordability schemes (Sapphire Access Scheme, for example). Compare that to what you're spending on the street — for many people it works out similar, but you get lab-tested, legal medicine delivered to your door.</div>
+                </div>
+
+                <div class="qa-item" onclick="toggleQA(this)">
+                    <div class="qa-question"><span>What about edibles — can I get those on prescription?</span><span>+</span></div>
+                    <div class="qa-answer">UK prescriptions currently focus on dried flower (for vaporization) and cannabis oils (sublingual drops). You won't get gummy bears on the NHS just yet! Cannabis oils are great for precise dosing and longer-lasting effects — many patients use flower during the day and oil at night. Some clinics prescribe both. The UK market is expanding, and more formulations are becoming available. If edibles are your preference, ask your prescriber about oil-based options.</div>
+                </div>
+            </div>
+
+            <!-- Prescription nudge -->
+            <div class="card text-center" style="background: linear-gradient(135deg, #1e40af 0%, #1d4ed8 100%); color: white;">
+                <p class="font-bold text-lg mb-2">Self-medicating?</p>
+                <p class="text-white/80 text-sm mb-4">Terp says: "Best decision I ever made was going legal, bruv. No more guessing what's in your draw."</p>
+                <a href="#" onclick="showSection('getlegal');return false" class="btn btn-gold w-full text-center">Get Prescribed Legally</a>
+            </div>
+        </div>
+
+        <!-- SECTION: The Village -->
+        <div id="section-village" class="hidden">
+
+            <!-- Welcome -->
+            <div class="card">
+                <h2 class="text-2xl font-bold text-gray-800 mb-2">Welcome to the Village</h2>
+                <p class="text-gray-600 mb-4">Cannabin-Oid helps people who self-medicate with cannabis find <strong>legal prescription pathways</strong>. We're an educational community focused on medical science and harm reduction.</p>
+                <p class="text-gray-600 mb-4">Built by Doc - prescribed by <strong>Alternaleaf UK</strong> after 42 years of self-medicating without knowing why.</p>
+                <p class="text-gray-500 text-sm">Part of the FeelFamous ecosystem - building communities, not corporations.</p>
+            </div>
+
+            <!-- Doc's Story (Short Version) -->
+            <div class="card" style="background: linear-gradient(135deg, #14532d 0%, #166534 100%); color: white;">
+                <h3 class="text-xl font-bold mb-4">Doc's Story</h3>
+                <div class="space-y-3 text-sm text-white/90">
+                    <p>I'm 57. Diagnosed AuDHD two years ago. Been self-medicating with cannabis since I was four years old - copying adults because that's what autistic kids do.</p>
+                    <p>For 42 years I was made to feel like a criminal. The people I bought from weren't gang members - they were young mums feeding babies, people in pain with no options.</p>
+                    <p><strong>In June 2025, Alternaleaf UK prescribed me legally.</strong> Best birthday gift ever. Not because cannabis suddenly became medicine - it always was - but because they gave me dignity.</p>
+                    <p>This village exists to help you make that same journey. From self-medication to prescription. From criminal to patient.</p>
+                </div>
+                <a href="#" onclick="showSection('getlegal');return false" class="btn btn-gold w-full text-center mt-4">
+                    Start Your Prescription Journey →
+                </a>
+            </div>
+
+            <!-- What This Is / Is NOT -->
+            <div class="card bg-gradient-to-r from-green-50 to-emerald-50 border-2 border-green-200">
+                <h3 class="font-bold text-gray-800 mb-3">What Cannabin-Oid Is</h3>
+                <ul class="space-y-2 text-sm text-gray-700">
+                    <li><strong>Prescription pathway guide</strong> - helping self-medicators get legal</li>
+                    <li><strong>AI-powered identification</strong> for strains, terpenes, quality</li>
+                    <li><strong>Medical science focus</strong> - evidence-based information</li>
+                    <li><strong>Harm reduction priority</strong> - synthetic detection, safety warnings</li>
+                    <li><strong>Clinic directory</strong> - Alternaleaf, Sapphire, Cantourage, Releaf</li>
+                </ul>
+            </div>
+
+            <div class="card border-2 border-red-200 bg-red-50">
+                <h3 class="font-bold text-gray-800 mb-3">What Cannabin-Oid Is NOT</h3>
+                <ul class="space-y-2 text-sm text-gray-700">
+                    <li><strong>NOT a marketplace</strong> - we don't sell cannabis</li>
+                    <li><strong>NOT facilitating illegal activity</strong> - we guide you to legal routes</li>
+                    <li><strong>NOT "stoner culture"</strong> - professional medical focus</li>
+                    <li><strong>NOT medical advice</strong> - consult your prescriber</li>
+                </ul>
+            </div>
+
+            <!-- The Code -->
+            <div class="card" style="background: linear-gradient(135deg, #14532d 0%, #166534 100%); color: white;">
+                <h3 class="text-xl font-bold mb-4">The Village Code</h3>
+                <div class="space-y-3 text-sm">
+                    <p><strong>All Welcome, Be Kind.</strong> Patients, self-medicators, curious people - everyone learning together.</p>
+                    <p><strong>Medical Science First.</strong> Evidence-based information. No pseudoscience.</p>
+                    <p><strong>Harm Reduction Always.</strong> Safety warnings are mandatory. We protect our community.</p>
+                    <p><strong>Respect Privacy.</strong> What happens in the village stays in the village.</p>
+                    <p><strong>Get Legal.</strong> We exist to help you find prescription pathways, not stay in the shadows.</p>
+                </div>
+                <p class="text-white/60 text-xs mt-4">Common + Unity = Community</p>
+            </div>
+
+            <!-- UK Police Guidance -->
+            <div class="card border-2 border-blue-200 bg-blue-50">
+                <h3 class="font-bold text-blue-800 mb-3">UK Police Guidance (Nov 2024)</h3>
+                <p class="text-sm text-gray-700 mb-3"><strong>"Patients first, suspects second"</strong> - National Police Chiefs' Council</p>
+                <ul class="space-y-2 text-sm text-gray-700">
+                    <li>&#10003; Officers must assume you're a patient unless they have grounds otherwise</li>
+                    <li>&#10003; You're NOT legally required to carry prescription documents</li>
+                    <li>&#10003; Smell of cannabis alone is NOT grounds for search if you're prescribed</li>
+                    <li>&#10003; Police can ask to see packaging, dispensing label, or prescriber letter</li>
+                </ul>
+                <p class="text-xs text-gray-500 mt-3">Almost 1 in 5 Alternaleaf patients have been challenged by police. This guidance is changing that.</p>
+            </div>
+
+            <!-- Harm Reduction Focus -->
+            <div class="card" style="background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%); color: white;">
+                <h3 class="text-xl font-bold mb-3">Harm Reduction Focus</h3>
+                <p class="text-white/90 mb-4">Every analysis includes safety checks:</p>
+                <ul class="space-y-2 text-sm text-white/90">
+                    <li>⚠️ Synthetic cannabinoid detection warnings</li>
+                    <li>🔬 Mold and contamination checks</li>
+                    <li>🧪 PGR (Plant Growth Regulator) identification</li>
+                    <li>📋 Lab testing recommendations</li>
+                </ul>
+                <p class="text-yellow-300 font-bold mt-4 text-sm">The safest cannabis is prescribed cannabis. Get legal, get lab-tested product.</p>
+            </div>
+
+            <!-- Streets -->
+            <div class="card">
+                <h3 class="font-bold text-gray-800 mb-4">Explore the Village</h3>
+
+                <div class="village-section">
+                    <h4 class="font-semibold text-gray-700 mb-2">Main Square</h4>
+                    <a href="#" onclick="showSection('oracle');return false" class="street-link">
+                        <span class="text-xl mr-2">🔬</span>
+                        <span class="font-semibold">Strain Identifier</span>
+                        <span class="text-gray-500 text-sm block">AI-powered analysis - free forever</span>
+                    </a>
+                    <a href="#" onclick="showSection('getlegal');return false" class="street-link" style="border-color: #16a34a; background: #f0fdf4;">
+                        <span class="text-xl mr-2">💊</span>
+                        <span class="font-semibold text-green-700">Get Prescribed</span>
+                        <span class="text-green-600 text-sm block">Your pathway to legal medical cannabis</span>
+                    </a>
+                </div>
+
+                <div class="village-section">
+                    <h4 class="font-semibold text-gray-700 mb-2">Your Space in the Dispensary</h4>
+                    <a href="/hut/signup.html" class="street-link">
+                        <span class="text-xl mr-2">🌱</span>
+                        <span class="font-semibold">Claim Your Hut</span>
+                        <span class="text-gray-500 text-sm block">Villagers (£3/mo) — name, bio, QR, one link</span>
+                    </a>
+                    <a href="/hamlet/signup.html" class="street-link" style="border-color: #16a34a; background: #f0fdf4;">
+                        <span class="text-xl mr-2">🌿</span>
+                        <span class="font-semibold text-green-700">Claim Your Hamlet</span>
+                        <span class="text-green-600 text-sm block">Elders (£7/mo) + Founders (£15/mo) — story, kit, links</span>
+                    </a>
+                    <a href="/hamlet/" class="street-link">
+                        <span class="text-xl mr-2">🏘️</span>
+                        <span class="font-semibold">View the Hamlet Directory</span>
+                        <span class="text-gray-500 text-sm block">See who's in the Dispensary</span>
+                    </a>
+                </div>
+
+                <div class="village-section">
+                    <h4 class="font-semibold text-gray-700 mb-2">Prescription Clinics</h4>
+                    <a href="https://alternaleaf.com/uk" target="_blank" rel="noopener noreferrer" class="street-link" style="border-color: #059669;">
+                        <span class="text-xl mr-2">💚</span>
+                        <span class="font-semibold">Alternaleaf UK</span>
+                        <span class="text-green-600 text-sm block">Doc's clinic. The one that changed everything.</span>
+                    </a>
+                    <a href="https://www.sapphireclinics.com" target="_blank" rel="noopener noreferrer" class="street-link">
+                        <span class="text-xl mr-2">🏥</span>
+                        <span class="font-semibold">Sapphire Medical</span>
+                        <span class="text-gray-500 text-sm block">Largest UK medical cannabis clinic</span>
+                    </a>
+                    <a href="https://wa.me/447976884254" class="street-link">
+                        <span class="text-xl mr-2">💬</span>
+                        <span class="font-semibold">WhatsApp Doc</span>
+                        <span class="text-gray-500 text-sm block">Questions about getting prescribed? Ask.</span>
+                    </a>
+                </div>
+
+                <div class="village-section">
+                    <h4 class="font-semibold text-gray-700 mb-2">The Library (Coming Soon)</h4>
+                    <div class="street-link opacity-60">
+                        <span class="text-xl mr-2">📚</span>
+                        <span class="font-semibold">Strain Database</span>
+                        <span class="text-gray-500 text-sm block">Top 50 strains with medical profiles</span>
+                    </div>
+                    <div class="street-link opacity-60">
+                        <span class="text-xl mr-2">🧬</span>
+                        <span class="font-semibold">Terpene Guide</span>
+                        <span class="text-gray-500 text-sm block">Complete terpene reference</span>
+                    </div>
+                    <div class="street-link opacity-60">
+                        <span class="text-xl mr-2">⚖️</span>
+                        <span class="font-semibold">Legal Frameworks</span>
+                        <span class="text-gray-500 text-sm block">UK, Spain, EU, USA regulations</span>
+                    </div>
+                </div>
+
+                <div class="village-section">
+                    <h4 class="font-semibold text-gray-700 mb-2">The -Oid Villages</h4>
+                    <div class="grid grid-cols-3 gap-2">
+                        <a href="https://magic-oid.co.uk" class="street-link text-center py-3">
+                            <span class="text-2xl">🎩</span>
+                            <span class="block text-sm font-semibold mt-1">Magic-Oid</span>
+                        </a>
+                        <a href="https://radi-oid.co.uk" class="street-link text-center py-3">
+                            <span class="text-2xl">📻</span>
+                            <span class="block text-sm font-semibold mt-1">Radi-Oid</span>
+                        </a>
+                        <a href="https://sail-oid.co.uk" class="street-link text-center py-3">
+                            <span class="text-2xl">⛵</span>
+                            <span class="block text-sm font-semibold mt-1">Sail-Oid</span>
+                        </a>
+                        <a href="https://guit-oid.co.uk" class="street-link text-center py-3">
+                            <span class="text-2xl">🎸</span>
+                            <span class="block text-sm font-semibold mt-1">Guit-Oid</span>
+                        </a>
+                        <a href="https://vinyl-oid.co.uk" class="street-link text-center py-3">
+                            <span class="text-2xl">💿</span>
+                            <span class="block text-sm font-semibold mt-1">Vinyl-Oid</span>
+                        </a>
+                        <a href="https://coin-oid.co.uk" class="street-link text-center py-3">
+                            <span class="text-2xl">🪙</span>
+                            <span class="block text-sm font-semibold mt-1">Coin-Oid</span>
+                        </a>
+                        <a href="https://watch-oid.co.uk" class="street-link text-center py-3">
+                            <span class="text-2xl">⌚</span>
+                            <span class="block text-sm font-semibold mt-1">Watch-Oid</span>
+                        </a>
+                        <a href="https://camera-oid.co.uk" class="street-link text-center py-3">
+                            <span class="text-2xl">📷</span>
+                            <span class="block text-sm font-semibold mt-1">Camera-Oid</span>
+                        </a>
+                        <a href="https://stamp-oid.co.uk" class="street-link text-center py-3">
+                            <span class="text-2xl">📮</span>
+                            <span class="block text-sm font-semibold mt-1">Stamp-Oid</span>
+                        </a>
+                        <div class="street-link text-center py-3 bg-green-50 border-green-400">
+                            <span class="text-2xl">🌿</span>
+                            <span class="block text-sm font-bold mt-1 text-green-600">You're Here!</span>
+                        </div>
+                        <a href="https://fish-oid.co.uk" class="street-link text-center py-3">
+                            <span class="text-2xl">🐟</span>
+                            <span class="block text-sm font-semibold mt-1">Fish-Oid</span>
+                        </a>
+                        <a href="https://designer-oid.co.uk" class="street-link text-center py-3">
+                            <span class="text-2xl">👗</span>
+                            <span class="block text-sm font-semibold mt-1">Designer-Oid</span>
+                        </a>
+                        <a href="https://miniature-oid.co.uk" class="street-link text-center py-3">
+                            <span class="text-2xl">🔍</span>
+                            <span class="block text-sm font-semibold mt-1">Miniature-Oid</span>
+                        </a>
+                        <a href="https://spicylister.com" class="street-link text-center py-3">
+                            <span class="text-2xl">🌶️</span>
+                            <span class="block text-sm font-semibold mt-1">SpicyLister</span>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="village-section">
+                    <h4 class="font-semibold text-gray-700 mb-2">The Family</h4>
+                    <div class="grid grid-cols-2 gap-2">
+                        <a href="https://docstrange.co.uk" class="street-link text-center py-3">
+                            <span class="text-2xl">🧠</span>
+                            <span class="block text-sm font-semibold mt-1">Doc Strange</span>
+                        </a>
+                        <a href="https://feelfamous.com" class="street-link text-center py-3">
+                            <span class="text-2xl">⭐</span>
+                            <span class="block text-sm font-semibold mt-1">FeelFamous</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quote -->
+            <div class="card text-center bg-gradient-to-r from-green-50 to-emerald-50">
+                <p class="text-lg italic text-gray-700 mb-2">"The illegality of cannabis is outrageous, an impediment to full utilization of a drug which helps produce the serenity and insight, sensitivity and fellowship so desperately needed in this increasingly mad and dangerous world."</p>
+                <p class="text-sm text-green-600 font-semibold">- Carl Sagan</p>
+            </div>
+        </div>
+
+        <!-- SECTION: Get Legal (Prescription Pathway) -->
+        <div id="section-getlegal" class="hidden">
+
+            <!-- Hero: The Big Truth -->
+            <div class="card" style="background: linear-gradient(135deg, #1e40af 0%, #1d4ed8 100%); color: white;">
+                <h2 class="text-2xl font-bold mb-3">You're Not a Criminal. You Never Were.</h2>
+                <p class="text-white/90 mb-3">Medical cannabis has been legal in the UK since 2018. You don't need to buy from the street. You don't need to feel guilty. You can get a prescription.</p>
+                <p class="text-white/90 mb-3">If you've been self-medicating with cannabis - for pain, anxiety, ADHD, autism, PTSD, sleep, depression - a prescriber can make that legal.</p>
+                <p class="text-white font-bold">Doc did it. Dozens of friends have done it. You can too.</p>
+            </div>
+
+            <!-- How It Works - Steps -->
+            <div class="card">
+                <h3 class="font-bold text-gray-800 mb-4">How to Get Prescribed (4 Steps)</h3>
+                <div class="space-y-4">
+                    <div class="flex gap-4 items-start">
+                        <span class="step-number">1</span>
+                        <div>
+                            <p class="font-bold text-gray-800">Choose a Clinic</p>
+                            <p class="text-sm text-gray-600">Alternaleaf, Sapphire, Cantourage, or Releaf. All online consultations.</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-4 items-start">
+                        <span class="step-number">2</span>
+                        <div>
+                            <p class="font-bold text-gray-800">Book a Consultation</p>
+                            <p class="text-sm text-gray-600">Video call with a specialist. You need to have tried at least 2 previous treatments that didn't work.</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-4 items-start">
+                        <span class="step-number">3</span>
+                        <div>
+                            <p class="font-bold text-gray-800">Get Your Prescription</p>
+                            <p class="text-sm text-gray-600">If approved, your prescription is sent to a licensed pharmacy.</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-4 items-start">
+                        <span class="step-number">4</span>
+                        <div>
+                            <p class="font-bold text-gray-800">Receive Your Medicine</p>
+                            <p class="text-sm text-gray-600">Lab-tested, legal, delivered to your door. No more street. No more risk.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Featured: Alternaleaf -->
+            <div class="card" style="background: linear-gradient(135deg, #059669 0%, #047857 100%); color: white; padding: 0; overflow: hidden;">
+                <div style="padding: 32px;">
+                    <span class="badge badge-featured mb-3">Doc's Clinic</span>
+                    <h2 class="text-3xl font-extrabold mb-2">Alternaleaf UK</h2>
+                    <p class="text-white/90 mb-4">The clinic that saved Doc's life. June 7th, 2025 - the day before his birthday. After 42 years of self-medicating, legitimacy at last.</p>
+                    <p class="text-white/90 text-sm mb-4">Alternaleaf specializes in patients where other treatments haven't worked. Online consultations. Delivered to your door.</p>
+                    <a href="https://alternaleaf.com/uk" target="_blank" rel="noopener noreferrer" class="btn btn-gold w-full text-center mb-3">
+                        Visit Alternaleaf UK →
+                    </a>
+                    <p class="text-white/60 text-xs text-center">This is not a paid endorsement. Doc is a genuine patient.</p>
+                </div>
+            </div>
+
+            <!-- Other Clinics -->
+            <div class="card">
+                <h3 class="font-bold text-gray-800 mb-4">UK Medical Cannabis Clinics</h3>
+                <p class="text-sm text-gray-600 mb-4">Multiple clinics offer medical cannabis prescriptions. All legitimate, all regulated.</p>
+
+                <div class="space-y-3">
+                    <div class="clinic-card">
+                        <h4 class="font-bold text-gray-800">Sapphire Medical Clinics</h4>
+                        <p class="text-sm text-gray-600 mb-2">Largest UK medical cannabis clinic network. UK Medical Cannabis Registry. Sapphire Access Scheme for affordability.</p>
+                        <a href="https://www.sapphireclinics.com" target="_blank" rel="noopener noreferrer" class="btn btn-clinic text-sm">Visit Sapphire →</a>
+                    </div>
+
+                    <div class="clinic-card">
+                        <h4 class="font-bold text-gray-800">Cantourage Clinic</h4>
+                        <p class="text-sm text-gray-600 mb-2">Specialist clinic with experienced prescribers. Growing range of products and formulations.</p>
+                        <a href="https://cantourage.com" target="_blank" rel="noopener noreferrer" class="btn btn-clinic text-sm">Visit Cantourage →</a>
+                    </div>
+
+                    <div class="clinic-card">
+                        <h4 class="font-bold text-gray-800">Releaf</h4>
+                        <p class="text-sm text-gray-600 mb-2">Digital-first approach with app-based access. Streamlined consultation process.</p>
+                        <a href="https://www.releaf.co.uk" target="_blank" rel="noopener noreferrer" class="btn btn-clinic text-sm">Visit Releaf →</a>
+                    </div>
+
+                    <div class="clinic-card">
+                        <h4 class="font-bold text-gray-800">Integro Clinics</h4>
+                        <p class="text-sm text-gray-600 mb-2">Online consultations, secure video appointments. Part of Grow Open Access Initiative.</p>
+                        <a href="https://integroclinics.com" target="_blank" rel="noopener noreferrer" class="btn btn-clinic text-sm">Visit Integro →</a>
+                    </div>
+                </div>
+
+                <p class="text-xs text-gray-500 mt-4">Full clinic comparison guide available in the Village Library (Villager members).</p>
+            </div>
+
+            <!-- What You'll Need -->
+            <div class="card bg-gradient-to-r from-blue-50 to-indigo-50 border-2 border-blue-200">
+                <h3 class="font-bold text-blue-800 mb-3">What You'll Need for Your Consultation</h3>
+                <ul class="space-y-2 text-sm text-gray-700">
+                    <li>&#10003; <strong>Medical history</strong> - conditions you're treating</li>
+                    <li>&#10003; <strong>Previous treatments tried</strong> - minimum 2 that didn't work (GP prescriptions, therapy, etc.)</li>
+                    <li>&#10003; <strong>Honest self-medication history</strong> - prescribers want to know</li>
+                    <li>&#10003; <strong>GP Summary Care Record</strong> - most clinics request this</li>
+                    <li>&#10003; <strong>Photo ID</strong> - standard verification</li>
+                </ul>
+                <div class="bg-white rounded-xl p-4 mt-4">
+                    <p class="text-sm text-gray-700"><strong>Doc's tip:</strong> Frame it as harm reduction. "Cannabis helps me more than alcohol/painkillers/benzos, and I want to do this legally." That's the truth. Say it.</p>
+                </div>
+            </div>
+
+            <!-- Conditions That Qualify -->
+            <div class="card">
+                <h3 class="font-bold text-gray-800 mb-3">Conditions That May Qualify</h3>
+                <div class="grid grid-cols-2 gap-2 text-sm text-gray-700">
+                    <div class="bg-green-50 rounded-lg p-3">Chronic Pain</div>
+                    <div class="bg-green-50 rounded-lg p-3">Anxiety</div>
+                    <div class="bg-green-50 rounded-lg p-3">ADHD</div>
+                    <div class="bg-green-50 rounded-lg p-3">Autism / ASD</div>
+                    <div class="bg-green-50 rounded-lg p-3">PTSD</div>
+                    <div class="bg-green-50 rounded-lg p-3">Depression</div>
+                    <div class="bg-green-50 rounded-lg p-3">Insomnia</div>
+                    <div class="bg-green-50 rounded-lg p-3">Epilepsy</div>
+                    <div class="bg-green-50 rounded-lg p-3">MS / Neurological</div>
+                    <div class="bg-green-50 rounded-lg p-3">Fibromyalgia</div>
+                    <div class="bg-green-50 rounded-lg p-3">IBS / Crohn's</div>
+                    <div class="bg-green-50 rounded-lg p-3">Nausea (chemo)</div>
+                </div>
+                <p class="text-xs text-gray-500 mt-3">You must have tried at least 2 conventional treatments without adequate relief.</p>
+            </div>
+
+            <!-- Costs -->
+            <div class="card">
+                <h3 class="font-bold text-gray-800 mb-3">What It Costs</h3>
+                <div class="space-y-3 text-sm text-gray-700">
+                    <div class="flex justify-between items-center py-2 border-b">
+                        <span>Initial consultation</span>
+                        <span class="font-bold">£49-£150</span>
+                    </div>
+                    <div class="flex justify-between items-center py-2 border-b">
+                        <span>Follow-up appointments</span>
+                        <span class="font-bold">£49-£80</span>
+                    </div>
+                    <div class="flex justify-between items-center py-2 border-b">
+                        <span>Medication (monthly)</span>
+                        <span class="font-bold">£150-£350</span>
+                    </div>
+                    <div class="flex justify-between items-center py-2">
+                        <span>Prescription fee</span>
+                        <span class="font-bold">£0-£30</span>
+                    </div>
+                </div>
+                <div class="bg-amber-50 rounded-lg p-3 mt-3">
+                    <p class="text-sm text-amber-800"><strong>Access schemes exist.</strong> Sapphire has the Sapphire Access Scheme. Several clinics offer reduced rates. Ask about affordability options.</p>
+                </div>
+            </div>
+
+            <!-- Vaporizer Requirement -->
+            <div class="card border-2 border-red-200 bg-red-50">
+                <h3 class="font-bold text-red-800 mb-3">UK Legal Requirement: You Must Vaporize</h3>
+                <p class="text-sm text-gray-700 mb-3">If prescribed in the UK, you CANNOT smoke your medication. Combustion/ignition is illegal. You must use a vaporizer.</p>
+                <div class="bg-white rounded-lg p-3">
+                    <p class="text-sm text-gray-700 mb-2"><strong>Doc's Daily Drivers:</strong></p>
+                    <ul class="text-sm text-gray-600 space-y-2">
+                        <li>&#8226; <a href="https://www.amazon.co.uk/s?k=Arizer+Solo+2+vaporizer&tag=chrdocstrcromh-21" target="_blank" rel="noopener" class="text-green-700 underline font-semibold">Arizer Solo 2</a> - Doc's daily driver. Reliable, clean vapour, glass stem</li>
+                        <li>&#8226; <a href="https://www.amazon.co.uk/s?k=Arizer+Solo+3+vaporizer&tag=chrdocstrcromh-21" target="_blank" rel="noopener" class="text-green-700 underline font-semibold">Arizer Solo 3</a> - The upgrade Doc's got his eye on. USB-C, better airflow</li>
+                        <li>&#8226; <a href="https://www.amazon.co.uk/s?k=Arizer+Air+SE+vaporizer&tag=chrdocstrcromh-21" target="_blank" rel="noopener" class="text-green-700 underline">Arizer Air SE</a> - Great budget starter, replaceable battery</li>
+                        <li>&#8226; <a href="https://www.amazon.co.uk/s?k=Dynavap+vaporizer&tag=chrdocstrcromh-21" target="_blank" rel="noopener" class="text-green-700 underline">Dynavap</a> - No battery, indestructible travel companion</li>
+                        <li>&#8226; <a href="https://www.amazon.co.uk/s?k=Storm+Spirit+vaporizer&tag=chrdocstrcromh-21" target="_blank" rel="noopener" class="text-green-700 underline">Storm/Spirit range</a> - Budget friendly, decent performance</li>
+                    </ul>
+                    <p class="text-xs text-gray-500 mt-2"><strong>Essentials:</strong>
+                        <a href="https://www.amazon.co.uk/s?k=isopropyl+alcohol+99%25&tag=chrdocstrcromh-21" target="_blank" rel="noopener" class="text-green-700 underline">Isopropyl alcohol 99%</a> (cleaning) |
+                        <a href="https://www.amazon.co.uk/s?k=18650+battery+charger&tag=chrdocstrcromh-21" target="_blank" rel="noopener" class="text-green-700 underline">18650 batteries + charger</a> (Air SE)
+                    </p>
+                    <p class="text-xs text-gray-400 mt-1">Amazon links support the village (affiliate)</p>
+                </div>
+            </div>
+
+            <!-- Patreon active state (hidden until signed in) -->
+            <div id="patreonStatus" class="hidden card mb-6 text-center" style="background: linear-gradient(135deg, #14532d 0%, #166534 100%); color: white;">
+                <p class="text-4xl mb-3">🌿</p>
+                <p class="font-bold text-xl" id="patreonTierLabel">Villager — Patreon Active</p>
+                <p class="text-white/70 text-sm mt-2">Full village access unlocked. Thank you.</p>
+            </div>
+
+            <!-- Join Village via Patreon -->
+            <div id="patreonJoin" class="offer-card mb-6">
+                <div class="relative z-10">
+                    <span class="badge badge-founder mb-3">Support on Patreon</span>
+                    <h2 class="text-2xl font-extrabold mb-4">Join the Village</h2>
+
+                    <div class="grid grid-cols-3 gap-2 mb-6 text-center text-sm">
+                        <div class="bg-white/20 rounded-xl p-3">
+                            <p class="text-2xl mb-1">🏡</p>
+                            <p class="font-bold">Villager</p>
+                            <p class="text-white/80">£3/mo</p>
+                        </div>
+                        <div class="bg-white/20 rounded-xl p-3">
+                            <p class="text-2xl mb-1">⚔️</p>
+                            <p class="font-bold">Elder</p>
+                            <p class="text-white/80">£7/mo</p>
+                        </div>
+                        <div class="bg-white/20 rounded-xl p-3">
+                            <p class="text-2xl mb-1">🏛️</p>
+                            <p class="font-bold">Founder</p>
+                            <p class="text-white/80">£15/mo</p>
+                        </div>
+                    </div>
+
+                    <ul class="space-y-2 mb-6 text-sm">
+                        <li class="flex items-center gap-2"><span class="text-green-400">&#10003;</span> Full "How Doc Got Prescribed" step-by-step guide</li>
+                        <li class="flex items-center gap-2"><span class="text-green-400">&#10003;</span> Clinic comparison guide (which clinic fits your needs)</li>
+                        <li class="flex items-center gap-2"><span class="text-green-400">&#10003;</span> Pro access to ALL -Oid apps (12+ villages)</li>
+                        <li class="flex items-center gap-2"><span class="text-green-400">&#10003;</span> Unlimited AI strain identification</li>
+                        <li class="flex items-center gap-2"><span class="text-green-400">&#10003;</span> Vaporizer guide + Doc's cleaning method</li>
+                        <li class="flex items-center gap-2"><span class="text-green-400">&#10003;</span> Dosing guides for different conditions</li>
+                    </ul>
+
+                    <a href="#" id="patreonSignInBtn" class="btn btn-gold w-full text-center mb-3">
+                        🎨 Sign in with Patreon
+                    </a>
+                    <a href="https://www.patreon.com/chrisptee" target="_blank" rel="noopener" class="block text-center text-white/60 text-xs hover:text-white/80 transition">
+                        Not a member yet? Join at patreon.com/chrisptee
+                    </a>
+                </div>
+            </div>
+
+            <!-- Claim Your Space — three CTAs -->
+            <div class="card mb-6" style="border: 2px solid #16a34a;">
+                <h3 class="font-bold text-gray-800 text-lg mb-1">🌿 Claim your space in the Dispensary</h3>
+                <p class="text-gray-500 text-sm mb-4">No ads. No algorithms. Your own page, QR code, and corner of the village. Patreon members only.</p>
+                <div style="display:flex; flex-direction:column; gap:10px;">
+                    <a href="/hut/signup.html" class="btn btn-outline" style="width:100%; justify-content:space-between;">
+                        <span>🌱 Villager Hut</span>
+                        <span style="font-size:13px; font-weight:400; opacity:0.7;">£3/mo · Name, bio, QR, one link</span>
+                    </a>
+                    <a href="/hamlet/signup.html" class="btn btn-outline" style="width:100%; justify-content:space-between;">
+                        <span>🌿 Elder Hamlet</span>
+                        <span style="font-size:13px; font-weight:400; opacity:0.7;">£7/mo · Story, links, kudos</span>
+                    </a>
+                    <a href="/hamlet/signup.html" class="btn btn-primary" style="width:100%; justify-content:space-between;">
+                        <span>🌿 Founder's Hamlet</span>
+                        <span style="font-size:13px; font-weight:400; opacity:0.8;">£15/mo · Kit grid + SpicyLister</span>
+                    </a>
+                </div>
+                <p style="font-size:12px; color:#6b9e6b; margin-top:10px; text-align:center;">
+                    Already have a hamlet? <a href="/hamlet/" style="color:#16a34a;">View the directory →</a>
+                </p>
+            </div>
+
+            <!-- Free Option -->
+            <div class="card text-center">
+                <h3 class="font-bold text-gray-800 mb-2">Try Free First</h3>
+                <p class="text-gray-600 text-sm mb-4">The strain identifier and clinic links are free forever. No crippled features. No dark patterns. The paid membership gets you Doc's full prescription guide and community access.</p>
+                <div id="authFormJoin">
+                    <input type="email" id="emailInputJoin" placeholder="your@email.com" class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl mb-3 text-center focus:border-green-500 focus:outline-none">
+                    <input type="password" id="passwordInputJoin" placeholder="Choose a password (min 6 chars)" class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl mb-3 text-center focus:border-green-500 focus:outline-none">
+                    <button onclick="signUpOrIn('emailInputJoin', 'passwordInputJoin', 'authFormJoin', 'authSuccessJoin')" class="btn btn-outline w-full mb-2">Sign Up (Free Account)</button>
+                    <p class="text-xs text-gray-500">Already have an account? Same form - just sign in.</p>
+                </div>
+                <div id="authSuccessJoin" class="hidden p-4 bg-green-50 rounded-xl">
+                    <p class="text-green-600 font-bold">You're in!</p>
+                    <p class="text-gray-600 text-sm mt-1">Welcome to the village.</p>
+                </div>
+                <p class="text-xs text-gray-400 mt-3">No spam. No manipulation. No third parties.</p>
+            </div>
+
+            <!-- Contact -->
+            <div class="card">
+                <h3 class="font-bold text-gray-800 mb-3">Questions About Getting Prescribed?</h3>
+                <p class="text-gray-600 text-sm mb-4">Doc has helped multiple friends navigate the prescription process. No sales pitch. Just honest answers from someone who's been through it.</p>
+                <div class="flex flex-wrap gap-2">
+                    <a href="https://wa.me/447976884254" class="btn btn-green flex-1">WhatsApp Doc</a>
+                    <a href="mailto:chris@chrisptee.co.uk" class="btn btn-outline flex-1">Email</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION: God Mode (Admin Only) -->
+        <div id="section-admin" class="hidden">
+            <div class="card" style="background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%); color: white;">
+                <h2 class="text-2xl font-bold mb-2">God Mode Active</h2>
+                <p class="text-white/80">Welcome, Village Elder. You have full control.</p>
+            </div>
+
+            <!-- Your QR Code -->
+            <div class="card text-center">
+                <h3 class="font-bold text-gray-800 mb-3">Your Scannable QR Code</h3>
+                <p class="text-gray-600 text-sm mb-4">For Spannabis booth. Visitors scan to start their prescription journey.</p>
+                <div id="adminQRCode" class="mx-auto mb-4" style="max-width: 280px;"></div>
+                <button onclick="downloadAdminQR()" class="btn btn-primary">Download QR (High Res)</button>
+                <p class="text-xs text-gray-500 mt-2">Links to: cannabin-oid.co.uk?ref=chrisptee</p>
+            </div>
+
+            <!-- Village Broadcast Control -->
+            <div class="card" style="background: linear-gradient(135deg, #7c2d12 0%, #c2410c 100%); color: white;">
+                <h3 class="font-bold mb-3">Village Broadcast</h3>
+                <p class="text-white/80 text-sm mb-4">Change the video shown on ALL -Oid apps.</p>
+
+                <div class="bg-white/10 rounded-xl p-4 mb-4">
+                    <label class="block text-sm font-semibold mb-2">YouTube URL</label>
+                    <input type="text" id="broadcastUrlInput" placeholder="https://youtube.com/shorts/..."
+                        class="w-full px-4 py-3 rounded-xl text-gray-800 focus:outline-none mb-3">
+
+                    <label class="block text-sm font-semibold mb-2">Broadcast Title</label>
+                    <input type="text" id="broadcastTitleInput" placeholder="Welcome to Cannabin-Oid"
+                        class="w-full px-4 py-3 rounded-xl text-gray-800 focus:outline-none mb-3">
+
+                    <div class="flex items-center gap-3 mb-3">
+                        <input type="checkbox" id="broadcastEmergency" class="w-5 h-5">
+                        <label for="broadcastEmergency" class="text-sm">Emergency Broadcast (red banner)</label>
+                    </div>
+                </div>
+
+                <button onclick="updateBroadcast()" class="btn btn-gold w-full mb-2">Update All Apps</button>
+                <button onclick="toggleBroadcast()" id="toggleBroadcastBtn" class="btn btn-outline w-full" style="background: white/20; border-color: white; color: white;">
+                    Hide Broadcast
+                </button>
+            </div>
+
+            <!-- Village Stats -->
+            <div class="card">
+                <h3 class="font-bold text-gray-800 mb-3">Village Stats</h3>
+                <div id="villageStats" class="grid grid-cols-2 gap-4 text-center">
+                    <div class="p-4 bg-green-50 rounded-xl">
+                        <p class="text-3xl font-bold text-green-600" id="statVillagers">-</p>
+                        <p class="text-sm text-gray-600">Villagers</p>
+                    </div>
+                    <div class="p-4 bg-yellow-50 rounded-xl">
+                        <p class="text-3xl font-bold text-yellow-600" id="statKudos">-</p>
+                        <p class="text-sm text-gray-600">Total Kudos</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading View -->
+        <div id="loadingView" class="hidden">
+            <div class="card text-center py-12">
+                <div class="text-6xl loading-spinner mb-4">🌿</div>
+                <p class="text-xl font-bold text-green-600 pulse" id="loadingTitle">Analyzing specimen...</p>
+                <p class="text-gray-500 text-sm mt-2" id="loadingStatus">Examining trichomes</p>
+                <p class="text-gray-400 text-sm mt-4 italic">"All good things come to those who wait"</p>
+                <p class="text-gray-400 text-xs mt-2">This can take up to 30 seconds for an accurate result</p>
+                <div id="loadingTimer" class="text-green-500 font-mono text-lg mt-3"></div>
+            </div>
+        </div>
+
+        <!-- Result View -->
+        <div id="resultView" class="hidden">
+            <div class="result-card">
+                <img id="resultImage" src="" alt="Result" class="w-full rounded-xl mb-4 shadow-lg">
+                <h3 id="resultTitle" class="text-2xl font-extrabold mb-2"></h3>
+                <div id="resultDescription" class="text-white/90 text-sm leading-relaxed whitespace-pre-wrap"></div>
+            </div>
+
+            <!-- Prescription CTA after result -->
+            <div class="card text-center" style="background: linear-gradient(135deg, #1e40af 0%, #1d4ed8 100%); color: white;">
+                <p class="font-bold mb-2">Using this strain to self-medicate?</p>
+                <p class="text-white/80 text-sm mb-3">You could get prescribed the same (or better) - lab-tested, legal, delivered to your door.</p>
+                <a href="#" onclick="showSection('getlegal');return false" class="btn btn-gold w-full text-center">Get Prescribed Legally →</a>
+            </div>
+
+            <!-- Doc's Kit - Amazon affiliates -->
+            <div class="card">
+                <p class="font-bold text-gray-800 mb-2">&#128684; Going Legal? You'll Need a Vaporizer</p>
+                <p class="text-gray-600 text-xs mb-3">UK prescriptions require vaporization - no combustion allowed. Here's what Doc uses:</p>
+                <div class="grid grid-cols-2 gap-2">
+                    <a href="https://www.amazon.co.uk/s?k=Arizer+Solo+2+vaporizer&tag=chrdocstrcromh-21" target="_blank" rel="noopener" class="block p-3 bg-green-50 rounded-xl text-center text-sm hover:bg-green-100 transition-colors text-gray-800 no-underline">
+                        <span class="block font-bold text-green-700">Arizer Solo 2</span>
+                        <span class="text-xs text-gray-500">Doc's daily driver</span>
+                    </a>
+                    <a href="https://www.amazon.co.uk/s?k=Arizer+Solo+3+vaporizer&tag=chrdocstrcromh-21" target="_blank" rel="noopener" class="block p-3 bg-amber-50 rounded-xl text-center text-sm hover:bg-amber-100 transition-colors text-gray-800 no-underline">
+                        <span class="block font-bold text-amber-700">Arizer Solo 3</span>
+                        <span class="text-xs text-gray-500">The upgrade</span>
+                    </a>
+                    <a href="https://www.amazon.co.uk/s?k=Dynavap+vaporizer&tag=chrdocstrcromh-21" target="_blank" rel="noopener" class="block p-3 bg-gray-50 rounded-xl text-center text-sm hover:bg-gray-100 transition-colors text-gray-800 no-underline">
+                        <span class="block font-bold text-gray-700">Dynavap</span>
+                        <span class="text-xs text-gray-500">Travel essential</span>
+                    </a>
+                    <a href="https://www.amazon.co.uk/s?k=isopropyl+alcohol+99%25&tag=chrdocstrcromh-21" target="_blank" rel="noopener" class="block p-3 bg-gray-50 rounded-xl text-center text-sm hover:bg-gray-100 transition-colors text-gray-800 no-underline">
+                        <span class="block font-bold text-gray-700">ISO 99%</span>
+                        <span class="text-xs text-gray-500">Cleaning essential</span>
+                    </a>
+                </div>
+                <p class="text-xs text-gray-400 mt-2 text-center">Amazon links support the village (affiliate)</p>
+            </div>
+
+            <div class="grid grid-cols-3 gap-3 mb-4">
+                <button onclick="downloadResult()" class="btn btn-green">Download</button>
+                <button onclick="shareResult()" class="btn btn-primary">Share</button>
+                <button onclick="resetToHome()" class="btn btn-outline">Again</button>
+            </div>
+
+            <div id="signInPrompt" class="card text-center">
+                <p class="text-gray-700 font-semibold mb-4">Sign in to save results and earn kudos!</p>
+                <div id="authFormResult">
+                    <input type="email" id="emailInputResult" placeholder="your@email.com" class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl mb-3 text-center focus:border-green-500 focus:outline-none">
+                    <input type="password" id="passwordInputResult" placeholder="Password" class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl mb-3 text-center focus:border-green-500 focus:outline-none">
+                    <button onclick="signUpOrIn('emailInputResult', 'passwordInputResult', 'authFormResult', 'authSuccessResult')" class="btn btn-primary w-full">Sign In / Sign Up</button>
+                </div>
+                <div id="authSuccessResult" class="hidden p-4 bg-green-50 rounded-xl">
+                    <p class="text-green-600 font-bold">You're in!</p>
+                    <p class="text-gray-600 text-sm mt-1">Kudos earned. Welcome to the village.</p>
+                </div>
+            </div>
+
+            <div id="kudosEarned" class="hidden card text-center bg-yellow-50 border-2 border-yellow-400">
+                <p class="text-xl font-bold text-gray-800">+10 Kudos Earned!</p>
+            </div>
+        </div>
+
+        <!-- MEET SECTION -->
+        <div id="section-meet" class="hidden max-w-2xl mx-auto px-4 py-8">
+            <div class="card">
+                <div class="text-center mb-6">
+                    <p class="text-3xl mb-2">📍</p>
+                    <h2 class="text-2xl font-bold text-gray-800">Meeting Point Generator</h2>
+                    <p class="text-gray-500 text-sm mt-2">Share your exact spot in three words. Markets, fairs, car boots — never get lost again.</p>
+                    <p class="text-gray-400 text-xs mt-1">Powered by <a href="https://what3words.com" target="_blank" rel="noopener" class="text-green-600">what3words</a> — every 3×3m square on Earth has a unique 3-word address</p>
+                </div>
+                <div class="grid grid-cols-4 gap-2 mb-5">
+                    <button class="usecase-btn active" data-icon="🌿" data-title="My Stall" data-label="Market Stall" onclick="selectUseCase(this)">
+                        <span class="text-xl block mb-1">🌿</span>
+                        <span class="text-xs font-semibold text-gray-700">My Stall</span>
+                    </button>
+                    <button class="usecase-btn" data-icon="💨" data-title="The Growing Zone" data-label="Growing Zone" onclick="selectUseCase(this)">
+                        <span class="text-xl block mb-1">💨</span>
+                        <span class="text-xs font-semibold text-gray-700">Growing Zone</span>
+                    </button>
+                    <button class="usecase-btn" data-icon="🚗" data-title="My Van" data-label="Van" onclick="selectUseCase(this)">
+                        <span class="text-xl block mb-1">🚗</span>
+                        <span class="text-xs font-semibold text-gray-700">My Van</span>
+                    </button>
+                    <button class="usecase-btn" data-icon="🌿" data-title="This Fair" data-label="Fair/Market" onclick="selectUseCase(this)">
+                        <span class="text-xl block mb-1">🎪</span>
+                        <span class="text-xs font-semibold text-gray-700">This Fair</span>
+                    </button>
+                </div>
+                <div class="bg-gray-50 rounded-xl p-4 mb-4 border border-gray-200">
+                    <button onclick="findMySpot()" id="geoBtn" class="btn btn-primary w-full mb-3">📍 Find My Exact Spot</button>
+                    <p id="geoStatus" class="hidden text-center text-sm text-gray-600 mb-2"></p>
+                    <p class="text-center text-gray-400 text-xs mb-2">— or type a what3words address —</p>
+                    <div class="relative">
+                        <input type="text" id="w3wInput" placeholder="three.word.address"
+                            autocomplete="off" spellcheck="false"
+                            class="w-full px-4 py-3 border border-gray-200 rounded-xl text-center focus:border-green-400 outline-none min-h-[48px] text-lg tracking-widest font-mono bg-white text-gray-800"
+                            oninput="handleW3WInput(this.value)" onkeydown="handleW3WKeydown(event)">
+                        <div id="w3wSuggestions" class="hidden absolute z-50 w-full mt-1 bg-white border border-gray-200 rounded-xl overflow-hidden shadow-xl text-left"></div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2 mt-3">
+                        <input type="text" id="meetEventName" placeholder="Event name (optional)"
+                            class="px-3 py-2 border border-gray-200 rounded-lg text-sm min-h-[44px] focus:border-green-300 outline-none bg-white text-gray-700">
+                        <input type="text" id="meetLocationLabel" placeholder="e.g. Aisle B, Gate 3"
+                            class="px-3 py-2 border border-gray-200 rounded-lg text-sm min-h-[44px] focus:border-green-300 outline-none bg-white text-gray-700">
+                    </div>
+                    <button onclick="generateMeetCard()" class="btn btn-gold w-full mt-3">Generate Card ✨</button>
+                </div>
+                <div id="meetCardPreview" class="hidden">
+                    <div class="bg-gray-800 rounded-xl p-5 text-center">
+                        <div class="text-3xl mb-1" id="cardIcon">🌿</div>
+                        <p class="text-xs font-bold uppercase tracking-widest mb-1 text-green-400" id="cardUseCaseTitle">My Stall</p>
+                        <p class="text-4xl text-amber-300 font-bold mb-1 leading-tight font-mono" id="cardW3WDisplay">///word.word.word</p>
+                        <p class="text-gray-400 text-sm mb-3" id="cardLocationLabel"></p>
+                        <div id="meetQR" class="mx-auto mb-3" style="width:140px;height:140px;background:#fff;border-radius:10px;padding:8px;display:flex;align-items:center;justify-content:center;"></div>
+                        <p class="text-gray-500 text-sm mb-3" id="cardEventName"></p>
+                        <div class="flex gap-2 justify-center flex-wrap">
+                            <button onclick="shareSpot()" class="btn btn-primary text-sm">📤 Share Spot</button>
+                            <button onclick="copyW3WLink()" class="btn btn-outline text-sm">📋 Copy Link</button>
+                            <button onclick="resetMeetCard()" class="text-gray-400 hover:text-gray-600 transition text-sm px-3 py-2 min-h-[44px]">New</button>
+                        </div>
+                    </div>
+                    <p class="text-center text-gray-400 text-xs mt-3"><a href="https://what3words.com" target="_blank" rel="noopener" class="text-green-600">what3words.com</a> — scan QR to navigate on any device</p>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Support The Village -->
+    <div class="bg-green-50 py-8 border-t border-green-200/30">
+        <div class="max-w-4xl mx-auto px-4 text-center">
+            <h3 class="text-xl font-bold mb-4 text-green-800">Support The Village</h3>
+            <p class="text-sm mb-6 text-green-700">Cannabin-Oid is free forever. Support on Patreon to unlock the full prescription guide and community access.</p>
+            <div class="flex flex-wrap gap-3 justify-center">
+                <a href="https://www.patreon.com/chrisptee" target="_blank" rel="noopener" class="bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-xl font-bold transition">🎨 Support on Patreon</a>
+                <a href="https://wa.me/447976884254" target="_blank" rel="noopener" class="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-xl font-bold transition">WhatsApp Doc</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer style="background: linear-gradient(135deg, #14532d 0%, #166534 100%);" class="py-8">
+        <div class="max-w-2xl mx-auto text-center px-4">
+            <h3 class="text-lg font-bold text-green-300 mb-3">WE ALL STAND ON THE SHOULDERS OF GIANTS</h3>
+            <p class="text-sm text-green-200/60 mb-4">Raphael Mechoulam &bull; Jack Herer &bull; Dr. Sanjay Gupta &bull; Dennis Peron &bull; Dr. Lester Grinspoon &bull; Brownie Mary &bull; Rick Simpson</p>
+            <p class="text-green-400 text-lg italic mb-4">"World domination through kindness. One ember at a time."</p>
+            <div class="flex flex-wrap gap-3 justify-center mb-4">
+                <a href="https://www.patreon.com/chrisptee" target="_blank" rel="noopener" class="text-orange-300 hover:text-orange-200 text-sm transition">Patreon</a>
+                <a href="https://wa.me/447976884254" class="text-green-300 hover:text-green-200 text-sm transition">WhatsApp</a>
+                <a href="https://feelfamous.com" class="text-green-300 hover:text-green-200 text-sm transition">FeelFamous</a>
+                <a href="/story.html" class="text-orange-300 hover:text-orange-200 text-sm transition font-semibold">Our Story</a>
+            </div>
+            <p class="text-xs text-green-200/40 mb-1">
+                Built by <a href="https://chrisptee.co.uk" class="text-green-200/60 hover:text-green-200">Doc (Chris P Tee)</a> &bull;
+                Prescribed by <a href="https://alternaleaf.com/uk" class="text-green-200/60 hover:text-green-200">Alternaleaf UK</a> &bull;
+                Part of <a href="https://feelfamous.com" class="text-green-200/60 hover:text-green-200">FeelFamous</a>
+            </p>
+            <p class="text-xs text-green-200/40 mt-2">Common + Unity = Community &bull; Medical Science &bull; Harm Reduction &bull; PLUR</p>
+        </div>
+    </footer>
+
+    <!-- Quick Nav FAB -->
+    <div id="quickNav" class="hidden fixed bottom-4 right-4 flex flex-col gap-2 z-50">
+        <button onclick="showSection('getlegal')" class="w-12 h-12 bg-blue-600 text-white rounded-full shadow-lg flex items-center justify-center text-xl" title="Get Legal">💊</button>
+        <button onclick="showSection('oracle')" class="w-12 h-12 bg-green-600 text-white rounded-full shadow-lg flex items-center justify-center text-xl" title="Identify">🔬</button>
+    </div>
+
+    <canvas id="resultCanvas" class="hidden"></canvas>
+
+    <script>
+        // Patreon config
+        const PATREON_CLIENT_ID = 'A-K7cVCZBl7mQZDlrq0obIq7Jm0RPYAMGstfBsUyEeX-5e6WvU24ZWMTGBuypxot';
+        const PATREON_OAUTH_URL = `https://www.patreon.com/oauth2/authorize?response_type=code&client_id=${PATREON_CLIENT_ID}&redirect_uri=https://cannabin-oid.co.uk/auth/patreon&scope=identity%20identity.memberships`;
+        const PATREON_PAGE = 'https://www.patreon.com/chrisptee';
+
+        let patreonSession = null;
+
+        function restorePatreonSession() {
+            try {
+                const raw = localStorage.getItem('cannabinoid_patreon_session');
+                if (raw) {
+                    const s = JSON.parse(raw);
+                    if (s.expires && Date.now() < s.expires) {
+                        patreonSession = s;
+                        showPatreonStatus(s.tier);
+                    } else {
+                        localStorage.removeItem('cannabinoid_patreon_session');
+                    }
+                }
+            } catch(e) {}
+        }
+
+        function handlePatreonCallback() {
+            const params = new URLSearchParams(window.location.search);
+            const code = params.get('code');
+            if (code) {
+                fetch(`/.netlify/functions/patreon-auth?code=${encodeURIComponent(code)}`)
+                    .then(r => r.json())
+                    .then(data => {
+                        if (data.isPro) {
+                            const session = { isPro: true, tier: data.tier, expires: Date.now() + 86400000 };
+                            localStorage.setItem('cannabinoid_patreon_session', JSON.stringify(session));
+                            patreonSession = session;
+                            showPatreonStatus(data.tier);
+                        }
+                        window.history.replaceState({}, '', '/');
+                    })
+                    .catch(e => console.error('Patreon auth error:', e));
+            }
+        }
+
+        function showPatreonStatus(tier) {
+            const labels = { founder: '🏛️ Founder', elder: '⚔️ Elder', villager: '🏡 Villager' };
+            const el = document.getElementById('patreonTierLabel');
+            if (el) el.textContent = (labels[tier] || '🏡 Villager') + ' — Patreon Active';
+            document.getElementById('patreonStatus')?.classList.remove('hidden');
+            document.getElementById('patreonJoin')?.classList.add('hidden');
+        }
+
+        // Config
+        const CONFIG = {
+            oidName: 'Cannabin-Oid',
+            oidSlug: 'cannabis',
+            primaryColor: '#16a34a',
+            supabaseUrl: 'https://pdnjeynugptnavkdbmxh.supabase.co',
+            supabaseKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBkbmpleW51Z3B0bmF2a2RibXhoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkwMTEzMDAsImV4cCI6MjA4NDU4NzMwMH0.GawisR01EykMtdauBMxenmHF2NXDMzDOJl8WgzkwFQo',
+            adminEmails: ['chris@chrisptee.co.uk', 'chrisptee@gmail.com']
+        };
+
+        let isAdmin = false;
+
+        const { createClient } = supabase;
+        const supabaseClient = createClient(CONFIG.supabaseUrl, CONFIG.supabaseKey);
+
+        let currentUser = null;
+        let currentResult = null;
+        let currentMode = 'identify';
+
+        // Init
+        window.onload = async function() {
+            checkAgeVerification();
+            restorePatreonSession();
+            handlePatreonCallback();
+            document.getElementById('patreonSignInBtn')?.setAttribute('href', PATREON_OAUTH_URL);
+
+            const { data: { session }, error } = await supabaseClient.auth.getSession();
+
+            supabaseClient.auth.onAuthStateChange(async (event, session) => {
+                if (event === 'SIGNED_IN' && session) {
+                    currentUser = session.user;
+                    await loadUserData();
+                    showUserStatus();
+                    checkAdminStatus();
+                    showAuthSuccess();
+                } else if (event === 'SIGNED_OUT') {
+                    currentUser = null;
+                    isAdmin = false;
+                    document.getElementById('userBar').classList.add('hidden');
+                    document.getElementById('tab-admin').classList.add('hidden');
+                }
+            });
+
+            if (session) {
+                currentUser = session.user;
+                await loadUserData();
+                showUserStatus();
+                checkAdminStatus();
+            }
+
+            loadRecentActivity();
+            checkReferral();
+            loadBroadcast();
+        };
+
+        function showAuthSuccess() {
+            const modal = document.createElement('div');
+            modal.className = 'modal-overlay';
+            modal.id = 'authSuccessModal';
+            modal.innerHTML = `
+                <div class="modal-content text-center">
+                    <div class="text-6xl mb-4">🌿</div>
+                    <h2 class="text-2xl font-bold text-gray-800 mb-3">Welcome to the Village!</h2>
+                    <p class="text-gray-600 mb-2">You're signed in. Start identifying strains.</p>
+                    <p class="text-blue-600 font-semibold mb-4">Self-medicating? Check the "Get Legal" tab for prescription guidance.</p>
+                    <p class="text-green-600 font-semibold mb-6">+10 Kudos for joining!</p>
+                    <button onclick="document.getElementById('authSuccessModal').remove()" class="btn btn-primary w-full">Let's Go!</button>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+
+        function checkAgeVerification() {
+            if (!localStorage.getItem('cannabinoid_age')) {
+                document.getElementById('ageModal').classList.remove('hidden');
+            }
+        }
+
+        function confirmAge(type) {
+            localStorage.setItem('cannabinoid_age', type);
+            document.getElementById('ageModal').classList.add('hidden');
+            if (type === 'under18') alert('Please ask a parent or guardian to supervise your usage of this educational resource.');
+        }
+
+        function showSection(section) {
+            ['oracle', 'askterp', 'village', 'getlegal', 'admin', 'meet'].forEach(s => {
+                document.getElementById('section-' + s)?.classList.add('hidden');
+                document.getElementById('tab-' + s)?.classList.remove('active');
+            });
+            document.getElementById('section-' + section)?.classList.remove('hidden');
+            document.getElementById('tab-' + section)?.classList.add('active');
+            document.getElementById('resultView')?.classList.add('hidden');
+            document.getElementById('loadingView')?.classList.add('hidden');
+            window.scrollTo(0, 0);
+        }
+
+        function setMode(mode) {
+            currentMode = mode;
+            document.getElementById('modeIdentify').className = mode === 'identify' ? 'flex-1 btn btn-primary text-sm' : 'flex-1 btn btn-outline text-sm';
+            document.getElementById('modeRoast').className = mode === 'roast' ? 'flex-1 btn btn-primary text-sm' : 'flex-1 btn btn-outline text-sm';
+            document.getElementById('oracleTitle').textContent = mode === 'identify' ? "Strain Identification" : "Grow Critique";
+            document.getElementById('oracleSubtitle').textContent = mode === 'identify' ? "Upload a photo for AI-powered medical analysis" : "Get honest feedback on your cultivation";
+        }
+
+        async function loadUserData() {
+            if (!currentUser) return;
+            try {
+                let { data: userData } = await supabaseClient.from('users').select('*').eq('id', currentUser.id).single();
+                if (!userData) {
+                    const { data: newUser } = await supabaseClient.from('users').insert([{
+                        id: currentUser.id, email: currentUser.email, username: currentUser.email.split('@')[0], kudos: 0, oid_memberships: [CONFIG.oidSlug]
+                    }]).select().single();
+                    userData = newUser;
+                }
+                if (userData) {
+                    const oidCount = userData.oid_memberships?.length || 1;
+                    let badge = 'Villager';
+                    if (oidCount >= 5) badge = 'Pollinator';
+                    else if (oidCount >= 2) badge = 'Bridge Walker';
+                    document.getElementById('userName').textContent = '@' + userData.username;
+                    document.getElementById('userBadge').textContent = badge;
+                    document.getElementById('userKudos').textContent = userData.kudos || 0;
+                }
+            } catch (e) { console.error('User error:', e); }
+        }
+
+        function showUserStatus() {
+            document.getElementById('userBar').classList.remove('hidden');
+            document.getElementById('quickNav').classList.remove('hidden');
+            document.getElementById('signInPrompt')?.classList.add('hidden');
+        }
+
+        async function signUpOrIn(emailId, passwordId, formId, successId) {
+            const email = document.getElementById(emailId).value.trim();
+            const password = document.getElementById(passwordId).value;
+            if (!email || !email.includes('@')) {
+                alert('Please enter a valid email address.');
+                return;
+            }
+            if (!password || password.length < 6) {
+                alert('Password must be at least 6 characters.');
+                return;
+            }
+
+            // Try sign in first
+            const { data: signInData, error: signInError } = await supabaseClient.auth.signInWithPassword({
+                email: email,
+                password: password
+            });
+
+            if (!signInError && signInData.session) {
+                document.getElementById(formId).classList.add('hidden');
+                document.getElementById(successId).classList.remove('hidden');
+                return;
+            }
+
+            // If sign in fails, try sign up
+            const { data: signUpData, error: signUpError } = await supabaseClient.auth.signUp({
+                email: email,
+                password: password
+            });
+
+            if (signUpError) {
+                // If sign up also fails, the password was wrong for existing account
+                if (signInError && signInError.message.includes('Invalid login')) {
+                    alert('Wrong password. If you already have an account, check your password.');
+                } else {
+                    alert('Error: ' + signUpError.message);
+                }
+                return;
+            }
+
+            // Sign up succeeded - auto sign in
+            if (signUpData.session) {
+                document.getElementById(formId).classList.add('hidden');
+                document.getElementById(successId).classList.remove('hidden');
+            } else {
+                // Some Supabase configs require email confirmation even for password signup
+                // Try signing in immediately
+                const { error: retryError } = await supabaseClient.auth.signInWithPassword({
+                    email: email,
+                    password: password
+                });
+                if (!retryError) {
+                    document.getElementById(formId).classList.add('hidden');
+                    document.getElementById(successId).classList.remove('hidden');
+                } else {
+                    document.getElementById(formId).classList.add('hidden');
+                    document.getElementById(successId).classList.remove('hidden');
+                    document.getElementById(successId).innerHTML = '<p class="text-green-600 font-bold">Account created!</p><p class="text-gray-600 text-sm mt-1">Check your email to confirm, then sign in.</p>';
+                }
+            }
+        }
+
+        async function signOut() {
+            await supabaseClient.auth.signOut();
+            currentUser = null;
+            location.reload();
+        }
+
+        // God Mode
+        function checkAdminStatus() {
+            if (currentUser && CONFIG.adminEmails.includes(currentUser.email.toLowerCase())) {
+                isAdmin = true;
+                document.getElementById('tab-admin').classList.remove('hidden');
+                loadAdminData();
+            }
+        }
+
+        async function loadAdminData() {
+            if (!isAdmin) return;
+            generateAdminQR();
+            loadVillageStats();
+        }
+
+        function generateAdminQR() {
+            const qrContainer = document.getElementById('adminQRCode');
+            if (!qrContainer) return;
+            qrContainer.innerHTML = '';
+            const referralUrl = `${window.location.origin}?ref=chrisptee`;
+            QRCode.toCanvas(referralUrl, { width: 280, margin: 2 }, (err, canvas) => {
+                if (err) { console.error(err); return; }
+                qrContainer.appendChild(canvas);
+            });
+        }
+
+        function downloadAdminQR() {
+            const referralUrl = `${window.location.origin}?ref=chrisptee`;
+            QRCode.toDataURL(referralUrl, { width: 1024, margin: 2 }, (err, url) => {
+                if (err) { console.error(err); return; }
+                const link = document.createElement('a');
+                link.download = 'cannabin-oid-qr-spannabis.png';
+                link.href = url;
+                link.click();
+            });
+        }
+
+        async function loadVillageStats() {
+            try {
+                const { count: villagerCount } = await supabaseClient
+                    .from('users')
+                    .select('*', { count: 'exact', head: true });
+
+                const { data: kudosData } = await supabaseClient
+                    .from('users')
+                    .select('kudos');
+
+                const totalKudos = kudosData?.reduce((sum, u) => sum + (u.kudos || 0), 0) || 0;
+
+                document.getElementById('statVillagers').textContent = villagerCount || 0;
+                document.getElementById('statKudos').textContent = totalKudos;
+            } catch (e) { console.error('Stats error:', e); }
+        }
+
+        // Broadcast System
+        function getYouTubeEmbedUrl(url) {
+            if (!url) return '';
+            let videoId = '';
+            if (url.includes('youtube.com/shorts/')) {
+                videoId = url.split('youtube.com/shorts/')[1].split('?')[0];
+            } else if (url.includes('youtu.be/')) {
+                videoId = url.split('youtu.be/')[1].split('?')[0];
+            } else if (url.includes('youtube.com/watch')) {
+                const urlParams = new URLSearchParams(url.split('?')[1]);
+                videoId = urlParams.get('v');
+            } else if (url.includes('youtube.com/embed/')) {
+                videoId = url.split('youtube.com/embed/')[1].split('?')[0];
+            }
+            return videoId ? `https://www.youtube.com/embed/${videoId}` : url;
+        }
+
+        async function loadBroadcast() {
+            try {
+                const { data, error } = await supabaseClient
+                    .from('broadcast')
+                    .select('*')
+                    .eq('is_active', true)
+                    .limit(1)
+                    .single();
+
+                if (error || !data) return;
+
+                const embedUrl = getYouTubeEmbedUrl(data.video_url);
+                document.getElementById('broadcastVideo').src = embedUrl;
+                document.getElementById('broadcastTitle').textContent = data.title || 'Village Broadcast';
+                document.getElementById('broadcastSection').classList.remove('hidden');
+
+                if (data.is_emergency) {
+                    document.getElementById('emergencyBanner').classList.remove('hidden');
+                }
+
+                if (isAdmin) {
+                    document.getElementById('broadcastUrlInput').value = data.video_url || '';
+                    document.getElementById('broadcastTitleInput').value = data.title || '';
+                    document.getElementById('broadcastEmergency').checked = data.is_emergency || false;
+                }
+            } catch (e) {
+                console.log('Broadcast not available');
+            }
+        }
+
+        async function updateBroadcast() {
+            if (!isAdmin || !currentUser) return;
+
+            const url = document.getElementById('broadcastUrlInput').value.trim();
+            const title = document.getElementById('broadcastTitleInput').value.trim();
+            const isEmergency = document.getElementById('broadcastEmergency').checked;
+
+            if (!url) {
+                alert('Please enter a YouTube URL');
+                return;
+            }
+
+            try {
+                const { error } = await supabaseClient
+                    .from('broadcast')
+                    .update({
+                        video_url: url,
+                        title: title || 'Village Broadcast',
+                        is_emergency: isEmergency,
+                        is_active: true,
+                        updated_at: new Date().toISOString(),
+                        updated_by: currentUser.email
+                    })
+                    .eq('id', (await supabaseClient.from('broadcast').select('id').limit(1).single()).data.id);
+
+                if (error) throw error;
+
+                alert('Broadcast updated!');
+                loadBroadcast();
+            } catch (e) {
+                console.error('Broadcast update error:', e);
+                alert('Error updating broadcast.');
+            }
+        }
+
+        async function toggleBroadcast() {
+            if (!isAdmin || !currentUser) return;
+
+            try {
+                const { data: current } = await supabaseClient
+                    .from('broadcast')
+                    .select('is_active, id')
+                    .limit(1)
+                    .single();
+
+                const newState = !current.is_active;
+
+                await supabaseClient
+                    .from('broadcast')
+                    .update({ is_active: newState, updated_at: new Date().toISOString() })
+                    .eq('id', current.id);
+
+                document.getElementById('toggleBroadcastBtn').textContent = newState ? 'Hide Broadcast' : 'Show Broadcast';
+
+                if (newState) {
+                    loadBroadcast();
+                } else {
+                    document.getElementById('broadcastSection').classList.add('hidden');
+                }
+
+                alert(newState ? 'Broadcast visible' : 'Broadcast hidden');
+            } catch (e) {
+                console.error('Toggle error:', e);
+            }
+        }
+
+        function checkReferral() {
+            const params = new URLSearchParams(window.location.search);
+            const ref = params.get('ref');
+            if (ref) {
+                localStorage.setItem('referrer', ref);
+                window.history.replaceState({}, '', window.location.pathname);
+            }
+        }
+
+        async function loadRecentActivity() {
+            try {
+                const { data } = await supabaseClient.from('users').select('username, created_at').order('created_at', { ascending: false }).limit(5);
+                if (data && data.length > 0) {
+                    document.getElementById('activityList').innerHTML = data.map(u => `<p>🌿 <strong>@${u.username}</strong> joined</p>`).join('');
+                } else {
+                    document.getElementById('activityList').innerHTML = '<p class="text-gray-400">Be the first to join!</p>';
+                }
+            } catch (e) { console.error('Activity error:', e); }
+        }
+
+        // Patience System
+        const patientMessages = [
+            "Examining trichomes...",
+            "Analyzing terpene profile...",
+            "Checking strain databases...",
+            "Cross-referencing genetics...",
+            "Running safety checks...",
+            "Almost there, patience pays off...",
+            "Good things come to those who wait...",
+            "Thorough analysis takes time..."
+        ];
+        let messageIndex = 0;
+        let loadingStartTime = 0;
+        let loadingTimerInterval = null;
+
+        function updateLoadingMessage(customMsg) {
+            const msgEl = document.getElementById('loadingStatus');
+            if (customMsg) {
+                msgEl.textContent = customMsg;
+            } else {
+                msgEl.textContent = patientMessages[messageIndex % patientMessages.length];
+                messageIndex++;
+            }
+        }
+
+        function startLoadingTimer() {
+            loadingStartTime = Date.now();
+            messageIndex = 0;
+            const timerEl = document.getElementById('loadingTimer');
+            loadingTimerInterval = setInterval(() => {
+                const elapsed = Math.floor((Date.now() - loadingStartTime) / 1000);
+                timerEl.textContent = `${elapsed}s`;
+                if (elapsed > 0 && elapsed % 4 === 0) {
+                    updateLoadingMessage();
+                }
+            }, 1000);
+        }
+
+        function stopLoadingTimer() {
+            if (loadingTimerInterval) {
+                clearInterval(loadingTimerInterval);
+                loadingTimerInterval = null;
+            }
+        }
+
+        async function fetchWithRetry(url, options, maxRetries = 4) {
+            let lastError;
+            for (let attempt = 0; attempt <= maxRetries; attempt++) {
+                try {
+                    const response = await fetch(url, options);
+                    const data = await response.json();
+                    if (data.error && (response.status === 429 || response.status === 503)) {
+                        if (attempt < maxRetries) {
+                            const waitTime = Math.pow(2, attempt) * 3000;
+                            updateLoadingMessage(`High demand... waiting ${waitTime/1000}s then trying again`);
+                            await new Promise(resolve => setTimeout(resolve, waitTime));
+                            continue;
+                        }
+                    }
+                    return data;
+                } catch (error) {
+                    lastError = error;
+                    if (error.name === 'AbortError') throw error;
+                    if (attempt < maxRetries) {
+                        const waitTime = Math.pow(2, attempt) * 3000;
+                        updateLoadingMessage(`Connection issue... trying again in ${waitTime/1000}s`);
+                        await new Promise(resolve => setTimeout(resolve, waitTime));
+                    }
+                }
+            }
+            throw lastError;
+        }
+
+        async function compressImage(file, maxSize = 800, quality = 0.7) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const img = new Image();
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        let { width, height } = img;
+                        if (width > maxSize || height > maxSize) {
+                            if (width > height) { height = (height / width) * maxSize; width = maxSize; }
+                            else { width = (width / height) * maxSize; height = maxSize; }
+                        }
+                        canvas.width = width; canvas.height = height;
+                        canvas.getContext('2d').drawImage(img, 0, 0, width, height);
+                        const dataUrl = canvas.toDataURL('image/jpeg', quality);
+                        resolve({ base64: dataUrl.split(',')[1], dataUrl });
+                    };
+                    img.onerror = reject;
+                    img.src = e.target.result;
+                };
+                reader.onerror = reject;
+                reader.readAsDataURL(file);
+            });
+        }
+
+        async function handleUpload(input) {
+            const file = input.files[0];
+            if (!file) return;
+
+            document.getElementById('section-oracle').classList.add('hidden');
+            document.getElementById('loadingView').classList.remove('hidden');
+            document.getElementById('loadingStatus').textContent = 'Compressing image...';
+            startLoadingTimer();
+
+            try {
+                const { base64, dataUrl } = await compressImage(file, 800, 0.7);
+                updateLoadingMessage('Analyzing specimen...');
+
+                const data = await fetchWithRetry('/.netlify/functions/analyze-image', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ image: base64, mode: currentMode, oidType: CONFIG.oidSlug, userId: currentUser?.id })
+                }, 4);
+
+                if (data.error) {
+                    stopLoadingTimer();
+                    alert(data.description || 'Analysis failed.');
+                    resetToHome();
+                    return;
+                }
+
+                currentResult = { mode: currentMode, image: dataUrl, ...data };
+                showResult(currentResult);
+
+                if (currentUser) {
+                    await supabaseClient.rpc('increment_kudos', { user_id: currentUser.id, amount: 10 });
+                    document.getElementById('kudosEarned').classList.remove('hidden');
+                    document.getElementById('signInPrompt').classList.add('hidden');
+                    await loadUserData();
+                }
+            } catch (error) {
+                console.error('Upload error:', error);
+                stopLoadingTimer();
+                alert(error.name === 'AbortError' ? 'Request timed out.' : 'Error analyzing. Try again.');
+                resetToHome();
+            }
+            input.value = '';
+        }
+
+        function showResult(result) {
+            stopLoadingTimer();
+            document.getElementById('loadingView').classList.add('hidden');
+            document.getElementById('resultView').classList.remove('hidden');
+            document.getElementById('resultImage').src = result.image;
+            document.getElementById('resultTitle').textContent = result.title || 'Analysis Complete';
+
+            // Parse AMAZON_SEARCH from Gemini response and create affiliate link
+            let desc = result.description || '';
+            let amazonHtml = '';
+            const amazonMatch = desc.match(/AMAZON_SEARCH:\s*(.+?)(\n|$)/i);
+            if (amazonMatch) {
+                const searchTerm = amazonMatch[1].trim();
+                const amazonUrl = `https://www.amazon.co.uk/s?k=${encodeURIComponent(searchTerm)}&tag=chrdocstrcromh-21`;
+                amazonHtml = `<a href="${amazonUrl}" target="_blank" rel="noopener" style="display:block;margin-top:16px;padding:16px;background:rgba(245,158,11,0.2);border:1px solid rgba(245,158,11,0.5);border-radius:12px;text-align:center;text-decoration:none;color:white;">` +
+                    `<span style="font-weight:700;color:#fbbf24;">&#128722; Find "${searchTerm}" on Amazon</span>` +
+                    `<span style="display:block;color:#86efac;font-size:12px;margin-top:4px;">Doc's affiliate link - supports the village</span></a>`;
+                desc = desc.replace(/AMAZON_SEARCH:\s*.+?(\n|$)/i, '');
+            }
+            document.getElementById('resultDescription').innerHTML = desc.replace(/\n/g, '<br>') + amazonHtml;
+        }
+
+        function resetToHome() {
+            document.getElementById('resultView').classList.add('hidden');
+            document.getElementById('loadingView').classList.add('hidden');
+            document.getElementById('section-oracle').classList.remove('hidden');
+            document.getElementById('kudosEarned')?.classList.add('hidden');
+            currentResult = null;
+        }
+
+        async function downloadResult() {
+            if (!currentResult) return;
+            const canvas = document.getElementById('resultCanvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = 1080; canvas.height = 1920;
+
+            const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+            gradient.addColorStop(0, '#16a34a'); gradient.addColorStop(1, '#15803d');
+            ctx.fillStyle = gradient; ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            const img = new Image();
+            img.onload = () => {
+                const scale = Math.min(900 / img.width, 600 / img.height);
+                const w = img.width * scale, h = img.height * scale;
+                const x = (canvas.width - w) / 2, y = 80;
+                ctx.shadowColor = 'rgba(0,0,0,0.3)'; ctx.shadowBlur = 20;
+                ctx.drawImage(img, x, y, w, h);
+                ctx.shadowBlur = 0;
+
+                ctx.fillStyle = 'white'; ctx.textAlign = 'center';
+                ctx.font = 'bold 48px Poppins, sans-serif';
+                ctx.fillText(currentResult.title || 'Cannabin-Oid', canvas.width / 2, y + h + 70);
+
+                ctx.font = '24px Poppins, sans-serif';
+                wrapText(ctx, (currentResult.description || '').substring(0, 500), canvas.width / 2, y + h + 130, 900, 32);
+
+                ctx.font = 'bold 28px Poppins, sans-serif';
+                ctx.fillText('Self-medicating? Get prescribed.', canvas.width / 2, canvas.height - 120);
+                ctx.font = 'bold 32px Poppins, sans-serif';
+                ctx.fillText('cannabin-oid.co.uk', canvas.width / 2, canvas.height - 70);
+
+                const link = document.createElement('a');
+                link.download = 'cannabin-oid-analysis.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            };
+            img.src = currentResult.image;
+        }
+
+        async function shareResult() {
+            if (!currentResult) return;
+
+            if (navigator.share) {
+                try {
+                    await navigator.share({
+                        title: currentResult.title || 'Cannabin-Oid Analysis',
+                        text: 'Self-medicating? You could get prescribed legally. Check out Cannabin-Oid!',
+                        url: 'https://cannabin-oid.co.uk'
+                    });
+                    return;
+                } catch (e) {
+                    if (e.name !== 'AbortError') console.log('Share failed:', e);
+                }
+            }
+
+            try {
+                await navigator.clipboard.writeText('Self-medicating with cannabis? You could get prescribed legally. cannabin-oid.co.uk');
+                alert('Link copied! Share it anywhere.');
+            } catch (e) {
+                alert('Share: cannabin-oid.co.uk');
+            }
+        }
+
+        function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
+            const words = text.split(' ');
+            let line = '';
+            let lineCount = 0;
+            const maxLines = 15;
+            for (let word of words) {
+                if (lineCount >= maxLines) break;
+                const testLine = line + word + ' ';
+                if (ctx.measureText(testLine).width > maxWidth && line) {
+                    ctx.fillText(line.trim(), x, y);
+                    line = word + ' '; y += lineHeight;
+                    lineCount++;
+                } else { line = testLine; }
+            }
+            if (lineCount < maxLines) ctx.fillText(line.trim(), x, y);
+        }
+
+        // ═══════════════════════════════════
+        // ASK TERP CHATBOT
+        // ═══════════════════════════════════
+        let chatHistory = [];
+        let terpBusy = false;
+
+        function askTerpQuick(question) {
+            document.getElementById('terpInput').value = question;
+            askTerp();
+        }
+
+        async function askTerp() {
+            const input = document.getElementById('terpInput');
+            const question = input.value.trim();
+            if (!question || terpBusy) return;
+
+            terpBusy = true;
+            input.value = '';
+
+            const chatBox = document.getElementById('chatMessages');
+
+            // Add user message
+            chatBox.innerHTML += `<div class="flex justify-end mb-3"><div class="chat-bubble chat-user">${escapeHtml(question)}</div></div>`;
+
+            // Add typing indicator
+            chatBox.innerHTML += `<div id="terpTyping" class="flex items-start gap-2 mb-3"><span class="text-2xl flex-shrink-0">🧪</span><div class="chat-bubble chat-terp chat-typing"><span>.</span><span>.</span><span>.</span> Terp is thinking</div></div>`;
+            chatBox.scrollTop = chatBox.scrollHeight;
+
+            // Track history
+            chatHistory.push({ role: 'user', text: question });
+
+            try {
+                const res = await fetch('/.netlify/functions/ask-terp', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ question, history: chatHistory.slice(-6) })
+                });
+                const data = await res.json();
+                const answer = data.answer || "Sorry mate, brain fog. Try again?";
+
+                // Remove typing indicator
+                document.getElementById('terpTyping')?.remove();
+
+                // Add Terp's response
+                chatBox.innerHTML += `<div class="flex items-start gap-2 mb-3"><span class="text-2xl flex-shrink-0">🧪</span><div class="chat-bubble chat-terp">${escapeHtml(answer)}</div></div>`;
+
+                chatHistory.push({ role: 'assistant', text: answer });
+
+            } catch (e) {
+                document.getElementById('terpTyping')?.remove();
+                chatBox.innerHTML += `<div class="flex items-start gap-2 mb-3"><span class="text-2xl flex-shrink-0">🧪</span><div class="chat-bubble chat-terp">Ah mate, something went wrong. Give it another go in a sec yeah?</div></div>`;
+            }
+
+            chatBox.scrollTop = chatBox.scrollHeight;
+            terpBusy = false;
+            input.focus();
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML.replace(/\n/g, '<br>');
+        }
+
+        // ═══════════════════════════════════
+        // Q&A ACCORDION
+        // ═══════════════════════════════════
+        function toggleQA(item) {
+            const answer = item.querySelector('.qa-answer');
+            const icon = item.querySelector('.qa-question span:last-child');
+            answer.classList.toggle('open');
+            icon.textContent = answer.classList.contains('open') ? '−' : '+';
+        }
+
+        // SECTION REVEAL ON SCROLL
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('visible');
+            });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.section-fade').forEach(el => observer.observe(el));
+
+        // DOT NAV ACTIVE STATE
+        const dotNavLinks = document.querySelectorAll('.dot-nav a');
+        const pageSections = document.querySelectorAll('[id^="page"]');
+        const dotObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    dotNavLinks.forEach(link => link.classList.remove('active'));
+                    const activeLink = document.querySelector('.dot-nav a[href="#' + entry.target.id + '"]');
+                    if (activeLink) activeLink.classList.add('active');
+                }
+            });
+        }, { threshold: 0.3 });
+        pageSections.forEach(section => dotObserver.observe(section));
+
+        // REFERRAL CODE
+        const urlParams = new URLSearchParams(window.location.search);
+        const refCode = urlParams.get('ref');
+        if (refCode) localStorage.setItem('referredBy', refCode);
+
+        // ==================== MEETING POINT GENERATOR ====================
+        const W3W_KEY = 'R7VL7Q93';
+        let currentW3WAddress = '';
+        let currentUseCase = { icon: '🌿', title: 'My Stall', label: 'Market Stall' };
+        let w3wSuggestTimer = null;
+
+        function selectUseCase(btn) {
+            document.querySelectorAll('.usecase-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            currentUseCase = { icon: btn.dataset.icon, title: btn.dataset.title, label: btn.dataset.label };
+        }
+        function cleanW3W(val) { return val.replace(/^\/+/, '').toLowerCase().trim(); }
+        function isCompleteW3W(val) { const parts = cleanW3W(val).split('.'); return parts.length === 3 && parts.every(p => p.length > 0); }
+        function handleW3WInput(val) {
+            clearTimeout(w3wSuggestTimer);
+            const clean = cleanW3W(val);
+            if (clean.length < 3) { document.getElementById('w3wSuggestions').classList.add('hidden'); return; }
+            w3wSuggestTimer = setTimeout(() => fetchW3WSuggestions(clean), 280);
+        }
+        function handleW3WKeydown(e) { if (e.key === 'Escape') document.getElementById('w3wSuggestions').classList.add('hidden'); }
+        async function fetchW3WSuggestions(partial) {
+            try {
+                const res = await fetch(`https://api.what3words.com/v3/autosuggest?input=${encodeURIComponent(partial)}&key=${W3W_KEY}&language=en&n-results=4&clip-to-country=GB`);
+                const data = await res.json();
+                const box = document.getElementById('w3wSuggestions');
+                if (!data.suggestions || data.suggestions.length === 0) { box.classList.add('hidden'); return; }
+                box.innerHTML = data.suggestions.map(s =>
+                    `<div class="w3w-suggestion" onclick="selectAddress('${s.words}')">
+                        <span class="text-green-600 font-bold">///</span><span class="text-gray-800">${s.words}</span>
+                        ${s.nearestPlace ? `<span class="text-gray-400 text-xs ml-2">${s.nearestPlace}</span>` : ''}
+                    </div>`
+                ).join('');
+                box.classList.remove('hidden');
+            } catch(e) { /* silent fail */ }
+        }
+        function selectAddress(words) {
+            currentW3WAddress = words;
+            document.getElementById('w3wInput').value = words;
+            document.getElementById('w3wSuggestions').classList.add('hidden');
+        }
+        async function findMySpot() {
+            const btn = document.getElementById('geoBtn');
+            const status = document.getElementById('geoStatus');
+            if (!navigator.geolocation) { status.textContent = 'Geolocation not available.'; status.classList.remove('hidden'); return; }
+            btn.textContent = '⏳ Finding your spot...'; btn.disabled = true; status.classList.add('hidden');
+            navigator.geolocation.getCurrentPosition(
+                async (pos) => {
+                    const { latitude: lat, longitude: lng } = pos.coords;
+                    try {
+                        const res = await fetch(`https://api.what3words.com/v3/convert-to-3wa?coordinates=${lat},${lng}&key=${W3W_KEY}&language=en`);
+                        const data = await res.json();
+                        if (data.words) { currentW3WAddress = data.words; document.getElementById('w3wInput').value = data.words; status.textContent = `Got it! ///${data.words}`; status.classList.remove('hidden'); }
+                        else { status.textContent = 'Could not convert location.'; status.classList.remove('hidden'); }
+                    } catch(e) { status.textContent = 'Location found — try typing the address.'; status.classList.remove('hidden'); }
+                    btn.textContent = '📍 Find My Exact Spot'; btn.disabled = false;
+                },
+                (err) => {
+                    const msgs = { 1: 'Location access denied.', 2: 'Location unavailable.', 3: 'Location timed out.' };
+                    status.textContent = msgs[err.code] || 'Could not get location.'; status.classList.remove('hidden');
+                    btn.textContent = '📍 Find My Exact Spot'; btn.disabled = false;
+                },
+                { timeout: 10000, maximumAge: 60000 }
+            );
+        }
+        function generateMeetCard() {
+            const inputVal = cleanW3W(document.getElementById('w3wInput').value);
+            if (!isCompleteW3W(inputVal)) { alert('Please enter a complete what3words address (three words separated by dots).'); return; }
+            currentW3WAddress = inputVal;
+            const eventName = document.getElementById('meetEventName').value.trim();
+            const locationLabel = document.getElementById('meetLocationLabel').value.trim();
+            document.getElementById('cardIcon').textContent = currentUseCase.icon;
+            document.getElementById('cardUseCaseTitle').textContent = currentUseCase.title;
+            document.getElementById('cardW3WDisplay').textContent = '///' + currentW3WAddress;
+            document.getElementById('cardLocationLabel').textContent = locationLabel || currentUseCase.label;
+            document.getElementById('cardEventName').textContent = eventName || '';
+            const qrContainer = document.getElementById('meetQR');
+            qrContainer.innerHTML = '';
+            const qrCanvas = document.createElement('canvas');
+            qrContainer.appendChild(qrCanvas);
+            QRCode.toCanvas(qrCanvas, `https://what3words.com/${currentW3WAddress}`, { width: 124, margin: 0, color: { dark: '#16a34a', light: '#ffffff' } });
+            document.getElementById('meetCardPreview').classList.remove('hidden');
+            document.getElementById('meetCardPreview').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+        async function shareSpot() {
+            if (!currentW3WAddress) return;
+            const url = `https://what3words.com/${currentW3WAddress}`;
+            const text = `${currentUseCase.icon} ${currentUseCase.title}: ///${currentW3WAddress}\n\n${url}`;
+            if (navigator.share) { try { await navigator.share({ title: currentUseCase.title, text, url }); return; } catch(e) { if (e.name === 'AbortError') return; } }
+            navigator.clipboard.writeText(text).then(() => alert('Copied!')).catch(() => alert(url));
+        }
+        function copyW3WLink() {
+            if (!currentW3WAddress) return;
+            const url = `https://what3words.com/${currentW3WAddress}`;
+            navigator.clipboard.writeText(url).then(() => alert('Link copied!')).catch(() => alert(url));
+        }
+        function resetMeetCard() {
+            currentW3WAddress = '';
+            document.getElementById('w3wInput').value = '';
+            document.getElementById('meetEventName').value = '';
+            document.getElementById('meetLocationLabel').value = '';
+            document.getElementById('meetCardPreview').classList.add('hidden');
+            document.getElementById('geoStatus').classList.add('hidden');
+        }
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('#w3wInput') && !e.target.closest('#w3wSuggestions')) {
+                document.getElementById('w3wSuggestions')?.classList.add('hidden');
+            }
+        });
+    </script>
+</body>
+</html>

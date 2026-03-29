@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cannabin-Oid QR Generator — The Dispensary</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg: #0a1a0a;
+            --primary: #16a34a;
+            --gold: #c9a227;
+            --cream: #f0f7f0;
+            --text: #c8e6c8;
+            --text-muted: #6b9e6b;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            font-size: 18px;
+            padding: 2rem 1.5rem 3rem;
+        }
+
+        .font-hand { font-family: 'Caveat', cursive; }
+
+        .container { max-width: 700px; margin: 0 auto; }
+
+        h1 {
+            font-family: 'Caveat', cursive;
+            font-size: 2.5rem;
+            color: var(--gold);
+            text-align: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+            font-size: 0.95rem;
+        }
+
+        /* Form */
+        .form-section {
+            background: rgba(22,163,74,0.05);
+            border: 1px solid rgba(22,163,74,0.2);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .field-group { margin-bottom: 1.2rem; }
+
+        label {
+            display: block;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 0.4rem;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 0.9rem 1.1rem;
+            background: rgba(10,26,10,0.8);
+            border: 2px solid rgba(22,163,74,0.2);
+            border-radius: 10px;
+            color: var(--cream);
+            font-family: 'Outfit', sans-serif;
+            font-size: 17px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        input:focus { border-color: var(--primary); }
+
+        .url-preview {
+            margin-top: 0.5rem;
+            font-size: 0.85rem;
+            color: var(--primary);
+        }
+
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 1rem;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 18px;
+            text-align: center;
+            cursor: pointer;
+            border: none;
+            font-family: 'Outfit', sans-serif;
+            min-height: 54px;
+            margin-top: 0.5rem;
+            transition: all 0.2s;
+        }
+
+        .btn-green {
+            background: linear-gradient(135deg, var(--primary), #15803d);
+            color: white;
+        }
+
+        .btn-green:hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(22,163,74,0.3); }
+
+        /* QR card (print-ready) */
+        #qrCard {
+            background: white;
+            border-radius: 24px;
+            padding: 40px;
+            text-align: center;
+            max-width: 400px;
+            margin: 0 auto 2rem;
+            display: none;
+        }
+
+        #qrCard h2 {
+            color: #1a2e1a;
+            font-family: 'Caveat', cursive;
+            font-size: 2rem;
+            margin-bottom: 6px;
+        }
+
+        #qrCard .tagline {
+            color: #5a8a5a;
+            font-size: 15px;
+            margin-bottom: 28px;
+        }
+
+        #qrImg {
+            border: 4px solid #16a34a;
+            border-radius: 12px;
+            display: block;
+            margin: 0 auto 16px;
+        }
+
+        #qrCard .qr-url {
+            background: #f0f7f0;
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-family: monospace;
+            color: #1a4a1a;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        #qrCard .dispensary-note {
+            font-size: 13px;
+            color: #6b9e6b;
+            border-top: 1px solid #e0ede0;
+            padding-top: 14px;
+            margin-top: 4px;
+        }
+
+        .download-row {
+            display: flex;
+            gap: 1rem;
+            max-width: 400px;
+            margin: 0 auto 2rem;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary-light, #22c55e);
+            border-radius: 12px;
+            padding: 0.8rem;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            flex: 1;
+            font-family: 'Outfit', sans-serif;
+            transition: all 0.2s;
+        }
+
+        .btn-outline:hover { background: rgba(22,163,74,0.1); }
+
+        /* Print styles */
+        @media print {
+            body { background: white; color: black; padding: 0; }
+            .form-section, h1, .subtitle, .download-row, #printBtn { display: none; }
+            #qrCard {
+                display: block !important;
+                border: 2px solid #16a34a;
+                box-shadow: none;
+                max-width: 100%;
+                margin: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+
+        <h1>QR Generator</h1>
+        <p class="subtitle">The Dispensary · Cannabin-Oid · For Spannabis, Bilbao, April 17-19 2026</p>
+
+        <!-- Form -->
+        <div class="form-section">
+
+            <div class="field-group">
+                <label>Page type</label>
+                <select id="pageType" onchange="updateUrl()">
+                    <option value="hamlet">Hamlet (Elder / Founder)</option>
+                    <option value="hut">Hut (Villager)</option>
+                </select>
+            </div>
+
+            <div class="field-group">
+                <label>Your handle / slug</label>
+                <input type="text" id="slugInput" placeholder="e.g. doc, terpnerd, janes-den..."
+                       oninput="updateUrl()" autocomplete="off" autocapitalize="none">
+                <p class="url-preview" id="urlPreview">cannabin-oid.co.uk/hamlet/...</p>
+            </div>
+
+            <div class="field-group">
+                <label>Display name (for the card)</label>
+                <input type="text" id="nameInput" placeholder="e.g. Doc Strange" autocomplete="off">
+            </div>
+
+            <div class="field-group">
+                <label>One-liner (optional)</label>
+                <input type="text" id="taglineInput" placeholder="e.g. Prescribed patient · Terpene nerd" maxlength="80" autocomplete="off">
+            </div>
+
+            <button class="btn btn-green" onclick="generateCard()">Generate QR Card</button>
+        </div>
+
+        <!-- QR Card -->
+        <div id="qrCard">
+            <h2 id="cardName">Doc Strange</h2>
+            <p class="tagline" id="cardTagline">The Dispensary — Cannabin-Oid</p>
+            <img id="qrImg" alt="QR Code" width="220" height="220">
+            <div class="qr-url" id="cardUrl">cannabin-oid.co.uk/hamlet/doc</div>
+            <div class="dispensary-note">
+                🌿 No ads. No algorithms. Just you.<br>
+                The Dispensary · cannabin-oid.co.uk
+            </div>
+        </div>
+
+        <!-- Download / Print row -->
+        <div class="download-row" id="downloadRow" style="display:none;">
+            <button class="btn-outline" onclick="window.print()">🖨️ Print</button>
+            <button class="btn-outline" id="downloadBtn" onclick="downloadQR()">⬇️ Download QR</button>
+        </div>
+
+    </div>
+
+    <script>
+        let currentQrUrl = '';
+
+        function toSlug(str) {
+            return str.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+        }
+
+        function updateUrl() {
+            const type = document.getElementById('pageType').value;
+            const rawSlug = document.getElementById('slugInput').value.trim();
+            const slug = toSlug(rawSlug) || '...';
+            const url = `cannabin-oid.co.uk/${type}/${slug}`;
+            document.getElementById('urlPreview').textContent = url;
+        }
+
+        function generateCard() {
+            const type = document.getElementById('pageType').value;
+            const rawSlug = document.getElementById('slugInput').value.trim();
+            const slug = toSlug(rawSlug);
+            const name = document.getElementById('nameInput').value.trim() || slug;
+            const tagline = document.getElementById('taglineInput').value.trim() || 'The Dispensary — Cannabin-Oid';
+
+            if (!slug) {
+                alert('Enter your handle first.');
+                return;
+            }
+
+            const fullUrl = `https://cannabin-oid.co.uk/${type}/${slug}`;
+            currentQrUrl = fullUrl;
+            const displayUrl = fullUrl.replace('https://', '');
+
+            // Update card content
+            document.getElementById('cardName').textContent = name;
+            document.getElementById('cardTagline').textContent = tagline;
+            document.getElementById('cardUrl').textContent = displayUrl;
+
+            // QR image
+            const qrImg = document.getElementById('qrImg');
+            qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(fullUrl)}&bgcolor=ffffff&color=16a34a`;
+
+            // Show card and actions
+            document.getElementById('qrCard').style.display = 'block';
+            document.getElementById('downloadRow').style.display = 'flex';
+
+            // Scroll to card
+            document.getElementById('qrCard').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        function downloadQR() {
+            const type = document.getElementById('pageType').value;
+            const rawSlug = document.getElementById('slugInput').value.trim();
+            const slug = toSlug(rawSlug) || 'qr';
+            const fullUrl = `https://cannabin-oid.co.uk/${type}/${slug}`;
+            const qrSrc = `https://api.qrserver.com/v1/create-qr-code/?size=600x600&data=${encodeURIComponent(fullUrl)}&bgcolor=ffffff&color=16a34a`;
+
+            const a = document.createElement('a');
+            a.href = qrSrc;
+            a.download = `cannabin-oid-qr-${slug}.png`;
+            a.target = '_blank';
+            a.click();
+        }
+
+        // Init URL preview
+        updateUrl();
+    </script>
+
+</body>
+</html>

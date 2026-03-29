@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Claim Your Hut — The Dispensary</title>
+    <meta name="description" content="Claim your Villager hut in The Dispensary. No ads. No algorithms. Just you.">
+
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg: #0a1a0a;
+            --deep: #0f2410;
+            --primary: #16a34a;
+            --primary-light: #22c55e;
+            --gold: #c9a227;
+            --gold-dark: #a07d1c;
+            --cream: #f0f7f0;
+            --text: #c8e6c8;
+            --text-muted: #6b9e6b;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            font-size: 18px;
+            line-height: 1.7;
+        }
+
+        .font-hand { font-family: 'Caveat', cursive; }
+
+        .container {
+            max-width: 540px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem 3rem;
+        }
+
+        .card {
+            background: rgba(22,163,74,0.05);
+            border: 1px solid rgba(22,163,74,0.2);
+            border-radius: 20px;
+            padding: 2rem;
+        }
+
+        /* Progress bar */
+        .progress {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 2rem;
+        }
+
+        .progress-dot {
+            flex: 1;
+            height: 4px;
+            background: rgba(22,163,74,0.2);
+            border-radius: 2px;
+            transition: background 0.3s;
+        }
+
+        .progress-dot.active { background: var(--primary); }
+        .progress-dot.done { background: var(--gold); }
+
+        .progress-label {
+            text-align: center;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+        }
+
+        /* Question screens */
+        .screen { display: none; }
+        .screen.active { display: block; }
+
+        .question-label {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--cream);
+            margin-bottom: 0.5rem;
+            line-height: 1.3;
+        }
+
+        .question-hint {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 1rem 1.2rem;
+            background: rgba(10,26,10,0.8);
+            border: 2px solid rgba(22,163,74,0.25);
+            border-radius: 12px;
+            color: var(--cream);
+            font-family: 'Outfit', sans-serif;
+            font-size: 18px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        input:focus, textarea:focus { border-color: var(--primary); }
+
+        input::placeholder, textarea::placeholder { color: var(--text-muted); opacity: 0.6; }
+
+        textarea { resize: vertical; min-height: 120px; }
+
+        .slug-preview {
+            margin-top: 0.75rem;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .slug-preview span {
+            color: var(--primary-light);
+            font-weight: 600;
+        }
+
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 1rem;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 18px;
+            text-align: center;
+            cursor: pointer;
+            border: none;
+            font-family: 'Outfit', sans-serif;
+            min-height: 54px;
+            transition: all 0.2s;
+            margin-top: 1.5rem;
+        }
+
+        .btn-green {
+            background: linear-gradient(135deg, var(--primary), #15803d);
+            color: white;
+        }
+
+        .btn-green:hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(22,163,74,0.3); }
+
+        .btn-quiet {
+            background: transparent;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            font-weight: 400;
+            margin-top: 0.75rem;
+            text-decoration: underline;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+        /* Auth gate */
+        #authGate {
+            text-align: center;
+            padding: 3rem 1rem;
+        }
+
+        /* Success */
+        #successScreen {
+            display: none;
+            text-align: center;
+            padding: 2rem 0;
+        }
+
+        .error-msg {
+            color: #f87171;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+
+        <!-- Auth gate (shown if not logged in or tier too low) -->
+        <div id="authGate" style="display:none;">
+            <p class="font-hand" style="font-size: 2.2rem; color: var(--gold); margin-bottom: 1rem;">The Dispensary</p>
+            <p style="color: var(--text-muted); margin-bottom: 0.5rem;">A Villager hut needs a Patreon subscription of at least £3/month.</p>
+            <p style="color: var(--text-muted); margin-bottom: 2rem; font-size: 0.9rem;">If you're already a member, log in via Patreon below.</p>
+            <a href="https://www.patreon.com/cannabinoid" target="_blank" rel="noopener"
+               style="display:inline-block; padding: 1rem 2rem; background: linear-gradient(135deg,var(--primary),#15803d); color:white; border-radius:12px; font-weight:700; text-decoration:none; font-size:18px;">
+                Join via Patreon
+            </a>
+            <p style="margin-top: 1.5rem; font-size: 0.85rem; color: var(--text-muted);">
+                Already a Patreon member?
+                <a href="/.netlify/functions/patreon-auth?redirect=/hut/signup" style="color: var(--primary-light);">Log in here</a>
+            </p>
+        </div>
+
+        <!-- Signup form (shown when authenticated) -->
+        <div id="signupForm" style="display:none;">
+
+            <div style="text-align:center; margin-bottom: 2rem;">
+                <p class="font-hand" style="font-size: 2.2rem; color: var(--gold);">Claim Your Hut</p>
+                <p style="color: var(--text-muted); font-size: 0.95rem;">Your quiet corner of The Dispensary.</p>
+            </div>
+
+            <!-- Progress -->
+            <div class="progress" id="progressBar">
+                <div class="progress-dot" id="dot-0"></div>
+                <div class="progress-dot" id="dot-1"></div>
+                <div class="progress-dot" id="dot-2"></div>
+                <div class="progress-dot" id="dot-3"></div>
+            </div>
+            <p class="progress-label" id="progressLabel">Step 1 of 4</p>
+
+            <!-- Q1: Name -->
+            <div class="screen active" id="screen-0">
+                <div class="card">
+                    <p class="question-label">What should we call you?</p>
+                    <p class="question-hint">Can be a handle. Doesn't have to be your real name.</p>
+                    <input type="text" id="q-name" placeholder="e.g. TerpNerd, Doc, JaneB..." maxlength="60" autocomplete="off">
+                    <div class="slug-preview" id="slugPreview" style="display:none;">
+                        Your hut will live at: <span id="slugDisplay">cannabin-oid.co.uk/hut/...</span>
+                    </div>
+                    <p class="error-msg" id="err-name"></p>
+                    <button class="btn btn-green" onclick="nextScreen(0)">Next →</button>
+                </div>
+            </div>
+
+            <!-- Q2: One-liner -->
+            <div class="screen" id="screen-1">
+                <div class="card">
+                    <p class="question-label">One line about yourself</p>
+                    <p class="question-hint">e.g. "Prescribed patient · Terpene nerd · Vinyl collector"</p>
+                    <input type="text" id="q-oneliner" placeholder="Describe yourself in one line..." maxlength="120" autocomplete="off">
+                    <button class="btn btn-green" onclick="nextScreen(1)">Next →</button>
+                    <button class="btn-quiet" onclick="skipScreen(1)">Skip for now</button>
+                </div>
+            </div>
+
+            <!-- Q3: Story -->
+            <div class="screen" id="screen-2">
+                <div class="card">
+                    <p class="question-label">Your story</p>
+                    <p class="question-hint">2-3 sentences. Self-medicating? Prescribed? Still figuring it out? No judgement.</p>
+                    <textarea id="q-story" placeholder="Tell the Dispensary about your journey..." maxlength="500"></textarea>
+                    <button class="btn btn-green" onclick="nextScreen(2)">Next →</button>
+                    <button class="btn-quiet" onclick="skipScreen(2)">Skip for now</button>
+                </div>
+            </div>
+
+            <!-- Q4: Link -->
+            <div class="screen" id="screen-3">
+                <div class="card">
+                    <p class="question-label">Your link</p>
+                    <p class="question-hint">SpicyLister listing, or your own site. One link only — make it count.</p>
+                    <input type="url" id="q-link" placeholder="https://..." autocomplete="off">
+                    <input type="text" id="q-link-label" placeholder="Link label (e.g. My SpicyLister)" maxlength="60" style="margin-top:0.75rem;" autocomplete="off">
+                    <p class="error-msg" id="err-submit"></p>
+                    <button class="btn btn-green" id="submitBtn" onclick="submitHut()">Claim My Hut 🌱</button>
+                    <button class="btn-quiet" onclick="skipScreen(3)">Skip link</button>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Success -->
+        <div id="successScreen">
+            <div style="text-align:center; padding: 2rem 0;">
+                <p style="font-size: 3rem;">🌱</p>
+                <p class="font-hand" style="font-size: 2.5rem; color: var(--gold); margin: 0.5rem 0;">You're in the Dispensary!</p>
+                <p style="color: var(--text-muted); margin-bottom: 1.5rem;">Your hut is live:</p>
+                <p style="margin-bottom: 2rem;">
+                    <a id="hutLink" href="#" style="color: var(--primary-light); font-size: 1.1rem; font-weight: 600;"></a>
+                </p>
+                <p style="color: var(--text-muted); font-size: 0.9rem;">
+                    Want a fuller presence? Elders get a hamlet page with story, links, and kudos.<br>
+                    <a href="https://www.patreon.com/cannabinoid" style="color:var(--primary-light);">Upgrade to Elder (£7/mo)</a>
+                </p>
+            </div>
+        </div>
+
+    </div>
+
+
+    <script>
+        const SUPABASE_URL = 'https://pdnjeynugptnavkdbmxh.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBkbmpleW51Z3B0bmF2a2RibXhoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzc4MTk2MDIsImV4cCI6MjA1MzM5NTYwMn0.ioaR3LPf5r-GXIsMXLt0GKGt47gV_MbsPVLCpmnFv_U';
+
+        let supabase;
+        try { supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY); }
+        catch(e) {}
+
+        let currentScreen = 0;
+        const TOTAL = 4;
+
+        // ── Check Patreon session ──────────────────────────────
+        function getSession() {
+            const match = document.cookie.match(/cannabinoid_patreon_session=([^;]+)/);
+            if (!match) return null;
+            try { return JSON.parse(decodeURIComponent(match[1])); }
+            catch { return null; }
+        }
+
+        const session = getSession();
+        if (!session || (session.amount_cents || 0) < 300) {
+            document.getElementById('authGate').style.display = 'block';
+        } else {
+            document.getElementById('signupForm').style.display = 'block';
+            updateProgress();
+        }
+
+        // ── Slug generation ────────────────────────────────────
+        const nameInput = document.getElementById('q-name');
+        nameInput.addEventListener('input', () => {
+            const val = nameInput.value.trim();
+            if (!val) { document.getElementById('slugPreview').style.display = 'none'; return; }
+            const slug = toSlug(val);
+            document.getElementById('slugDisplay').textContent = `cannabin-oid.co.uk/hut/${slug}`;
+            document.getElementById('slugPreview').style.display = 'block';
+        });
+
+        function toSlug(str) {
+            return str.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+        }
+
+        // ── Progress ───────────────────────────────────────────
+        function updateProgress() {
+            for (let i = 0; i < TOTAL; i++) {
+                const dot = document.getElementById(`dot-${i}`);
+                if (!dot) continue;
+                dot.className = 'progress-dot';
+                if (i < currentScreen) dot.classList.add('done');
+                else if (i === currentScreen) dot.classList.add('active');
+            }
+            document.getElementById('progressLabel').textContent = `Step ${currentScreen + 1} of ${TOTAL}`;
+        }
+
+        // ── Navigation ─────────────────────────────────────────
+        function nextScreen(from) {
+            if (from === 0) {
+                const name = document.getElementById('q-name').value.trim();
+                if (!name) { document.getElementById('err-name').textContent = 'We need something to call you.'; return; }
+                document.getElementById('err-name').textContent = '';
+            }
+            document.getElementById(`screen-${from}`).classList.remove('active');
+            currentScreen = from + 1;
+            if (currentScreen < TOTAL) {
+                document.getElementById(`screen-${currentScreen}`).classList.add('active');
+                updateProgress();
+            }
+        }
+
+        function skipScreen(from) {
+            nextScreen(from);
+        }
+
+        // ── Save draft to Supabase (save-as-you-go) ────────────
+        async function saveDraft() {
+            if (!supabase) return;
+            const name = document.getElementById('q-name').value.trim();
+            if (!name) return;
+            const slug = toSlug(name);
+            try {
+                await supabase.from('cannabinoid_members').upsert({
+                    slug,
+                    name,
+                    one_liner: document.getElementById('q-oneliner').value.trim() || null,
+                    story: document.getElementById('q-story').value.trim() || null,
+                    tier: 'villager',
+                    active: false,
+                    village: 'cannabin-oid'
+                }, { onConflict: 'slug' });
+            } catch(e) { /* silently skip — full save on submit */ }
+        }
+
+        // Auto-save on input changes
+        ['q-oneliner','q-story'].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.addEventListener('blur', saveDraft);
+        });
+
+        // ── Submit ─────────────────────────────────────────────
+        async function submitHut() {
+            const btn = document.getElementById('submitBtn');
+            btn.disabled = true;
+            btn.textContent = 'Creating your hut...';
+
+            const name = document.getElementById('q-name').value.trim();
+            const slug = toSlug(name);
+            const linkUrl = document.getElementById('q-link').value.trim();
+            const linkLabel = document.getElementById('q-link-label').value.trim();
+
+            const links = {};
+            if (linkUrl) links.website = linkUrl;
+
+            const body = {
+                slug,
+                name,
+                one_liner: document.getElementById('q-oneliner').value.trim() || null,
+                story: document.getElementById('q-story').value.trim() || null,
+                links,
+                theme: 'apothecary',
+                amazon_tag: 'chrdocstrcromh-21'
+            };
+
+            try {
+                const res = await fetch('/.netlify/functions/patreon-hamlet-create', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(body),
+                    credentials: 'include'
+                });
+
+                const data = await res.json();
+
+                if (!res.ok || !data.success) {
+                    document.getElementById('err-submit').textContent = data.message || data.error || 'Something went wrong. Try again.';
+                    btn.disabled = false;
+                    btn.textContent = 'Claim My Hut 🌱';
+                    return;
+                }
+
+                document.getElementById('signupForm').style.display = 'none';
+                const hutLink = document.getElementById('hutLink');
+                hutLink.href = data.url;
+                hutLink.textContent = data.url.replace('https://', '');
+                document.getElementById('successScreen').style.display = 'block';
+
+            } catch(e) {
+                document.getElementById('err-submit').textContent = 'Connection error — please try again.';
+                btn.disabled = false;
+                btn.textContent = 'Claim My Hut 🌱';
+            }
+        }
+    </script>
+
+</body>
+</html>

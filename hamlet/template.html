@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="pageTitle">The Dispensary — Cannabin-Oid</title>
+    <meta name="description" id="pageDesc" content="A member of The Dispensary on Cannabin-Oid. No ads. No algorithms.">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+
+    <style>
+        /* ── BASE: Apothecary (default) ── */
+        :root {
+            --bg:            #0a1a0a;
+            --deep:          #0f2410;
+            --primary:       #16a34a;
+            --primary-light: #22c55e;
+            --accent:        #14532d;
+            --accent-dark:   #0f3d22;
+            --gold:          #c9a227;
+            --gold-dark:     #a07d1c;
+            --cream:         #f0f7f0;
+            --text:          #c8e6c8;
+            --text-muted:    #6b9e6b;
+        }
+
+        /* The Garden */
+        [data-theme="garden"] {
+            --bg:            #0d1a0d;
+            --deep:          #152415;
+            --primary:       #4a7c59;
+            --primary-light: #5e9e72;
+            --accent:        #5c4033;
+            --accent-dark:   #3e2c22;
+            --cream:         #f5ecd7;
+            --text:          #d4e8d4;
+            --text-muted:    #7a9e7a;
+        }
+
+        /* The Sanctum */
+        [data-theme="sanctum"] {
+            --bg:            #040f0f;
+            --deep:          #081818;
+            --primary:       #0d7377;
+            --primary-light: #14a3a8;
+            --accent:        #7a4f1d;
+            --accent-dark:   #5c3a14;
+            --cream:         #f5f0e8;
+            --text:          #b8d4d4;
+            --text-muted:    #5a8a8a;
+        }
+
+        /* The Lab */
+        [data-theme="lab"] {
+            --bg:            #070f14;
+            --deep:          #0d1a22;
+            --primary:       #0e7490;
+            --primary-light: #0ea5c9;
+            --accent:        #334155;
+            --accent-dark:   #1e293b;
+            --cream:         #f0f9ff;
+            --text:          #bae6fd;
+            --text-muted:    #4e8fa0;
+        }
+
+        /* The Den */
+        [data-theme="den"] {
+            --bg:            #0e0c06;
+            --deep:          #1a1607;
+            --primary:       #6b7c2c;
+            --primary-light: #8a9e3a;
+            --accent:        #7c4d1a;
+            --accent-dark:   #5c3712;
+            --cream:         #f5ead4;
+            --text:          #d4c89a;
+            --text-muted:    #7a6e40;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            font-size: 18px;
+            line-height: 1.7;
+        }
+
+        .font-hand { font-family: 'Caveat', cursive; }
+        .container { max-width: 800px; margin: 0 auto; padding: 0 20px; }
+
+        /* ── HEADER ── */
+        .hamlet-header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent-dark) 100%);
+            text-align: center;
+            padding: 50px 20px;
+            border-radius: 0 0 30px 30px;
+            border: 4px solid var(--gold);
+            border-top: none;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+            margin-bottom: 30px;
+        }
+
+        .hamlet-header h1 {
+            font-family: 'Caveat', cursive;
+            font-size: clamp(2.5rem, 8vw, 4rem);
+            color: var(--cream);
+            margin-bottom: 10px;
+        }
+
+        .hamlet-header .subtitle {
+            font-size: 1.15rem;
+            color: rgba(240,247,240,0.8);
+            font-style: italic;
+        }
+
+        .hamlet-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%);
+            color: var(--accent-dark);
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+        }
+
+        /* ── CARDS ── */
+        .card {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(22,163,74,0.12);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 20px;
+        }
+
+        .card h2 {
+            font-family: 'Caveat', cursive;
+            font-size: 2rem;
+            margin-bottom: 15px;
+            color: var(--gold);
+        }
+
+        .card-green {
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+            border: 3px solid var(--accent-dark);
+            color: var(--cream);
+        }
+
+        /* ── KIT GRID ── */
+        .kit-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 16px;
+        }
+
+        .kit-item {
+            background: rgba(22,163,74,0.06);
+            border: 1px solid rgba(22,163,74,0.15);
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .kit-item:hover { transform: translateY(-3px); border-color: var(--primary); }
+
+        .kit-item .kit-emoji { font-size: 2.2rem; margin-bottom: 10px; display: block; }
+        .kit-item .kit-name { font-weight: 700; color: var(--cream); margin-bottom: 6px; }
+        .kit-item .kit-desc { font-size: 14px; color: var(--text-muted); margin-bottom: 12px; }
+
+        .kit-links { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+
+        .kit-link {
+            display: inline-block;
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: opacity 0.2s;
+        }
+
+        .kit-link:hover { opacity: 0.8; }
+        .kit-link-amazon { background: rgba(255,153,0,0.15); color: #ff9900; border: 1px solid rgba(255,153,0,0.3); }
+        .kit-link-ebay { background: rgba(0,100,210,0.15); color: #5ba6ff; border: 1px solid rgba(0,100,210,0.25); }
+
+        /* ── SPICYLISTER CARD ── */
+        .spicylister-card {
+            background: linear-gradient(135deg, rgba(22,163,74,0.12), rgba(201,162,39,0.08));
+            border: 2px solid var(--gold);
+            border-radius: 20px;
+            padding: 28px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        /* ── LINKS ── */
+        .links-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .link-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 18px;
+            border-radius: 12px;
+            background: rgba(22,163,74,0.08);
+            border: 1px solid rgba(22,163,74,0.2);
+            color: var(--primary-light);
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .link-pill:hover {
+            background: rgba(22,163,74,0.15);
+            border-color: var(--primary);
+        }
+
+        /* ── KUDOS ── */
+        .kudos-row {
+            display: flex;
+            gap: 2rem;
+            margin-top: 1rem;
+        }
+
+        .kudos-number {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--gold);
+            line-height: 1;
+        }
+
+        .kudos-label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        /* ── SIGNUP FORM ── */
+        .form-group { margin-bottom: 16px; }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            color: var(--cream);
+            font-size: 16px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 14px 18px;
+            font-size: 18px;
+            border: 2px solid rgba(22,163,74,0.2);
+            border-radius: 12px;
+            background: rgba(0,0,0,0.3);
+            color: white;
+            font-family: 'Outfit', sans-serif;
+            outline: none;
+        }
+
+        .form-group input:focus { border-color: var(--primary); }
+        .form-group input::placeholder { color: rgba(255,255,255,0.35); }
+
+        /* ── QR ── */
+        .qr-section {
+            text-align: center;
+            padding: 28px;
+            background: white;
+            border-radius: 16px;
+            margin-bottom: 20px;
+        }
+
+        .qr-section h3 {
+            color: #1a2e1a;
+            font-family: 'Caveat', cursive;
+            font-size: 1.5rem;
+            margin-bottom: 12px;
+        }
+
+        /* ── FOOTER ── */
+        .hamlet-footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-muted);
+            border-top: 1px solid rgba(22,163,74,0.1);
+        }
+
+        .hamlet-footer a { color: var(--primary-light); text-decoration: none; }
+        .hamlet-footer a:hover { text-decoration: underline; }
+
+        /* ── BUTTONS ── */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 16px 32px;
+            font-size: 18px;
+            font-weight: 700;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            min-height: 54px;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .btn:hover { transform: translateY(-2px); }
+
+        .btn-green {
+            background: linear-gradient(135deg, var(--primary) 0%, #15803d 100%);
+            color: white;
+            width: 100%;
+        }
+
+        .btn-green:hover { box-shadow: 0 4px 20px rgba(22,163,74,0.35); }
+
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+        .hidden { display: none !important; }
+
+        /* ── DIVIDER ── */
+        .divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(22,163,74,0.2), transparent);
+            margin: 1.5rem 0;
+        }
+
+        /* ── LOADING ── */
+        #loadingState {
+            text-align: center;
+            padding: 4rem;
+            color: var(--text-muted);
+        }
+
+        #notFound {
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+
+        @media (max-width: 600px) {
+            .kit-grid { grid-template-columns: 1fr 1fr; }
+            .hamlet-header { padding: 36px 16px; }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Loading state -->
+    <div id="loadingState">
+        <p style="font-family:'Caveat',cursive; font-size:1.8rem; color:var(--primary);">Loading...</p>
+    </div>
+
+    <!-- Not found -->
+    <div id="notFound" class="hidden">
+        <p style="font-family:'Caveat',cursive; font-size:2rem; color:var(--gold); margin-bottom:1rem;">Hamlet not found</p>
+        <p style="color:var(--text-muted); margin-bottom:1.5rem;">That handle doesn't exist in the Dispensary.</p>
+        <a href="/hamlet/" style="color:var(--primary-light);">← View all hamlets</a>
+    </div>
+
+    <!-- Main content (populated by JS) -->
+    <div id="hamletContent" class="hidden">
+
+        <!-- HEADER -->
+        <div class="hamlet-header">
+            <div id="hamletBadge" class="hamlet-badge"></div>
+            <h1 id="hamletName"></h1>
+            <p class="subtitle" id="hamletOneLiner"></p>
+        </div>
+
+        <div class="container">
+
+            <!-- MEET SECTION -->
+            <div class="card" id="meetSection">
+                <h2>Meet</h2>
+                <p id="hamletStory" style="margin-bottom:1rem;"></p>
+                <div class="kudos-row">
+                    <div>
+                        <div class="kudos-number" id="kudosCount">—</div>
+                        <div class="kudos-label">Kudos</div>
+                    </div>
+                    <div>
+                        <div class="kudos-number" id="referralCount">—</div>
+                        <div class="kudos-label">Introduced</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- KIT GRID (Founder only) -->
+            <div id="kitSection" class="hidden">
+                <div class="card">
+                    <h2>The Kit</h2>
+                    <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:1.5rem;">
+                        Gear that actually gets used. Amazon + eBay links are affiliate links — if you buy through them, it helps fund their meds.
+                        <br>
+                        <a href="https://magic-oid.co.uk/hamlet/doc#amazon-guide" style="color:var(--primary-light); font-size:0.85rem;" target="_blank" rel="noopener">
+                            Want your own Amazon tag? →
+                        </a>
+                    </p>
+                    <div class="kit-grid" id="kitGrid"></div>
+                </div>
+            </div>
+
+            <!-- SPICYLISTER (Founder only) -->
+            <div id="spicylisterSection" class="hidden">
+                <div class="spicylister-card">
+                    <p class="font-hand" style="font-size:2rem; color:var(--gold); margin-bottom:0.5rem;">Help fund their meds</p>
+                    <p style="color:var(--text-muted); margin-bottom:1.2rem;" id="spicylisterText"></p>
+                    <a id="spicylisterLink" href="#" target="_blank" rel="noopener" class="btn btn-green" style="display:inline-flex; width:auto; padding:14px 28px;">
+                        🌿 Shop their SpicyLister
+                    </a>
+                </div>
+            </div>
+
+            <!-- SIGNUP FORM -->
+            <div class="card card-green" id="signupSection">
+                <h2 style="color:var(--cream);">Join the Dispensary free</h2>
+                <p style="margin-bottom:18px; font-size:0.95rem; color:rgba(240,247,240,0.75);">
+                    Sign up through this hamlet and they earn kudos. You get access to all the ecosystem apps.
+                </p>
+
+                <form id="hamletForm">
+                    <div class="form-group">
+                        <label for="sigName">Your name</label>
+                        <input type="text" id="sigName" placeholder="What should we call you?" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="sigEmail">Email</label>
+                        <input type="email" id="sigEmail" placeholder="you@example.com" required>
+                    </div>
+                    <button type="submit" class="btn btn-green" id="sigBtn">
+                        <span id="sigBtnText">Join the Dispensary</span>
+                        <span id="sigBtnLoading" class="hidden">Joining...</span>
+                    </button>
+                    <p style="font-size:13px; color:rgba(240,247,240,0.5); margin-top:12px; text-align:center;">
+                        Free forever. No card needed.
+                    </p>
+                </form>
+            </div>
+
+            <!-- SIGNUP SUCCESS (hidden initially) -->
+            <div class="card hidden" id="signupSuccess">
+                <div style="text-align:center; padding:1rem 0;">
+                    <p style="font-size:2.5rem; margin-bottom:0.5rem;">🌿</p>
+                    <p class="font-hand" style="font-size:2rem; color:var(--gold); margin-bottom:0.5rem;">Welcome to the Dispensary!</p>
+                    <p style="color:var(--text-muted); margin-bottom:1rem;">You're in. Check your email.</p>
+                    <a href="https://www.patreon.com/cannabinoid" target="_blank" rel="noopener" style="color:var(--primary-light); font-size:0.95rem;">
+                        Want your own hut? Become a Patreon Villager →
+                    </a>
+                </div>
+            </div>
+
+            <!-- LINKS SECTION -->
+            <div class="card" id="linksSection">
+                <h2>Find Them</h2>
+                <div class="links-row" id="linksRow"></div>
+            </div>
+
+            <!-- QR CODE -->
+            <div class="qr-section" id="qrSection">
+                <h3 id="qrTitle">Scan to visit this hamlet</h3>
+                <img id="qrImg" alt="QR Code" width="200" height="200"
+                     style="border:4px solid var(--primary); border-radius:12px; margin:12px 0;">
+                <p id="qrUrl" style="color:#555; font-size:14px;"></p>
+            </div>
+
+            <!-- FOOTER -->
+            <div class="hamlet-footer">
+                <p class="font-hand" style="font-size:1.8rem; color:var(--gold); margin-bottom:0.5rem;" id="footerQuote"></p>
+                <p style="margin-bottom:1rem; font-size:0.9rem; color:var(--text-muted);">Elder of the Dispensary — Doc Strange</p>
+                <p style="margin-bottom:1.5rem;">
+                    <a href="https://cannabin-oid.co.uk">← Cannabin-Oid</a> ·
+                    <a href="/hamlet/">All Hamlets</a> ·
+                    <a href="/hamlet/doc">Doc's Den</a>
+                </p>
+                <p style="font-size:0.8rem; opacity:0.35;">
+                    No ads. No algorithms. Just you. · Built with 💚 by The Chris P Trinity
+                </p>
+            </div>
+
+        </div>
+    </div>
+
+
+    <script>
+        const SUPABASE_URL = 'https://pdnjeynugptnavkdbmxh.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBkbmpleW51Z3B0bmF2a2RibXhoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzc4MTk2MDIsImV4cCI6MjA1MzM5NTYwMn0.ioaR3LPf5r-GXIsMXLt0GKGt47gV_MbsPVLCpmnFv_U';
+
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // ── Get slug from URL ──────────────────────────────────
+        const pathParts = window.location.pathname.split('/').filter(Boolean);
+        const SLUG = pathParts[pathParts.length - 1] || '';
+        const HAMLET_URL = `https://cannabin-oid.co.uk/hamlet/${SLUG}`;
+
+        function escHtml(str) {
+            return (str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+        }
+
+        // ── Load member ────────────────────────────────────────
+        async function loadHamlet() {
+            if (!SLUG) { show404(); return; }
+
+            const { data, error } = await supabase
+                .from('cannabinoid_members')
+                .select('*')
+                .eq('slug', SLUG)
+                .eq('active', true)
+                .maybeSingle();
+
+            if (error || !data) { show404(); return; }
+
+            renderHamlet(data);
+        }
+
+        function show404() {
+            document.getElementById('loadingState').classList.add('hidden');
+            document.getElementById('notFound').classList.remove('hidden');
+        }
+
+        // ── Render ─────────────────────────────────────────────
+        function renderHamlet(m) {
+            // Apply theme
+            if (m.theme && m.theme !== 'apothecary') {
+                document.documentElement.setAttribute('data-theme', m.theme);
+            }
+
+            // Page meta
+            document.getElementById('pageTitle').textContent = `${m.name} | The Dispensary — Cannabin-Oid`;
+            document.getElementById('pageDesc').content = `${m.name} — ${m.tier} of The Dispensary. ${m.one_liner || ''}`;
+
+            // Badge
+            const tierLabels = { villager: '🌱 Villager', elder: '🌿 Elder', founder: '🌿 Founder' };
+            const tierLabel = tierLabels[m.tier] || '🌿 Member';
+            const numStr = m.member_number ? ` #${m.member_number}` : '';
+            document.getElementById('hamletBadge').textContent = `${tierLabel}${numStr} — The Dispensary`;
+
+            // Header
+            document.getElementById('hamletName').textContent = m.name;
+            document.getElementById('hamletOneLiner').textContent = m.one_liner || '';
+
+            // Story
+            document.getElementById('hamletStory').textContent = m.story || '';
+            if (!m.story) document.getElementById('meetSection').classList.add('hidden');
+
+            // Tier-conditional: Founder sections
+            if (m.tier === 'founder') {
+                // Kit grid
+                const kit = Array.isArray(m.kit) ? m.kit : [];
+                if (kit.length > 0) {
+                    document.getElementById('kitSection').classList.remove('hidden');
+                    const grid = document.getElementById('kitGrid');
+                    kit.forEach(item => {
+                        const card = document.createElement('div');
+                        card.className = 'kit-item';
+                        const amazonUrl = item.amazon_url || '';
+                        const ebayUrl = item.ebay_url || '';
+                        const amazonTag = m.amazon_tag || 'chrdocstrcromh-21';
+                        const amazonWithTag = amazonUrl
+                            ? `${amazonUrl}${amazonUrl.includes('?') ? '&' : '?'}tag=${amazonTag}`
+                            : '';
+                        card.innerHTML = `
+                            <span class="kit-emoji">${escHtml(item.emoji || '🌿')}</span>
+                            <div class="kit-name">${escHtml(item.name || '')}</div>
+                            <div class="kit-desc">${escHtml(item.desc || '')}</div>
+                            <div class="kit-links">
+                                ${amazonWithTag ? `<a href="${escHtml(amazonWithTag)}" target="_blank" rel="noopener" class="kit-link kit-link-amazon">Amazon</a>` : ''}
+                                ${ebayUrl ? `<a href="${escHtml(ebayUrl)}" target="_blank" rel="noopener" class="kit-link kit-link-ebay">eBay</a>` : ''}
+                            </div>
+                        `;
+                        grid.appendChild(card);
+                    });
+                }
+
+                // SpicyLister
+                const links = m.links || {};
+                if (links.spicylister) {
+                    document.getElementById('spicylisterSection').classList.remove('hidden');
+                    document.getElementById('spicylisterText').textContent =
+                        `Help ${m.name} fund their meds — buy from their SpicyLister listing.`;
+                    document.getElementById('spicylisterLink').href = links.spicylister;
+                }
+            }
+
+            // Links section
+            renderLinks(m.links || {}, m.name);
+
+            // QR
+            document.getElementById('qrImg').src =
+                `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(HAMLET_URL)}&bgcolor=ffffff&color=16a34a`;
+            document.getElementById('qrTitle').textContent = `Scan to visit ${m.name}'s hamlet`;
+            document.getElementById('qrUrl').textContent = `cannabin-oid.co.uk/hamlet/${SLUG}`;
+
+            // Footer quote
+            if (m.quote_text) {
+                document.getElementById('footerQuote').textContent = `"${m.quote_text}"`;
+            }
+
+            // Signup form target
+            document.querySelector('input[type="hidden"][name="hamlet"]') && null; // handled in submit
+
+            // Hide loading, show content
+            document.getElementById('loadingState').classList.add('hidden');
+            document.getElementById('hamletContent').classList.remove('hidden');
+
+            // Load kudos
+            loadKudos();
+        }
+
+        // ── Links ──────────────────────────────────────────────
+        function renderLinks(links, name) {
+            const LINK_CONFIG = [
+                { key: 'spicylister', label: '🌿 SpicyLister', prefix: '' },
+                { key: 'bluesky',     label: '🦋 Bluesky',     prefix: '' },
+                { key: 'mastodon',    label: '🐘 Mastodon',     prefix: '' },
+                { key: 'upscrolled',  label: '📜 Upscrolled',   prefix: '' },
+                { key: 'email',       label: '✉️ Email',         prefix: 'mailto:' },
+                { key: 'website',     label: '🌐 Website',      prefix: '' }
+            ];
+
+            const row = document.getElementById('linksRow');
+            let hasLink = false;
+
+            LINK_CONFIG.forEach(({ key, label, prefix }) => {
+                const val = links[key];
+                if (!val) return;
+                hasLink = true;
+                const a = document.createElement('a');
+                a.href = prefix + val;
+                a.className = 'link-pill';
+                a.textContent = label;
+                if (key !== 'email') { a.target = '_blank'; a.rel = 'noopener'; }
+                row.appendChild(a);
+            });
+
+            if (!hasLink) {
+                document.getElementById('linksSection').classList.add('hidden');
+            }
+        }
+
+        // ── Kudos ──────────────────────────────────────────────
+        async function loadKudos() {
+            const { count } = await supabase
+                .from('hamlet_signups')
+                .select('*', { count: 'exact', head: true })
+                .eq('hamlet', SLUG)
+                .eq('village', 'cannabin-oid');
+            if (count !== null) {
+                document.getElementById('referralCount').textContent = count;
+                document.getElementById('kudosCount').textContent = 10 + count * 10;
+            }
+        }
+
+        // ── Signup form ────────────────────────────────────────
+        document.getElementById('hamletForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const name = document.getElementById('sigName').value.trim();
+            const email = document.getElementById('sigEmail').value.trim();
+            if (!name || !email) return;
+
+            const btn = document.getElementById('sigBtn');
+            btn.disabled = true;
+            document.getElementById('sigBtnText').classList.add('hidden');
+            document.getElementById('sigBtnLoading').classList.remove('hidden');
+
+            try {
+                const { error } = await supabase.from('hamlet_signups').insert([{
+                    name, email,
+                    hamlet: SLUG,
+                    ref: SLUG,
+                    source: 'hamlet-page-2026',
+                    village: 'cannabin-oid'
+                }]);
+
+                if (error) console.error('Signup error:', error);
+
+                // Welcome email (best effort)
+                try {
+                    await fetch('/.netlify/functions/hamlet-welcome', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ email, name, hamlet: SLUG, ref: SLUG })
+                    });
+                } catch {}
+
+                document.getElementById('signupSection').classList.add('hidden');
+                document.getElementById('signupSuccess').classList.remove('hidden');
+                document.getElementById('signupSuccess').scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+                loadKudos();
+
+            } catch(err) {
+                btn.disabled = false;
+                document.getElementById('sigBtnText').classList.remove('hidden');
+                document.getElementById('sigBtnLoading').classList.add('hidden');
+                alert('Something went wrong. Try again.');
+            }
+        });
+
+        // ── Init ───────────────────────────────────────────────
+        loadHamlet();
+    </script>
+
+</body>
+</html>

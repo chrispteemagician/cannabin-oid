@@ -1,0 +1,38 @@
+functionsDirectory = "C:\\Users\\comed\\Desktop\\a1\\APPS\\cannabin-oid-FINAL\\cannabin-oid\\netlify\\functions"
+functionsDirectoryOrigin = "config"
+headersOrigin = "config"
+plugins = []
+redirects = []
+
+[build]
+publish = "C:\\Users\\comed\\Desktop\\a1\\APPS\\cannabin-oid-FINAL\\cannabin-oid"
+publishOrigin = "config"
+commandOrigin = "config"
+command = "echo 'Static site - no build needed'"
+functions = "C:\\Users\\comed\\Desktop\\a1\\APPS\\cannabin-oid-FINAL\\cannabin-oid\\netlify\\functions"
+
+[build.environment]
+SECRETS_SCAN_OMIT_KEYS = "SUPABASE_API_KEY"
+
+[build.processing]
+
+[build.processing.css]
+
+[build.processing.html]
+
+[build.processing.images]
+
+[build.processing.js]
+
+[build.services]
+
+[functions]
+
+[functions."*"]
+
+[[headers]]
+for = "/*"
+
+[headers.values]
+X-Frame-Options = "DENY"
+X-Content-Type-Options = "nosniff"
