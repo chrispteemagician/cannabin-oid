@@ -38,8 +38,8 @@ exports.handler = async (event) => {
 
         const { access_token } = await tokenRes.json();
 
-        // Fetch identity with memberships and email
-        const identityUrl = `https://www.patreon.com/api/oauth2/v2/identity?include=memberships&fields[member]=patron_status,currently_entitled_amount_cents,campaign_id&fields[user]=email`;
+        // Fetch identity with memberships and user ID
+        const identityUrl = `https://www.patreon.com/api/oauth2/v2/identity?include=memberships&fields[member]=patron_status,currently_entitled_amount_cents,campaign_id&fields[user]=vanity`;
         const identityRes = await fetch(identityUrl, {
             headers: { Authorization: `Bearer ${access_token}` }
         });
@@ -50,10 +50,11 @@ exports.handler = async (event) => {
 
         const identity = await identityRes.json();
 
-        const patreonEmail = identity.data?.attributes?.email || '';
-        const ADMIN_EMAILS = ['chris@chrisptee.co.uk', 'glowgadgets@gmail.com'];
-        const is_founder = ADMIN_EMAILS.includes(patreonEmail.toLowerCase());
-        console.log('Patreon email:', patreonEmail, '| is_founder:', is_founder);
+        const patreonId = identity.data?.id || '';
+        const patreonVanity = identity.data?.attributes?.vanity || '';
+        const FOUNDER_VANITY = 'chrisptee';
+        const is_founder = patreonVanity.toLowerCase() === FOUNDER_VANITY;
+        console.log('Patreon ID:', patreonId, '| vanity:', patreonVanity, '| is_founder:', is_founder);
 
         const memberships = (identity.included || []).filter(item => item.type === 'member');
 
@@ -77,7 +78,7 @@ exports.handler = async (event) => {
         return {
             statusCode: 200,
             headers,
-            body: JSON.stringify({ isPro, tier, is_founder, patreon_email: patreonEmail })
+            body: JSON.stringify({ isPro, tier, is_founder, patreon_id: patreonId, patreon_vanity: patreonVanity })
         };
 
     } catch (err) {
