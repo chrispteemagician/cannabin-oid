@@ -95,9 +95,12 @@
         <h1 class="text-4xl sm:text-5xl font-extrabold mb-1">Cannabin-Oid</h1>
         <p class="text-lg font-semibold opacity-95">Self-Medicating? Get Prescribed.</p>
         <p class="text-sm opacity-80 mt-1">Your pathway from street to prescription.</p>
-        <div id="headerAuth" class="mt-4">
+        <div id="headerAuth" class="mt-4 flex items-center justify-center gap-3">
             <a id="headerSignInBtn" href="#" class="inline-block bg-white/20 hover:bg-white/30 text-white font-bold px-5 py-2 rounded-xl text-sm transition">🎨 Sign in with Patreon</a>
-            <p id="headerSignedIn" class="hidden text-white/80 text-sm font-semibold mt-1" id="headerSignedIn"></p>
+            <div id="headerSignedIn" class="hidden flex items-center gap-3">
+                <span id="headerTierLabel" class="text-white font-bold text-sm"></span>
+                <button onclick="patreonSignOut()" class="bg-white/20 hover:bg-white/30 text-white text-xs font-bold px-3 py-2 rounded-xl transition">Sign Out</button>
+            </div>
         </div>
     </header>
 
@@ -1139,10 +1142,15 @@
             if (el) el.textContent = label + ' — Patreon Active';
             document.getElementById('patreonStatus')?.classList.remove('hidden');
             document.getElementById('patreonJoin')?.classList.add('hidden');
-            // Update header
             document.getElementById('headerSignInBtn')?.classList.add('hidden');
-            const headerSignedIn = document.getElementById('headerSignedIn');
-            if (headerSignedIn) { headerSignedIn.textContent = label + ' ✓'; headerSignedIn.classList.remove('hidden'); }
+            const headerTierLabel = document.getElementById('headerTierLabel');
+            if (headerTierLabel) headerTierLabel.textContent = label + ' ✓';
+            document.getElementById('headerSignedIn')?.classList.remove('hidden');
+        }
+
+        function patreonSignOut() {
+            localStorage.removeItem('cannabinoid_patreon_session');
+            location.reload();
         }
 
         // Config
