@@ -1081,6 +1081,12 @@
 
         let patreonSession = null;
 
+        function activateGodMode() {
+            isAdmin = true;
+            document.getElementById('tab-admin')?.classList.remove('hidden');
+            loadAdminData();
+        }
+
         function restorePatreonSession() {
             try {
                 const raw = localStorage.getItem('cannabinoid_patreon_session');
@@ -1089,6 +1095,7 @@
                     if (s.expires && Date.now() < s.expires) {
                         patreonSession = s;
                         showPatreonStatus(s.tier);
+                        if (s.is_founder) activateGodMode();
                     } else {
                         localStorage.removeItem('cannabinoid_patreon_session');
                     }
@@ -1103,12 +1110,17 @@
                 fetch(`/.netlify/functions/patreon-auth?code=${encodeURIComponent(code)}`)
                     .then(r => r.json())
                     .then(data => {
-                        if (data.isPro) {
-                            const session = { isPro: true, tier: data.tier, expires: Date.now() + 86400000 };
-                            localStorage.setItem('cannabinoid_patreon_session', JSON.stringify(session));
-                            patreonSession = session;
-                            showPatreonStatus(data.tier);
-                        }
+                        const session = {
+                            isPro: data.isPro || data.is_founder,
+                            tier: data.tier,
+                            is_founder: data.is_founder || false,
+                            email: data.patreon_email || '',
+                            expires: Date.now() + 86400000
+                        };
+                        localStorage.setItem('cannabinoid_patreon_session', JSON.stringify(session));
+                        patreonSession = session;
+                        showPatreonStatus(data.tier || (data.is_founder ? 'founder' : null));
+                        if (data.is_founder) activateGodMode();
                         window.history.replaceState({}, '', '/');
                     })
                     .catch(e => console.error('Patreon auth error:', e));
@@ -1425,7 +1437,7 @@
         }
 
         async function updateBroadcast() {
-            if (!isAdmin || !currentUser) return;
+            if (!isAdmin) return;
 
             const url = document.getElementById('broadcastUrlInput').value.trim();
             const title = document.getElementById('broadcastTitleInput').value.trim();
@@ -1445,7 +1457,7 @@
                         is_emergency: isEmergency,
                         is_active: true,
                         updated_at: new Date().toISOString(),
-                        updated_by: currentUser.email
+                        updated_by: patreonSession?.email || currentUser?.email || 'founder'
                     })
                     .eq('id', (await supabaseClient.from('broadcast').select('id').limit(1).single()).data.id);
 
@@ -1460,7 +1472,7 @@
         }
 
         async function toggleBroadcast() {
-            if (!isAdmin || !currentUser) return;
+            if (!isAdmin) return;
 
             try {
                 const { data: current } = await supabaseClient

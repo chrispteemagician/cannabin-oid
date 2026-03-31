@@ -38,8 +38,8 @@ exports.handler = async (event) => {
 
         const { access_token } = await tokenRes.json();
 
-        // Fetch identity with memberships
-        const identityUrl = `https://www.patreon.com/api/oauth2/v2/identity?include=memberships&fields[member]=patron_status,currently_entitled_amount_cents,campaign_id`;
+        // Fetch identity with memberships and email
+        const identityUrl = `https://www.patreon.com/api/oauth2/v2/identity?include=memberships&fields[member]=patron_status,currently_entitled_amount_cents,campaign_id&fields[user]=email`;
         const identityRes = await fetch(identityUrl, {
             headers: { Authorization: `Bearer ${access_token}` }
         });
@@ -49,6 +49,10 @@ exports.handler = async (event) => {
         }
 
         const identity = await identityRes.json();
+
+        const patreonEmail = identity.data?.attributes?.email || '';
+        const ADMIN_EMAILS = ['chris@chrisptee.co.uk', 'chrisptee@gmail.com'];
+        const is_founder = ADMIN_EMAILS.includes(patreonEmail.toLowerCase());
 
         const memberships = (identity.included || []).filter(item => item.type === 'member');
 
@@ -72,7 +76,7 @@ exports.handler = async (event) => {
         return {
             statusCode: 200,
             headers,
-            body: JSON.stringify({ isPro, tier })
+            body: JSON.stringify({ isPro, tier, is_founder, patreon_email: patreonEmail })
         };
 
     } catch (err) {
