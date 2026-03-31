@@ -91,7 +91,7 @@
 
     <!-- Header -->
     <header class="header-gradient text-white text-center py-8 px-4">
-        <img src="cannabin-oid.jpg" alt="Cannabin-Oid" class="w-20 h-20 mx-auto rounded-2xl shadow-xl mb-3" onerror="this.style.display='none'">
+        <img src="cannabin-oid.jpg" alt="Cannabin-Oid" class="w-20 h-20 mx-auto rounded-2xl shadow-xl mb-3" onerror="this.style.display='none'" onclick="handleLogoTap()" style="cursor:pointer">
         <h1 class="text-4xl sm:text-5xl font-extrabold mb-1">Cannabin-Oid</h1>
         <p class="text-lg font-semibold opacity-95">Self-Medicating? Get Prescribed.</p>
         <p class="text-sm opacity-80 mt-1">Your pathway from street to prescription.</p>
@@ -1150,6 +1150,7 @@
 
         function patreonSignOut() {
             localStorage.removeItem('cannabinoid_patreon_session');
+            localStorage.removeItem('cannabinoid_god_mode');
             location.reload();
         }
 
@@ -1175,6 +1176,7 @@
         // Init
         window.onload = async function() {
             checkAgeVerification();
+            checkStoredGodMode();
             restorePatreonSession();
             handlePatreonCallback();
             document.getElementById('patreonSignInBtn')?.setAttribute('href', PATREON_OAUTH_URL);
@@ -1352,6 +1354,28 @@
             await supabaseClient.auth.signOut();
             currentUser = null;
             location.reload();
+        }
+
+        // God Mode passcode
+        let logoTapCount = 0, logoTapTimer = null;
+        function handleLogoTap() {
+            logoTapCount++;
+            clearTimeout(logoTapTimer);
+            logoTapTimer = setTimeout(() => { logoTapCount = 0; }, 800);
+            if (logoTapCount >= 3) {
+                logoTapCount = 0;
+                if (isAdmin) { alert('God Mode already active ✓'); return; }
+                const input = prompt('Enter passcode:');
+                if (input === 'Z0d14cM4nTr1n1tyxx') {
+                    localStorage.setItem('cannabinoid_god_mode', '1');
+                    activateGodMode();
+                    alert('God Mode activated 🔥');
+                }
+            }
+        }
+
+        function checkStoredGodMode() {
+            if (localStorage.getItem('cannabinoid_god_mode') === '1') activateGodMode();
         }
 
         // God Mode
