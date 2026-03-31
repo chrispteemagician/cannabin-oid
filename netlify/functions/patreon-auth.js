@@ -53,6 +53,7 @@ exports.handler = async (event) => {
         const patreonEmail = identity.data?.attributes?.email || '';
         const ADMIN_EMAILS = ['chris@chrisptee.co.uk', 'glowgadgets@gmail.com'];
         const is_founder = ADMIN_EMAILS.includes(patreonEmail.toLowerCase());
+        console.log('Patreon email:', patreonEmail, '| is_founder:', is_founder);
 
         const memberships = (identity.included || []).filter(item => item.type === 'member');
 

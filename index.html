@@ -1125,6 +1125,7 @@
                         patreonSession = session;
                         showPatreonStatus(data.tier || (data.is_founder ? 'founder' : null));
                         if (data.is_founder) activateGodMode();
+                        console.log('Patreon auth response:', JSON.stringify(data));
                         window.history.replaceState({}, '', '/');
                     })
                     .catch(e => console.error('Patreon auth error:', e));
