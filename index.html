@@ -95,6 +95,10 @@
         <h1 class="text-4xl sm:text-5xl font-extrabold mb-1">Cannabin-Oid</h1>
         <p class="text-lg font-semibold opacity-95">Self-Medicating? Get Prescribed.</p>
         <p class="text-sm opacity-80 mt-1">Your pathway from street to prescription.</p>
+        <div id="headerAuth" class="mt-4">
+            <a id="headerSignInBtn" href="#" class="inline-block bg-white/20 hover:bg-white/30 text-white font-bold px-5 py-2 rounded-xl text-sm transition">🎨 Sign in with Patreon</a>
+            <p id="headerSignedIn" class="hidden text-white/80 text-sm font-semibold mt-1" id="headerSignedIn"></p>
+        </div>
     </header>
 
     <!-- Prescription Pathway Banner -->
@@ -1129,10 +1133,15 @@
 
         function showPatreonStatus(tier) {
             const labels = { founder: '🏛️ Founder', elder: '⚔️ Elder', villager: '🏡 Villager' };
+            const label = labels[tier] || '🏡 Villager';
             const el = document.getElementById('patreonTierLabel');
-            if (el) el.textContent = (labels[tier] || '🏡 Villager') + ' — Patreon Active';
+            if (el) el.textContent = label + ' — Patreon Active';
             document.getElementById('patreonStatus')?.classList.remove('hidden');
             document.getElementById('patreonJoin')?.classList.add('hidden');
+            // Update header
+            document.getElementById('headerSignInBtn')?.classList.add('hidden');
+            const headerSignedIn = document.getElementById('headerSignedIn');
+            if (headerSignedIn) { headerSignedIn.textContent = label + ' ✓'; headerSignedIn.classList.remove('hidden'); }
         }
 
         // Config
@@ -1160,6 +1169,7 @@
             restorePatreonSession();
             handlePatreonCallback();
             document.getElementById('patreonSignInBtn')?.setAttribute('href', PATREON_OAUTH_URL);
+            document.getElementById('headerSignInBtn')?.setAttribute('href', PATREON_OAUTH_URL);
 
             const { data: { session }, error } = await supabaseClient.auth.getSession();
 
