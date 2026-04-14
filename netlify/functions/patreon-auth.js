@@ -38,8 +38,8 @@ exports.handler = async (event) => {
 
         const { access_token } = await tokenRes.json();
 
-        // Fetch identity with memberships
-        const identityUrl = `https://www.patreon.com/api/oauth2/v2/identity?include=memberships&fields[member]=patron_status,currently_entitled_amount_cents,campaign_id`;
+        // Fetch identity with memberships + campaign (campaign = user is a creator)
+        const identityUrl = `https://www.patreon.com/api/oauth2/v2/identity?include=memberships,campaign&fields[member]=patron_status,currently_entitled_amount_cents,campaign_id`;
         const identityRes = await fetch(identityUrl, {
             headers: { Authorization: `Bearer ${access_token}` }
         });
@@ -67,6 +67,15 @@ exports.handler = async (event) => {
             else if (amountCents >= 300) tier = 'villager';
 
             if (tier) { isPro = true; break; }
+        }
+
+        // If no patron tier found, check if this user IS the campaign creator
+        if (!isPro) {
+            const ownCampaigns = (identity.included || []).filter(item => item.type === 'campaign');
+            if (ownCampaigns.length > 0) {
+                tier = 'founder';
+                isPro = true;
+            }
         }
 
         return {
