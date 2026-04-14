@@ -1088,7 +1088,7 @@
     <script>
         // Patreon config
         const PATREON_CLIENT_ID = 'A-K7cVCZBl7mQZDlrq0obIq7Jm0RPYAMGstfBsUyEeX-5e6WvU24ZWMTGBuypxot';
-        const PATREON_OAUTH_URL = `https://www.patreon.com/oauth2/authorize?response_type=code&client_id=${PATREON_CLIENT_ID}&redirect_uri=https://cannabin-oid.co.uk/auth/patreon&scope=identity%20identity.memberships`;
+        const PATREON_OAUTH_URL = `https://www.patreon.com/oauth2/authorize?response_type=code&client_id=${PATREON_CLIENT_ID}&redirect_uri=https://cannabin-oid.co.uk/auth/patreon&scope=identity%20identity.memberships%20identity%5Bemail%5D`;
         const PATREON_PAGE = 'https://www.patreon.com/chrisptee';
 
         let patreonSession = null;
@@ -1118,26 +1118,60 @@
         function handlePatreonCallback() {
             const params = new URLSearchParams(window.location.search);
             const code = params.get('code');
-            if (code) {
-                fetch(`/.netlify/functions/patreon-auth?code=${encodeURIComponent(code)}`)
-                    .then(r => r.json())
-                    .then(data => {
-                        const session = {
-                            isPro: data.isPro || data.is_founder,
-                            tier: data.tier,
-                            is_founder: data.is_founder || false,
-                            email: data.patreon_email || '',
-                            expires: Date.now() + 86400000
-                        };
-                        localStorage.setItem('cannabinoid_patreon_session', JSON.stringify(session));
-                        patreonSession = session;
-                        showPatreonStatus(data.tier || (data.is_founder ? 'founder' : null));
-                        if (data.is_founder) activateGodMode();
-                        console.log('Patreon auth response:', JSON.stringify(data));
-                        window.history.replaceState({}, '', '/');
-                    })
-                    .catch(e => console.error('Patreon auth error:', e));
-            }
+            if (!code) return;
+
+            // Show loading state while auth runs
+            const signInBtn = document.getElementById('headerSignInBtn');
+            if (signInBtn) signInBtn.textContent = '⏳ Signing in…';
+
+            fetch(`/.netlify/functions/patreon-auth?code=${encodeURIComponent(code)}`)
+                .then(r => r.json())
+                .then(data => {
+                    window.history.replaceState({}, '', '/');
+
+                    if (data.error || (!data.isPro && !data.tier)) {
+                        // Auth failed — show a clear message, don't save a broken session
+                        if (signInBtn) signInBtn.textContent = '🎨 Sign in with Patreon';
+                        const notice = document.createElement('div');
+                        notice.style.cssText = 'position:fixed;top:16px;left:50%;transform:translateX(-50%);background:#fef2f2;color:#991b1b;border:1px solid #fca5a5;padding:12px 20px;border-radius:10px;z-index:9999;font-size:14px;font-weight:600;max-width:340px;text-align:center;box-shadow:0 4px 12px rgba(0,0,0,0.1)';
+                        notice.textContent = data.error === 'Token exchange failed'
+                            ? 'Sign-in failed — please try again. If this keeps happening, contact support.'
+                            : 'Sign-in failed — you may not be a Patreon member yet.';
+                        document.body.appendChild(notice);
+                        setTimeout(() => notice.remove(), 6000);
+                        console.warn('Patreon auth failed:', data.error || 'no tier returned');
+                        return;
+                    }
+
+                    const isFirstAuth = !localStorage.getItem('cannabinoid_welcome_sent');
+                    const session = {
+                        isPro: data.isPro || data.is_founder,
+                        tier: data.tier,
+                        is_founder: data.is_founder || false,
+                        email: data.email || '',
+                        name: data.name || '',
+                        expires: Date.now() + 86400000
+                    };
+                    localStorage.setItem('cannabinoid_patreon_session', JSON.stringify(session));
+                    patreonSession = session;
+                    showPatreonStatus(data.tier || (data.is_founder ? 'founder' : null));
+                    if (data.is_founder) activateGodMode();
+
+                    // Send welcome email on first sign-in
+                    if (isFirstAuth && data.email) {
+                        localStorage.setItem('cannabinoid_welcome_sent', '1');
+                        fetch('/.netlify/functions/send-welcome', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ email: data.email, name: data.name || '', tier: data.tier })
+                        }).catch(() => {}); // fire and forget — never block the user
+                    }
+                })
+                .catch(e => {
+                    window.history.replaceState({}, '', '/');
+                    if (signInBtn) signInBtn.textContent = '🎨 Sign in with Patreon';
+                    console.error('Patreon auth error:', e);
+                });
         }
 
         function showPatreonStatus(tier) {

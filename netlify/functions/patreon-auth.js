@@ -39,7 +39,7 @@ exports.handler = async (event) => {
         const { access_token } = await tokenRes.json();
 
         // Fetch identity with memberships + campaign (campaign = user is a creator)
-        const identityUrl = `https://www.patreon.com/api/oauth2/v2/identity?include=memberships,campaign&fields[member]=patron_status,currently_entitled_amount_cents,campaign_id`;
+        const identityUrl = `https://www.patreon.com/api/oauth2/v2/identity?include=memberships,campaign&fields[member]=patron_status,currently_entitled_amount_cents,campaign_id&fields[user]=email,full_name`;
         const identityRes = await fetch(identityUrl, {
             headers: { Authorization: `Bearer ${access_token}` }
         });
@@ -78,10 +78,14 @@ exports.handler = async (event) => {
             }
         }
 
+        const userAttrs = identity.data?.attributes || {};
+        const email = userAttrs.email || '';
+        const name = userAttrs.full_name || '';
+
         return {
             statusCode: 200,
             headers,
-            body: JSON.stringify({ isPro, tier })
+            body: JSON.stringify({ isPro, tier, email, name })
         };
 
     } catch (err) {
