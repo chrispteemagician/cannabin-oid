@@ -1978,7 +1978,7 @@
             navigator.geolocation.getCurrentPosition(
                 (pos) => {
                     const { latitude: lat, longitude: lng } = pos.coords;
-                    const w3wUrl = `https://map.what3words.com/?lng=${lng}&lat=${lat}&zoom=17`;
+                    const w3wUrl = `https://what3words.com/map?longitude=${lng}&latitude=${lat}`;
                     window.open(w3wUrl, '_blank', 'noopener');
                     status.innerHTML = `📍 Opened what3words at your location — copy your 3-word address and paste it above.`;
                     status.classList.remove('hidden');
