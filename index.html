@@ -1958,10 +1958,8 @@
         if (refCode) localStorage.setItem('referredBy', refCode);
 
         // ==================== MEETING POINT GENERATOR ====================
-        const W3W_KEY = 'R7VL7Q93';
         let currentW3WAddress = '';
         let currentUseCase = { icon: '🌿', title: 'My Stall', label: 'Market Stall' };
-        let w3wSuggestTimer = null;
 
         function selectUseCase(btn) {
             document.querySelectorAll('.usecase-btn').forEach(b => b.classList.remove('active'));
@@ -1970,47 +1968,19 @@
         }
         function cleanW3W(val) { return val.replace(/^\/+/, '').toLowerCase().trim(); }
         function isCompleteW3W(val) { const parts = cleanW3W(val).split('.'); return parts.length === 3 && parts.every(p => p.length > 0); }
-        function handleW3WInput(val) {
-            clearTimeout(w3wSuggestTimer);
-            const clean = cleanW3W(val);
-            if (clean.length < 3) { document.getElementById('w3wSuggestions').classList.add('hidden'); return; }
-            w3wSuggestTimer = setTimeout(() => fetchW3WSuggestions(clean), 280);
-        }
+        function handleW3WInput(val) { document.getElementById('w3wSuggestions').classList.add('hidden'); }
         function handleW3WKeydown(e) { if (e.key === 'Escape') document.getElementById('w3wSuggestions').classList.add('hidden'); }
-        async function fetchW3WSuggestions(partial) {
-            try {
-                const res = await fetch(`https://api.what3words.com/v3/autosuggest?input=${encodeURIComponent(partial)}&key=${W3W_KEY}&language=en&n-results=4&clip-to-country=GB`);
-                const data = await res.json();
-                const box = document.getElementById('w3wSuggestions');
-                if (!data.suggestions || data.suggestions.length === 0) { box.classList.add('hidden'); return; }
-                box.innerHTML = data.suggestions.map(s =>
-                    `<div class="w3w-suggestion" onclick="selectAddress('${s.words}')">
-                        <span class="text-green-600 font-bold">///</span><span class="text-gray-800">${s.words}</span>
-                        ${s.nearestPlace ? `<span class="text-gray-400 text-xs ml-2">${s.nearestPlace}</span>` : ''}
-                    </div>`
-                ).join('');
-                box.classList.remove('hidden');
-            } catch(e) { /* silent fail */ }
-        }
-        function selectAddress(words) {
-            currentW3WAddress = words;
-            document.getElementById('w3wInput').value = words;
-            document.getElementById('w3wSuggestions').classList.add('hidden');
-        }
-        async function findMySpot() {
+        function findMySpot() {
             const btn = document.getElementById('geoBtn');
             const status = document.getElementById('geoStatus');
             if (!navigator.geolocation) { status.textContent = 'Geolocation not available.'; status.classList.remove('hidden'); return; }
             btn.textContent = '⏳ Finding your spot...'; btn.disabled = true; status.classList.add('hidden');
             navigator.geolocation.getCurrentPosition(
-                async (pos) => {
+                (pos) => {
                     const { latitude: lat, longitude: lng } = pos.coords;
-                    try {
-                        const res = await fetch(`https://api.what3words.com/v3/convert-to-3wa?coordinates=${lat},${lng}&key=${W3W_KEY}&language=en`);
-                        const data = await res.json();
-                        if (data.words) { currentW3WAddress = data.words; document.getElementById('w3wInput').value = data.words; status.textContent = `Got it! ///${data.words}`; status.classList.remove('hidden'); }
-                        else { status.textContent = 'Could not convert location.'; status.classList.remove('hidden'); }
-                    } catch(e) { status.textContent = 'Location found — try typing the address.'; status.classList.remove('hidden'); }
+                    const w3wUrl = `https://what3words.com/?lng=${lng}&lat=${lat}`;
+                    status.innerHTML = `📍 Location found! <a href="${w3wUrl}" target="_blank" rel="noopener" class="text-green-600 font-bold underline">Open on what3words ↗</a> — copy your 3-word address and paste it above.`;
+                    status.classList.remove('hidden');
                     btn.textContent = '📍 Find My Exact Spot'; btn.disabled = false;
                 },
                 (err) => {
