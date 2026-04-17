@@ -1968,7 +1968,21 @@
         }
         function cleanW3W(val) { return val.replace(/^\/+/, '').toLowerCase().trim(); }
         function isCompleteW3W(val) { const parts = cleanW3W(val).split('.'); return parts.length === 3 && parts.every(p => p.length > 0); }
-        function handleW3WInput(val) { document.getElementById('w3wSuggestions').classList.add('hidden'); }
+        function handleW3WInput(val) {
+            const clean = cleanW3W(val);
+            const box = document.getElementById('w3wSuggestions');
+            if (isCompleteW3W(clean)) {
+                box.innerHTML = `<div class="w3w-suggestion" onclick="selectAddress('${clean}')"><span class="text-green-600 font-bold">///</span><span class="text-gray-800">${clean}</span><span class="text-gray-400 text-xs ml-2">tap to confirm</span></div>`;
+                box.classList.remove('hidden');
+            } else {
+                box.classList.add('hidden');
+            }
+        }
+        function selectAddress(words) {
+            currentW3WAddress = words;
+            document.getElementById('w3wInput').value = words;
+            document.getElementById('w3wSuggestions').classList.add('hidden');
+        }
         function handleW3WKeydown(e) { if (e.key === 'Escape') document.getElementById('w3wSuggestions').classList.add('hidden'); }
         function findMySpot() {
             const btn = document.getElementById('geoBtn');
