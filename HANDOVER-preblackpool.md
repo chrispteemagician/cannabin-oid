@@ -1,9 +1,87 @@
 # CANNABIN-OID HANDOVER DOCUMENT
 ## Full Context for Continuation
 
+**Last Updated:** April 17, 2026 — Spannabis Day 1, Bilbao
+**Owner:** Christian P Taylor (Chris P Tee / Doc)
+
+---
+
+## SPANNABIS DAY 1 — April 17, 2026
+
+### People Met
+
+**Raymond — The Bulldog Amsterdam** (owner or senior partner)
+- Sat next to Chris by chance, hit it off immediately
+- Chris informally identified him as undiagnosed ADHD with a touch of OCD
+- Raymond said "I don't really want to find out" — Chris told him why he should
+- Key message delivered: once you know your ADHD, the tools you've built to cope become *shareable*, and other people's tools become *available to you*. You stop being an island.
+- Very switched on. Good energy. Worth following up.
+
+**Katharina Jochum — Storz & Bickel**
+- Head of Business Development and Strategy Execution
+- katharina.jochum@storz-bickel.com / +49 7461 969707-39
+- Showed her Cannabin-Oid. Email pitch drafted and ready to send.
+- She was receptive. Follow up after the show.
+
+**Dynavap**
+- Rude experience. Rep was dismissive, spoke badly to a staff member Chris believes is AuDHD.
+- Chris called it out directly.
+- **Crossed off the partnership list.**
+
+**Xose — Spannabis Magazine (Editor/Boss)**
+- Email: xose@spannabis.com
+- Chris spoke to him at the show. Email pitch drafted.
+- **Wait 2 weeks post-show before sending** — let the Spannabis dust settle.
+
+### Key Observations from the Floor
+- Almost everyone Chris spoke to would qualify for medical cannabis prescription in the UK
+- The industry is dominated by money talk — Chris found it isolating but pushed through
+- Validation received: people who listened *got it*
+- Medical cannabis is the fastest-growing sector vs recreational — governments are channelling it through pharma/prescribers, which is actually the route *in* for patients
+- "You're not smoking a joint, you're inhaling vapour that has the medicine your brain is craving"
+
+### Chris's Mindset / Plan
+- Day 2 he goes in prepared, not unknown
+- Nomad visa in Spain is the goal — code in the sunshine
+- Wants the current apps working properly before building new ones
+- Back sore, knee sore — ate, rested, ready for tomorrow
+
+### Emails Drafted (not yet sent — in conversation context, copy manually to Gmail)
+
+**To Katharina Jochum (Storz & Bickel):**
+> Subject: Cannabin-Oid — AuDHD-built patient tool, just showed you at Spannabis
+> [Full draft in session — send any time]
+
+**To Xose (Spannabis Magazine):**
+> Subject: A patient built this. You should see it.
+> [Full draft in session — send in ~2 weeks, early May 2026]
+
+---
+
+## TECH WORK — April 17, 2026
+
+Branch: `claude/fix-what3words-locator-pD1ME`
+
+### What3Words Meeting Point Generator — Fixed
+- **Removed API entirely** (was using `R7VL7Q93` key for autosuggest + convert-to-3wa)
+- "Find My Spot" now uses `navigator.geolocation` → opens `https://what3words.com/map?longitude=${lng}&latitude=${lat}` in new tab
+- Geolocation timeout raised to 30s, `enableHighAccuracy: false` for faster mobile acquisition
+- Text input now shows the user's own typed address as a single confirmation option (no API autocomplete)
+
+### Patreon Auth — Debug Mode Active
+- Fixed creator detection: now checks `identity.data.relationships.campaign` (primary Patreon v2 path) as well as `identity.included`
+- Removed invalid `campaign_id` from `fields[member]`
+- **Debug output is currently ON** in `netlify/functions/patreon-auth.js` — the response includes a `_debug` block showing exactly what Patreon returns
+- Sign-in is still failing — awaiting debug output from a live sign-in attempt to diagnose further
+
+---
+
+**Original session below (February 6, 2026):**
+
+---
+
 **Date:** February 6, 2026
 **Session:** Prescription Pathway Rewrite + Amazon Affiliate Integration
-**Owner:** Christian P Taylor (Chris P Tee / Doc)
 
 ---
 
