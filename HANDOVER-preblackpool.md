@@ -236,7 +236,7 @@ glowgadgets.com         - Bristol rave
 | **Arizer Solo 2** | Daily driver | amazon.co.uk/s?k=Arizer+Solo+2+vaporizer&tag=chrdocstrcromh-21 |
 | **Arizer Solo 3** | The dream upgrade | amazon.co.uk/s?k=Arizer+Solo+3+vaporizer&tag=chrdocstrcromh-21 |
 | Arizer Air SE | Budget option | amazon.co.uk/s?k=Arizer+Air+SE+vaporizer&tag=chrdocstrcromh-21 |
-| Dynavap | Travel essential | amazon.co.uk/s?k=Dynavap+vaporizer&tag=chrdocstrcromh-21 |
+| PAX 4 | Smart vape (met at Spannabis) | amazon.co.uk/s?k=PAX+4+vaporizer&tag=chrdocstrcromh-21 |
 | ISO 99% | Cleaning | amazon.co.uk/s?k=isopropyl+alcohol+99%25&tag=chrdocstrcromh-21 |
 | 18650 batteries + charger | For Air SE | amazon.co.uk/s?k=18650+battery+charger&tag=chrdocstrcromh-21 |
 
@@ -246,7 +246,7 @@ Main: https://vapefiend.co.uk
 Solo 3: https://vapefiend.co.uk/products/arizer-solo-3-vaporizer
 Air SE: https://vapefiend.co.uk/products/arizer-air-se-vaporizer-x
 Parts: https://vapefiend.co.uk/collections/arizer-parts
-Dynavap: https://vapefiend.co.uk/collections/vaporizers/dynavap
+PAX 4: https://www.amazon.co.uk/s?k=PAX+4+vaporizer&tag=chrdocstrcromh-21
 Storm: https://vapefiend.co.uk/collections/storm-vaporizers
 ```
 
