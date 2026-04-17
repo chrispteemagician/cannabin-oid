@@ -39,7 +39,7 @@ exports.handler = async (event) => {
         const { access_token } = await tokenRes.json();
 
         // Fetch identity with memberships + campaign (campaign = user is a creator)
-        const identityUrl = `https://www.patreon.com/api/oauth2/v2/identity?include=memberships,campaign&fields[member]=patron_status,currently_entitled_amount_cents,campaign_id&fields[user]=email,full_name`;
+        const identityUrl = `https://www.patreon.com/api/oauth2/v2/identity?include=memberships,campaign&fields[member]=patron_status,currently_entitled_amount_cents&fields[user]=email,full_name`;
         const identityRes = await fetch(identityUrl, {
             headers: { Authorization: `Bearer ${access_token}` }
         });
@@ -50,31 +50,32 @@ exports.handler = async (event) => {
 
         const identity = await identityRes.json();
 
-        const memberships = (identity.included || []).filter(item => item.type === 'member');
-
         let tier = null;
         let isPro = false;
 
-        for (const member of memberships) {
-            const attrs = member.attributes || {};
-            if (attrs.patron_status !== 'active_patron') continue;
-            if (PATREON_CAMPAIGN_ID && member.relationships?.campaign?.data?.id !== PATREON_CAMPAIGN_ID) continue;
-
-            const amountCents = attrs.currently_entitled_amount_cents || 0;
-
-            if (amountCents >= 1500) tier = 'founder';
-            else if (amountCents >= 700) tier = 'elder';
-            else if (amountCents >= 300) tier = 'villager';
-
-            if (tier) { isPro = true; break; }
+        // Check if this user IS the campaign creator (two ways Patreon v2 can return this)
+        const hasCampaignRelationship = !!identity.data?.relationships?.campaign?.data;
+        const hasCampaignIncluded = (identity.included || []).some(item => item.type === 'campaign');
+        if (hasCampaignRelationship || hasCampaignIncluded) {
+            tier = 'founder';
+            isPro = true;
         }
 
-        // If no patron tier found, check if this user IS the campaign creator
+        // Check patron memberships
         if (!isPro) {
-            const ownCampaigns = (identity.included || []).filter(item => item.type === 'campaign');
-            if (ownCampaigns.length > 0) {
-                tier = 'founder';
-                isPro = true;
+            const memberships = (identity.included || []).filter(item => item.type === 'member');
+            for (const member of memberships) {
+                const attrs = member.attributes || {};
+                if (attrs.patron_status !== 'active_patron') continue;
+                if (PATREON_CAMPAIGN_ID && member.relationships?.campaign?.data?.id !== PATREON_CAMPAIGN_ID) continue;
+
+                const amountCents = attrs.currently_entitled_amount_cents || 0;
+
+                if (amountCents >= 1500) tier = 'founder';
+                else if (amountCents >= 700) tier = 'elder';
+                else if (amountCents >= 300) tier = 'villager';
+
+                if (tier) { isPro = true; break; }
             }
         }
 
