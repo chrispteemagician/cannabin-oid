@@ -86,7 +86,21 @@ exports.handler = async (event) => {
         return {
             statusCode: 200,
             headers,
-            body: JSON.stringify({ isPro, tier, email, name })
+            body: JSON.stringify({
+                isPro, tier, email, name,
+                _debug: {
+                    hasCampaignRelationship: !!identity.data?.relationships?.campaign?.data,
+                    hasCampaignIncluded: (identity.included || []).some(item => item.type === 'campaign'),
+                    includedTypes: (identity.included || []).map(item => item.type),
+                    memberStatuses: (identity.included || []).filter(i => i.type === 'member').map(m => ({
+                        status: m.attributes?.patron_status,
+                        cents: m.attributes?.currently_entitled_amount_cents,
+                        campaignId: m.relationships?.campaign?.data?.id
+                    })),
+                    campaignIdEnvSet: !!PATREON_CAMPAIGN_ID,
+                    campaignIdEnv: PATREON_CAMPAIGN_ID || null
+                }
+            })
         };
 
     } catch (err) {
