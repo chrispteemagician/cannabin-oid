@@ -1989,7 +1989,7 @@
                     status.textContent = msgs[err.code] || 'Could not get location.'; status.classList.remove('hidden');
                     btn.textContent = '📍 Find My Exact Spot'; btn.disabled = false;
                 },
-                { timeout: 10000, maximumAge: 60000 }
+                { timeout: 30000, maximumAge: 60000, enableHighAccuracy: false }
             );
         }
         function generateMeetCard() {
