@@ -46,6 +46,26 @@
 - Wants the current apps working properly before building new ones
 - Back sore, knee sore — ate, rested, ready for tomorrow
 
+### All Contacts — Spannabis Day 1 (full list at cannabin-oid.co.uk/spannabis)
+
+| Name | Company | Contact | Status |
+|------|---------|---------|--------|
+| James Harrison | PAX (EU Sales Manager) | james.harrison@pax.com / +33 6 59 08 66 93 | Email post-show |
+| Raymond | The Bulldog Amsterdam (owner/partner) | No card — find on LinkedIn | Warm — follow up |
+| Katharina Jochum | Storz & Bickel (Head of Biz Dev) | katharina.jochum@storz-bickel.com / +49 7461 969707-39 | Email ready — send any time |
+| Xose | Spannabis Magazine (editor/boss) | xose@spannabis.com | **Send early May — wait 2 weeks** |
+| José & José | Profesor Bacterium | TBC — find on Instagram | Warm — lovely brothers, get details |
+| Marta Szalajda | Vista Standard / Dark Horse Papers (Poland) | biuro@bista.pl / bista.pl | Follow up — rolling papers angle |
+| Carnales Seeds | Basque Country seeds | TBC | Find stand Day 2/3, intro properly |
+| Annette | Feel The [name TBC] — grinders/accessories | TBC | ADHD connection — our people |
+| Fern | life.pl (Poland) | fern@life.pl [confirm from card] | Chatty, gave stickers |
+| Alvin & Newt | California (no company) | No card | Real connection, shared blunt |
+| Dutch businessmen | Netherlands (coffee shop background) | No card — they'll find Doc | Interesting — watch this space |
+
+### Do Not Contact
+- **Dynavap** — rude, crossed off entirely. Removed from all site pages.
+- **Shiva Seeds** — rude. Not in codebase as partner (only appears as strain genetics reference — leave it).
+
 ### Emails Drafted (not yet sent — in conversation context, copy manually to Gmail)
 
 **To Katharina Jochum (Storz & Bickel):**
@@ -60,7 +80,14 @@
 
 ## TECH WORK — April 17, 2026
 
-Branch: `claude/fix-what3words-locator-pD1ME`
+Branch: `claude/fix-what3words-locator-pD1ME` — **all pushed, not yet merged to main**
+
+### New Files
+- `spannabis.html` — Basecamp contacts page at cannabin-oid.co.uk/spannabis. All Day 1 contacts listed with next steps.
+
+### Dynavap → PAX 4 (sitewide)
+- Removed Dynavap from `index.html`, `hamlet/doc/index.html`, `hamlet/mole/index.html`, `netlify/functions/ask-terp.js`, handover doc
+- PAX 4 added in its place with Amazon affiliate link and "met them at Spannabis" note
 
 ### What3Words Meeting Point Generator — Fixed
 - **Removed API entirely** (was using `R7VL7Q93` key for autosuggest + convert-to-3wa)
@@ -68,11 +95,11 @@ Branch: `claude/fix-what3words-locator-pD1ME`
 - Geolocation timeout raised to 30s, `enableHighAccuracy: false` for faster mobile acquisition
 - Text input now shows the user's own typed address as a single confirmation option (no API autocomplete)
 
-### Patreon Auth — Debug Mode Active
+### Patreon Auth — ⚠️ Debug Mode Active, Still Broken
 - Fixed creator detection: now checks `identity.data.relationships.campaign` (primary Patreon v2 path) as well as `identity.included`
 - Removed invalid `campaign_id` from `fields[member]`
-- **Debug output is currently ON** in `netlify/functions/patreon-auth.js` — the response includes a `_debug` block showing exactly what Patreon returns
-- Sign-in is still failing — awaiting debug output from a live sign-in attempt to diagnose further
+- **Debug output is currently ON** in `netlify/functions/patreon-auth.js` — `_debug` block in every response
+- **Sign-in is still failing** — next Claude needs to get the `_debug` output from a live sign-in attempt to find out why. Chris should open DevTools → Network → find the `patreon-auth` request → copy the response JSON and share it.
 
 ---
 
