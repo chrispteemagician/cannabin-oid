@@ -91,7 +91,19 @@ One contact wants a decentralised communication system free from observation. Do
 
 ---
 
-## TECH WORK — April 17, 2026
+## SAIL-OID INTELLIGENCE — Barcelona / La Serenas
+
+**Source:** Poet master at La Serenas, Barcelona. Speaks perfect English. Unsolicited, honest feedback.
+
+**The insight:** Atlantic coast of Spain into Portugal = real fishermen and working sailors. NOT the target audience for Sail-Oid. Do not waste time or marketing here.
+
+**Target audience IS:** Mediterranean. Ibiza, Mallorca, Côte d'Azur, Amalfi coast. That's where the leisure sailors and yacht money lives.
+
+**Action:** Reorient all Sail-Oid outreach and event planning toward Mediterranean ports. Skip the Atlantic entirely for now.
+
+---
+
+
 
 Branch: `claude/fix-what3words-locator-pD1ME` — **all pushed, not yet merged to main**
 
