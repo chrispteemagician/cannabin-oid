@@ -91,6 +91,37 @@ One contact wants a decentralised communication system free from observation. Do
 
 ---
 
+## LINDEN SUPERSEAT — URGENT BUSINESS OPPORTUNITY
+
+**Product:** Linden Superseat (walking stick that converts to a seat)
+**Manufacturer:** Able2 UK Ltd, Blackburn (Doc's hometown) — contact Shona: shona@able2.uk / 01254 619000
+
+**The opportunity:**
+- Every single person who sees Doc using it at Spannabis stops and stares. Literal rounds of applause.
+- Doc believes he could sell them for **€50 each** in Spain/Europe easily
+- If trade/bulk price is ~£25, margin is enormous
+- A van load would sell like hotcakes — Doc's words: "I'd be a millionaire by Christmas"
+
+**The plan:**
+- Call Shona at Able2 ASAP — get trade/wholesale pricing
+- Ask about bulk orders (van load quantity)
+- Find out about exporting to European markets
+- Dover → Calais → drive through France doing markets en route to Spain — bring Superseats, sell them, fund the whole trip
+
+**Priority:** HIGH. Call Monday morning.
+
+---
+
+## SAIL-OID / ROUTE NOTES
+
+- Bay of Biscay / Atlantic coast = wrong audience (working fishermen, not leisure sailors)
+- Round ear (Bay of Biscay) — Sail-Oid not suitable here either, route still TBC
+- Dover → Calais → France markets → Spain is the likely land route
+- Mediterranean remains the Sail-Oid target (Ibiza, Mallorca, Côte d'Azur)
+- Basque region loved by Doc but not the commercial target for current products
+
+---
+
 ## SAIL-OID INTELLIGENCE — Barcelona / La Serenas
 
 **Source:** Poet master at La Serenas, Barcelona. Speaks perfect English. Unsolicited, honest feedback.
