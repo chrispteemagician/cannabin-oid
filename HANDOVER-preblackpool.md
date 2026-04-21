@@ -62,6 +62,19 @@
 | Alvin & Newt | California (no company) | No card | Real connection, shared blunt |
 | Dutch businessmen | Netherlands (coffee shop background) | No card — they'll find Doc | Interesting — watch this space |
 
+### Day 2/3 Additional Contacts
+| Name | Notes | Status |
+|------|-------|--------|
+| Christian (Doha) | Canna TV — interviewed Doc, had him in tears, absolute brothers | Get contact + find the interview |
+| Dean | German-born Syrian Muslim, made his own magic lantern vaporizer, invited Doc to Gran Canaria | Get contact — serious friendship |
+| Pink Panther | German guy, loved everything | Get real name + contact |
+| Ethan | NY → California → Spain, 7 weeks in with Spanish wife, similar to Chris/Jane situation | Get contact, keep in touch |
+| Alessandra's friend | Lives in Bordeaux, invited Doc to stay, name TBC | Ask Alessandra |
+| The Privacy Guy | Wants mesh/private comms network, potential R&D backer, handle carefully | Assess MeshCore viability first |
+
+### New Business Angle — MeshCore / Private Comms
+One contact wants a decentralised communication system free from observation. Doc is considering MeshCore. Potential lump-sum R&D funding in exchange for building it. Needs own network infrastructure. Assess viability — could fund the whole operation. Handle carefully.
+
 ### Do Not Contact
 - **Dynavap** — rude, crossed off entirely. Removed from all site pages.
 - **Shiva Seeds** — rude. Not in codebase as partner (only appears as strain genetics reference — leave it).
