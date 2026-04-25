@@ -371,6 +371,37 @@
             margin-top: 20px;
         }
 
+        /* Community gallery */
+        .gallery-card {
+            background: rgba(22,163,74,0.04);
+            border: 1px solid rgba(22,163,74,0.15);
+            border-radius: 12px;
+            padding: 1.2rem 1.5rem;
+            margin-bottom: 0.75rem;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+        .gallery-card .name {
+            font-weight: 700;
+            color: var(--candle);
+            margin-bottom: 4px;
+        }
+        .gallery-submit {
+            display: block;
+            text-align: center;
+            background: rgba(22,163,74,0.06);
+            border: 1px dashed rgba(22,163,74,0.25);
+            border-radius: 12px;
+            padding: 1.4rem;
+            margin-top: 1rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: border-color 0.2s, color 0.2s;
+        }
+        .gallery-submit:hover { border-color: var(--primary); color: var(--primary-light); }
+        .gallery-submit .cta { font-size: 1.1rem; font-weight: 700; color: var(--primary-light); margin-bottom: 4px; }
+
         /* Footer */
         .hamlet-footer {
             text-align: center;
@@ -492,9 +523,9 @@
                 of vaporization. Every component, every firing, every glaze, done by hand.
             </p>
             <p>
-                The artistic realisation came through collaboration with <strong>Jaxel's Art</strong>
-                and the <strong>CannaKunst</strong> community — described simply as:
-                <em>"Colly Light: the inventor. Jaxel's Art: the artist."</em>
+                His brand was <strong>Art of Vapor</strong> — through which he sold his handcrafted pieces
+                directly to collectors and advocates across Europe. No middlemen. No web shop. Just Colly,
+                his kiln, and an email address for the people who knew what they had.
             </p>
             <p>
                 His son <strong>Felix Denzler</strong> carries the flame forward through ceramics at
@@ -694,6 +725,27 @@
                 That's the model. That's always been the model.
                 <strong style="color:var(--gold-light);">World domination through kindness. One ember at a time.</strong>
             </p>
+        </div>
+
+        <!-- COMMUNITY GALLERY -->
+        <div class="card">
+            <h2>🫂 Did You Know Colly?</h2>
+            <p style="margin-bottom:16px;">
+                His people are scattered now — across Gran Canaria, Germany, across Europe.
+                Every VapBong out there is a piece of him still in someone's hands.
+                This is the place to come together.
+            </p>
+            <p style="color:var(--text-muted); font-size:0.95rem; margin-bottom:20px;">
+                Did you own an <strong style="color:var(--candle);">Art of Vapor</strong> piece?
+                Did you meet him? Did his videos change the way you think about cannabis?
+                Share your story. A photo, a memory, a word.
+                We'll build a gallery here — for the people who knew him,
+                and the people who wish they had.
+            </p>
+            <a href="mailto:doc@cannabin-oid.co.uk?subject=Colly%20Memory&body=Your%20name%3A%0AYour%20story%3A%0A(Photo%3F%20Send%20it%20too)" class="gallery-submit">
+                <div class="cta">📬 Send your memory →</div>
+                <div style="font-size:0.85rem;">doc@cannabin-oid.co.uk · Subject: Colly Memory</div>
+            </a>
         </div>
 
         <!-- LINKS -->
