@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>In Honour of Donald "Dr. Colly Light" Denzler | Cannabin-Oid</title>
+    <meta name="description" content="Honorary hamlet for Donald Denzler — Dr. Colly Light. Inventor of the VapBong. Lifelong cannabis advocate. Legend of Gran Canaria. 17.12.1957 — 18.03.2026. We stand on the shoulders of giants.">
+    <link rel="icon" type="image/jpeg" href="../../cannabin-oid.jpg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Outfit:wght@300;400;600;800&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --midnight: #030a03;
+            --deep: #071407;
+            --primary: #16a34a;
+            --primary-light: #22c55e;
+            --gold: #d4a017;
+            --gold-dark: #b8860b;
+            --gold-light: #f5c842;
+            --forest: #14532d;
+            --forest-dark: #0f3d22;
+            --cream: #f0f7f0;
+            --text: #c8e6c8;
+            --text-muted: #6b9e6b;
+            --flame: #22c55e;
+            --candle: #86efac;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(180deg, var(--midnight) 0%, var(--deep) 50%, var(--midnight) 100%);
+            color: var(--text);
+            min-height: 100vh;
+            font-size: 18px;
+            line-height: 1.7;
+        }
+        .font-hand { font-family: 'Caveat', cursive; }
+        .container { max-width: 800px; margin: 0 auto; padding: 20px; }
+
+        /* Nav */
+        .site-nav {
+            background: rgba(3,10,3,0.95);
+            border-bottom: 1px solid rgba(22,163,74,0.2);
+            padding: 14px 20px;
+            text-align: center;
+            font-size: 16px;
+        }
+        .site-nav a { color: var(--text-muted); text-decoration: none; }
+        .site-nav a:hover { color: var(--gold); }
+        .site-nav .sep { color: rgba(255,255,255,0.2); margin: 0 8px; }
+        .site-nav .home { color: var(--primary-light); font-weight: 600; }
+
+        /* Hero */
+        .hamlet-hero {
+            background: linear-gradient(160deg, #020a02 0%, #071407 60%, #030a03 100%);
+            text-align: center;
+            padding: 60px 20px 50px;
+            border-bottom: 2px solid rgba(212,160,23,0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        .hamlet-hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at 50% 0%, rgba(212,160,23,0.06) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        .giants-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, rgba(212,160,23,0.15) 0%, rgba(212,160,23,0.08) 100%);
+            border: 1px solid rgba(212,160,23,0.5);
+            color: var(--gold-light);
+            padding: 8px 22px;
+            border-radius: 50px;
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 24px;
+        }
+        .honorary-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%);
+            color: var(--forest-dark);
+            padding: 7px 20px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 13px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+        .candle-row {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            letter-spacing: 6px;
+        }
+        .hero-dates {
+            font-size: 1rem;
+            color: var(--text-muted);
+            letter-spacing: 0.1em;
+            margin-bottom: 16px;
+            font-weight: 300;
+        }
+        .hero-name {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.8rem, 9vw, 5rem);
+            color: var(--cream);
+            line-height: 1.1;
+            margin-bottom: 8px;
+            text-shadow: 0 0 40px rgba(212,160,23,0.15);
+        }
+        .hero-aka {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: clamp(1.3rem, 4vw, 2rem);
+            color: var(--gold-light);
+            margin-bottom: 10px;
+        }
+        .hero-tagline {
+            font-size: 1rem;
+            color: var(--text-muted);
+            font-style: italic;
+            margin-bottom: 28px;
+        }
+        .rip-line {
+            display: inline-block;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: var(--text-muted);
+            padding: 8px 22px;
+            border-radius: 50px;
+            font-size: 14px;
+            letter-spacing: 0.05em;
+        }
+
+        /* Cards */
+        .card {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 20px;
+        }
+        .card h2 {
+            font-family: 'Caveat', cursive;
+            font-size: 2rem;
+            margin-bottom: 15px;
+            color: var(--gold);
+            text-shadow: 0 0 20px rgba(212,160,23,0.2);
+        }
+        .card p { margin-bottom: 14px; }
+        .card p:last-child { margin-bottom: 0; }
+
+        .card-forest {
+            background: linear-gradient(135deg, var(--forest) 0%, var(--forest-dark) 100%);
+            border: 4px solid var(--forest-dark);
+            color: var(--cream);
+            box-shadow: 0 6px 0 rgba(0,0,0,0.2), 0 0 40px rgba(22,163,74,0.08);
+        }
+        .card-forest h2 { color: var(--candle); }
+
+        .card-ember {
+            background: linear-gradient(135deg, rgba(22,163,74,0.08) 0%, rgba(7,20,7,0.95) 100%);
+            border: 2px solid rgba(22,163,74,0.25);
+        }
+
+        .card-gold {
+            background: linear-gradient(135deg, rgba(212,160,23,0.08) 0%, rgba(7,20,7,0.98) 100%);
+            border: 2px solid rgba(212,160,23,0.3);
+        }
+
+        /* Quote */
+        .quote-card {
+            background: rgba(22,163,74,0.07);
+            border-left: 3px solid var(--primary);
+            padding: 20px 25px;
+            margin-bottom: 15px;
+            border-radius: 0 12px 12px 0;
+            font-style: italic;
+            color: var(--cream);
+            line-height: 1.8;
+            font-family: 'Playfair Display', serif;
+        }
+        .quote-card .attr {
+            font-family: 'Outfit', sans-serif;
+            font-size: 14px;
+            color: var(--text-muted);
+            font-style: normal;
+            margin-top: 8px;
+            display: block;
+        }
+        .quote-gold {
+            border-left-color: var(--gold);
+            background: rgba(212,160,23,0.06);
+        }
+
+        /* Stats */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin: 20px 0;
+        }
+        .stat-item {
+            background: rgba(0,0,0,0.25);
+            border-radius: 12px;
+            padding: 16px 10px;
+            text-align: center;
+        }
+        .stat-num {
+            font-size: 1.7rem;
+            font-weight: 800;
+            color: var(--primary-light);
+            display: block;
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+        .stat-label {
+            font-size: 12px;
+            color: var(--text-muted);
+            letter-spacing: 0.05em;
+        }
+
+        /* Timeline */
+        .timeline { position: relative; padding-left: 28px; }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 5px;
+            top: 6px;
+            bottom: 6px;
+            width: 2px;
+            background: linear-gradient(180deg, var(--gold) 0%, var(--primary) 100%);
+            border-radius: 2px;
+        }
+        .tl-item { position: relative; margin-bottom: 24px; }
+        .tl-item::before {
+            content: '';
+            position: absolute;
+            left: -23px;
+            top: 6px;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--gold);
+            border: 2px solid var(--midnight);
+        }
+        .tl-date {
+            font-size: 13px;
+            color: var(--gold);
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            margin-bottom: 2px;
+        }
+        .tl-item h4 {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--cream);
+            margin-bottom: 4px;
+        }
+        .tl-item p {
+            font-size: 16px;
+            color: var(--text-muted);
+            margin-bottom: 0;
+        }
+
+        /* Beliefs grid */
+        .beliefs-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin: 16px 0;
+        }
+        .belief-item {
+            background: rgba(0,0,0,0.25);
+            border-radius: 12px;
+            padding: 16px;
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+        }
+        .belief-icon { font-size: 1.4rem; flex-shrink: 0; margin-top: 2px; }
+        .belief-text h4 {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--primary-light);
+            margin-bottom: 3px;
+        }
+        .belief-text p {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-bottom: 0;
+        }
+
+        /* Video */
+        .video-wrap {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            border-radius: 14px;
+            margin: 16px 0;
+            background: #000;
+        }
+        .video-wrap iframe {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            border: none;
+            border-radius: 14px;
+        }
+        .video-label {
+            font-size: 14px;
+            color: var(--text-muted);
+            text-align: center;
+            margin-top: 8px;
+            font-style: italic;
+        }
+
+        /* Btn */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 14px 28px;
+            font-size: 17px;
+            font-weight: 700;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            font-family: 'Outfit', sans-serif;
+        }
+        .btn:hover { transform: translateY(-2px); }
+        .btn-gold {
+            background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%);
+            color: var(--forest-dark);
+        }
+        .btn-green {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: white;
+        }
+        .btn-outline {
+            background: transparent;
+            border: 2px solid rgba(255,255,255,0.15);
+            color: var(--text);
+        }
+        .btn-outline:hover { border-color: var(--gold); color: var(--gold); }
+        .btn-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        /* Footer */
+        .hamlet-footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-muted);
+        }
+        .hamlet-footer a { color: var(--gold); text-decoration: none; }
+        .hamlet-footer a:hover { text-decoration: underline; }
+
+        @media (max-width: 600px) {
+            .beliefs-grid { grid-template-columns: 1fr; }
+            .stats-row { grid-template-columns: repeat(2, 1fr); }
+            .btn-row { flex-direction: column; }
+            .btn { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAV -->
+    <nav class="site-nav">
+        <a href="https://cannabin-oid.co.uk" class="home">🌿 Cannabin-Oid</a>
+        <span class="sep">›</span>
+        <a href="https://cannabin-oid.co.uk/hamlet/">The Village</a>
+        <span class="sep">›</span>
+        <span style="color:var(--gold);">Dr. Colly Light</span>
+    </nav>
+
+    <!-- HERO -->
+    <header class="hamlet-hero">
+        <div class="candle-row">🕯️ 🌿 🕯️</div>
+        <div class="giants-badge">🌟 Stand on the Shoulders of Giants</div>
+        <br>
+        <div class="honorary-badge">🌿 First Honorary Hamlet · Cannabin-Oid</div>
+        <div class="hero-dates">17 December 1957 &mdash; 18 March 2026</div>
+        <h1 class="hero-name">Donald Denzler</h1>
+        <p class="hero-aka">"Dr. Colly Light"</p>
+        <p class="hero-tagline">
+            Inventor. Advocate. Free spirit. Rasta soul.<br>
+            A voice for cannabis freedom long before the world was listening.
+        </p>
+        <span class="rip-line">🕊️ Buried Gran Canaria · 28 March 2026 · Ruhe in Frieden</span>
+    </header>
+
+    <div class="container">
+
+        <!-- WHY HE'S HERE -->
+        <div class="card card-gold" style="margin-top:30px;">
+            <h2>🌟 Why He's Here</h2>
+            <p>
+                Every path that exists today was walked by someone first — often alone, often at personal cost,
+                long before it was safe or legal to walk it publicly. Colly walked that path for decades.
+            </p>
+            <p>
+                Cannabin-Oid exists to take people <em>from self-medication to prescription</em>.
+                That journey was pioneered by people like Donald Denzler — loudly, defiantly, with a laugh that could
+                fill a room. Every person who gets a legal prescription today walks on ground he helped break.
+            </p>
+            <p style="color:var(--gold-light);font-weight:600;font-family:'Playfair Display',serif;font-style:italic;font-size:1.1rem;">
+                "We stand on the shoulders of giants."
+            </p>
+            <p>
+                This is his hamlet. The first honorary hamlet in the village.
+                Not because he asked for it — he never would have. Because he earned it.
+            </p>
+        </div>
+
+        <!-- WHO HE WAS -->
+        <div class="card">
+            <h2>🌿 Who Was Colly?</h2>
+            <p>
+                Donald Denzler — known the world over as <strong>Dr. Colly Light</strong> — was a German-born
+                cannabis advocate, inventor, artist, and philosopher who spent his final years living freely
+                in <strong>Gran Canaria</strong>. With his long white beard, dreadlocks, and unmistakable presence,
+                he was impossible to ignore. But it was what he <em>said</em> that made him unforgettable.
+            </p>
+            <p>
+                For over two decades he documented his life on YouTube — nearly 35,000 subscribers,
+                328 videos — with one guiding motto:
+            </p>
+            <div class="quote-card quote-gold">
+                "Wie ich mein Leben lebe."<br>
+                <em style="font-size:0.9em;opacity:0.8;">How I live my life.</em>
+                <span class="attr">— @CollyLight_Original · the channel that became a monument</span>
+            </div>
+            <p>
+                He didn't perform a life. He <em>lived</em> one. He shared health struggles, poverty,
+                joy, anger, his animals, his garden, his philosophy — all of it, unfiltered.
+                In a world of curated feeds, Colly was stubbornly, beautifully real.
+            </p>
+
+            <div class="stats-row">
+                <div class="stat-item">
+                    <span class="stat-num">34.9K</span>
+                    <span class="stat-label">Subscribers</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-num">328</span>
+                    <span class="stat-label">Videos</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-num">68</span>
+                    <span class="stat-label">Years</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-num">20+</span>
+                    <span class="stat-label">Years Advocating</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- THE VAPBONG -->
+        <div class="card card-forest">
+            <h2>🔬 The VapBong — A Legacy in Ceramic</h2>
+            <p>
+                Donald's greatest practical gift to cannabis culture was an invention that arrived decades
+                before the industry caught up with it: the <strong>VapBong</strong>. A handcrafted ceramic
+                vaporizer he designed himself — combining the ritual of the bong with the clean practice
+                of vaporization. Every component, every firing, every glaze, done by hand.
+            </p>
+            <p>
+                The artistic realisation came through collaboration with <strong>Jaxel's Art</strong>
+                and the <strong>CannaKunst</strong> community — described simply as:
+                <em>"Colly Light: the inventor. Jaxel's Art: the artist."</em>
+            </p>
+            <p>
+                His son <strong>Felix Denzler</strong> carries the flame forward through ceramics at
+                <a href="https://vapotterie.com" target="_blank" rel="noopener" style="color:var(--gold);">Vapotterie.com</a> —
+                a quiet inheritance from his father. The craft continues. The hands remember.
+            </p>
+
+            <div class="video-wrap">
+                <iframe
+                    src="https://www.youtube.com/embed/g3ldUDdKf0I"
+                    title="Donald Denzler introduces the VapBong"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen>
+                </iframe>
+            </div>
+            <p class="video-label">▶ Colly introducing the VapBong to the world — his own invention</p>
+        </div>
+
+        <!-- WHAT HE STOOD FOR -->
+        <div class="card">
+            <h2>☀️ What Colly Stood For</h2>
+            <p style="margin-bottom:18px;">
+                He didn't just talk about cannabis. He talked about <em>freedom</em>. About dignity.
+                About a person's right to their own body, their own medicine, their own life.
+                At a time when speaking openly about cannabis meant risk.
+            </p>
+            <div class="beliefs-grid">
+                <div class="belief-item">
+                    <div class="belief-icon">🌿</div>
+                    <div class="belief-text">
+                        <h4>Cannabis as Medicine</h4>
+                        <p>A lifelong advocate — decades before legalisation made it safe to say out loud.</p>
+                    </div>
+                </div>
+                <div class="belief-item">
+                    <div class="belief-icon">🗽</div>
+                    <div class="belief-text">
+                        <h4>Personal Freedom</h4>
+                        <p>Lived entirely on his own terms. In Gran Canaria. In community. No apology.</p>
+                    </div>
+                </div>
+                <div class="belief-item">
+                    <div class="belief-icon">🎙️</div>
+                    <div class="belief-text">
+                        <h4>Radical Honesty</h4>
+                        <p>Health struggles, poverty, joy — documented everything. Raw and unfiltered.</p>
+                    </div>
+                </div>
+                <div class="belief-item">
+                    <div class="belief-icon">✊</div>
+                    <div class="belief-text">
+                        <h4>Against Prohibition</h4>
+                        <p>Made statements about the German cannabis ban that are still being shared today.</p>
+                    </div>
+                </div>
+                <div class="belief-item">
+                    <div class="belief-icon">🐾</div>
+                    <div class="belief-text">
+                        <h4>Care for All Life</h4>
+                        <p>His animals were family. Friends fundraised for their care after he passed.</p>
+                    </div>
+                </div>
+                <div class="belief-item">
+                    <div class="belief-icon">☀️</div>
+                    <div class="belief-text">
+                        <h4>Rasta Spirit</h4>
+                        <p>Peace, nature, spiritual freedom — lived daily, not just believed.</p>
+                    </div>
+                </div>
+                <div class="belief-item">
+                    <div class="belief-icon">🤝</div>
+                    <div class="belief-text">
+                        <h4>Community Over Commerce</h4>
+                        <p>Never sold out. Built his following on trust, authenticity, and mutual care.</p>
+                    </div>
+                </div>
+                <div class="belief-item">
+                    <div class="belief-icon">🌱</div>
+                    <div class="belief-text">
+                        <h4>Natural Living</h4>
+                        <p>Believed in the right to a natural return to the earth. No compromise.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TIMELINE -->
+        <div class="card card-ember">
+            <h2>📜 A Life Well Lived</h2>
+            <div class="timeline">
+                <div class="tl-item">
+                    <div class="tl-date">17 December 1957</div>
+                    <h4>Born in Germany</h4>
+                    <p>Donald Denzler enters the world. The road to Gran Canaria begins.</p>
+                </div>
+                <div class="tl-item">
+                    <div class="tl-date">Decades of advocacy</div>
+                    <h4>Speaking Truth Under Risk</h4>
+                    <p>Long before it was safe, Colly spoke openly about cannabis as medicine. He made historical statements about German prohibition that are still circulating today.</p>
+                </div>
+                <div class="tl-item">
+                    <div class="tl-date">~2000s</div>
+                    <h4>The VapBong Is Born</h4>
+                    <p>Donald invents the VapBong — handcrafted ceramic vaporizer, hand-built electrics, hand-fired kiln. An entirely original creation from a genuine craftsman.</p>
+                </div>
+                <div class="tl-item">
+                    <div class="tl-date">Gran Canaria years</div>
+                    <h4>Finding His Home</h4>
+                    <p>Donald settles in Gran Canaria. Builds his life, his garden, his community, and @CollyLight_Original — 328 videos documenting everything.</p>
+                </div>
+                <div class="tl-item">
+                    <div class="tl-date">2024–2026</div>
+                    <h4>Facing the End with Honesty</h4>
+                    <p>A stroke, deteriorating health — documented openly, as always. His video about not wanting cremation showed the clarity and conviction that defined him.</p>
+                </div>
+                <div class="tl-item">
+                    <div class="tl-date">18 March 2026</div>
+                    <h4>Colly Returns to the Earth</h4>
+                    <p>Donald Denzler passes in Gran Canaria. The RIP video on his channel reaches 94,000+ views. The cannabis community — and thousands who never met him — feel the loss.</p>
+                </div>
+                <div class="tl-item">
+                    <div class="tl-date">28 March 2026</div>
+                    <h4>Buried in Caideros</h4>
+                    <p>At the Cemetery of San Jose de Caideros, Gran Canaria. His daughter, close friends, and his community say goodbye. <em>Ruhe in Frieden, mein lieber Bruder.</em></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- THE FAREWELL VIDEO -->
+        <div class="card">
+            <h2>🕯️ The World Says Goodbye</h2>
+            <p>
+                The memorial video posted on his channel received over <strong>94,000 views</strong> —
+                a testament to how many lives Colly touched. His son Felix posted his own heartfelt tribute.
+                The community he built showed up, as communities do.
+            </p>
+            <div class="video-wrap">
+                <iframe
+                    src="https://www.youtube.com/embed/0MaHLKjxJuY"
+                    title="R.I.P. Donald Colly Light 18.03.2026"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen>
+                </iframe>
+            </div>
+            <p class="video-label">▶ R.I.P. Donald Colly Light · 18.03.2026 · 94,000+ views</p>
+        </div>
+
+        <!-- DEAN — THE TORCH BEARER -->
+        <div class="card card-forest">
+            <h2>🔥 The Torch Passes</h2>
+            <p>
+                Every sage finds a Padawan. Dean — Christian — learned everything about handcraft ceramics,
+                the VapBong, and the art of growing from Colly. He carries that knowledge now.
+            </p>
+            <p>
+                Dean lives in Gran Canaria with his family. He was at Spannabis in Bilbao, April 2026 —
+                still in the room Colly built for him. Sharing the philosophy. Making the connections.
+                Being the aura in the corner that draws everyone in.
+            </p>
+            <p style="font-family:'Playfair Display',serif;font-style:italic;color:var(--candle);font-size:1.05rem;">
+                "He was a legend without knowing that he is one. I want to give him the honour he earns."
+            </p>
+            <p style="font-size:15px;color:var(--text-muted);">
+                — Dean, on his friend Colly · April 2026
+            </p>
+            <p style="margin-top:16px;">
+                The Shaman passed. The Sage continues. The fire doesn't go out — it finds new wood.
+            </p>
+        </div>
+
+        <!-- DOC'S MESSAGE -->
+        <div class="card card-gold">
+            <h2>💚 From Doc Strange</h2>
+            <div class="quote-card quote-gold">
+                "Ten seconds of hearing the youth and wisdom in Colly's voice made me wish I'd known him.
+                But then — I am him, and he is me. He is gone but it's our place to continue the work.
+                The labour of love. The passion, the mission, the purpose. That people can access the herb
+                that keeps them well, relaxed, pain free, and focused on love and kindness."
+                <span class="attr">— Doc Strange · Cannabin-Oid · April 2026</span>
+            </div>
+            <p>
+                For 26 years Doc masked as a straight man. Colly never masked.
+                He showed what it looked like to live the truth out loud, every day,
+                on camera, without permission from anyone.
+            </p>
+            <p>
+                That's the model. That's always been the model.
+                <strong style="color:var(--gold-light);">World domination through kindness. One ember at a time.</strong>
+            </p>
+        </div>
+
+        <!-- LINKS -->
+        <div class="card" style="text-align:center;">
+            <h2 style="color:var(--primary-light);">🌿 Visit Colly's Channel</h2>
+            <p style="color:var(--text-muted);margin-bottom:8px;">
+                328 videos. Nearly 35,000 subscribers. A living monument to a life lived honestly.
+            </p>
+            <p style="font-family:'Caveat',cursive;font-size:1.4rem;color:var(--candle);margin-bottom:24px;">
+                @CollyLight_Original
+            </p>
+            <div class="btn-row" style="justify-content:center;">
+                <a href="https://www.youtube.com/@CollyLight_Original" class="btn btn-gold" target="_blank" rel="noopener">
+                    ▶ His YouTube Channel
+                </a>
+                <a href="https://vapotterie.com" class="btn btn-outline" target="_blank" rel="noopener">
+                    🏺 Felix's Ceramics — Vapotterie.com
+                </a>
+                <a href="https://cannabin-oid.co.uk" class="btn btn-green" target="_blank">
+                    🌿 Back to Cannabin-Oid
+                </a>
+            </div>
+        </div>
+
+        <!-- FOOTER -->
+        <div class="hamlet-footer">
+            <div style="font-size:2rem;margin-bottom:16px;letter-spacing:6px;">🕯️ 🌿 🕯️</div>
+            <p style="font-family:'Playfair Display',serif;font-style:italic;font-size:1.2rem;color:var(--text-muted);margin-bottom:12px;">
+                "Wie ich mein Leben lebe." — How I live my life.
+            </p>
+            <p style="font-size:1rem;color:var(--text-muted);margin-bottom:20px;">
+                Donald Denzler · Dr. Colly Light · <strong>17.12.1957 — 18.03.2026</strong>
+            </p>
+            <p style="font-size:14px;color:rgba(107,158,107,0.6);">
+                First Honorary Hamlet · <a href="https://cannabin-oid.co.uk">Cannabin-Oid</a> ·
+                Part of the <a href="https://feelfamous.co.uk" target="_blank" rel="noopener">FeelFamous</a> ecosystem
+            </p>
+        </div>
+
+    </div>
+
+</body>
+</html>
