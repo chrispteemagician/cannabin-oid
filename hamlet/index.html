@@ -165,6 +165,65 @@
 
         footer a { color: var(--primary-light); text-decoration: none; }
 
+        /* Free Forever banner */
+        .free-banner {
+            background: linear-gradient(135deg, rgba(22,163,74,0.08) 0%, rgba(22,163,74,0.03) 100%);
+            border: 1px solid rgba(22,163,74,0.2);
+            border-radius: 18px;
+            padding: 1.5rem 1.75rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        .free-banner .headline {
+            font-family: 'Caveat', cursive;
+            font-size: 2rem;
+            color: var(--primary-light);
+            margin-bottom: 0.4rem;
+        }
+        .free-banner p { color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; }
+        .free-banner strong { color: var(--text); }
+        .free-banner .mission {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(22,163,74,0.12);
+            font-size: 0.9rem;
+            font-style: italic;
+            color: var(--text-muted);
+        }
+
+        /* Giants section */
+        .giants-section {
+            margin: 2rem 0;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(201,162,39,0.15);
+        }
+        .giants-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(201,162,39,0.08);
+            border: 1px solid rgba(201,162,39,0.3);
+            color: var(--gold);
+            padding: 5px 14px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            margin-bottom: 0.6rem;
+        }
+        .giants-intro { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1rem; }
+        .giants-card {
+            background: linear-gradient(135deg, rgba(201,162,39,0.06) 0%, rgba(22,163,74,0.04) 100%) !important;
+            border: 1px solid rgba(201,162,39,0.2) !important;
+        }
+        .giants-card:hover { border-color: rgba(201,162,39,0.45) !important; }
+        .tier-giant {
+            background: rgba(201,162,39,0.12);
+            color: var(--gold);
+            border: 1px solid rgba(201,162,39,0.35);
+        }
+
         @media (max-width: 500px) {
             .cta-row { grid-template-columns: 1fr; }
         }
@@ -179,6 +238,24 @@
     </div>
 
     <div class="container">
+
+        <!-- Free Forever -->
+        <div class="free-banner">
+            <div class="headline">Your hut is free. Forever.</div>
+            <p>
+                <strong>Being a Villager costs nothing.</strong> You're part of the tribe.<br>
+                Show up. Join the conversation. That's it.
+            </p>
+            <p style="margin-top:0.6rem;">
+                For <strong>less than a cup of coffee a month</strong>, claim a hamlet —
+                your own presence in The Dispensary — and help us build
+                a community strong enough to change things.
+            </p>
+            <div class="mission">
+                Our mission: <strong>legal medical cannabis</strong> for self-medicators
+                who feel like criminals when they just need help and don't know how to ask for it.
+            </div>
+        </div>
 
         <!-- Claim CTAs -->
         <div class="cta-row">
@@ -217,6 +294,22 @@
                 <span class="arrow">→</span>
             </div>
         </a>
+
+        <!-- Stand on the Shoulders of Giants -->
+        <div class="giants-section">
+            <div class="giants-label">🌟 Stand on the Shoulders of Giants</div>
+            <p class="giants-intro">Honorary hamlets for those who lit the path before us.</p>
+            <a href="/hamlet/colly/" class="hamlet-card giants-card">
+                <div class="hamlet-info">
+                    <h3 style="color:#f5c842;">Donald "Dr. Colly Light" Denzler</h3>
+                    <p>Inventor of the VapBong · 20+ years advocating · Legend of Gran Canaria · 1957–2026</p>
+                </div>
+                <div style="display:flex; align-items:center; gap:0.75rem; flex-shrink:0;">
+                    <span class="tier-badge tier-giant">🌟 Honorary</span>
+                    <span class="arrow">→</span>
+                </div>
+            </a>
+        </div>
 
         <div id="loading">Loading hamlets...</div>
         <div id="hamletList"></div>
