@@ -4,12 +4,17 @@
 // Every analysis ends with "Get Legal" prescription pathway info
 // Launching at Spannabis Bilbao 2026
 
+const { sanitize } = require('./ipi-sanitize');
+const { buildSecureSystemPrompt, stripExifFromJpeg, validateImageMime, logImageMeta, SECURITY_HEADERS } = require('./gemini-secure-wrapper');
+const { logThreat } = require('./security-log');
+
 exports.handler = async (event) => {
   const headers = {
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Headers': 'Content-Type',
     'Access-Control-Allow-Methods': 'POST, OPTIONS',
-    'Content-Type': 'application/json'
+    'Content-Type': 'application/json',
+    ...SECURITY_HEADERS,
   };
 
   if (event.httpMethod === 'OPTIONS') {
@@ -21,7 +26,7 @@ exports.handler = async (event) => {
   }
 
   try {
-    const { image, mode, oidType, userId } = JSON.parse(event.body);
+    const { image, mode, oidType, userId, userDescription } = JSON.parse(event.body);
 
     if (!image || !mode) {
       return { statusCode: 400, headers, body: JSON.stringify({ error: 'Missing image or mode' }) };
@@ -31,6 +36,20 @@ exports.handler = async (event) => {
     if (!apiKey) {
       return { statusCode: 500, headers, body: JSON.stringify({ error: 'Server missing API Key.' }) };
     }
+
+    // Sanitize user-supplied text
+    if (userDescription) {
+      const sanity = sanitize(userDescription, 'userDescription');
+      if (sanity.highRisk) {
+        logThreat('cannabin-oid', 'userDescription', sanity.threats);
+        return { statusCode: 403, headers, body: JSON.stringify({ error: 'Request blocked.' }) };
+      }
+    }
+
+    // Validate and strip EXIF from image
+    if (!validateImageMime('image/jpeg')) { /* assume JPEG — mimeType not sent by client */ }
+    logImageMeta('cannabin-oid', 'image/jpeg', image.length);
+    const { cleaned: cleanImage } = stripExifFromJpeg(image);
 
     let systemPrompt = '';
 
@@ -289,6 +308,9 @@ GOING LEGAL:
 
     }
 
+    // Wrap system prompt with security lockdown
+    const securedPrompt = buildSecureSystemPrompt(systemPrompt);
+
     // Call Gemini 2.0 Flash API
     const response = await fetch(
       `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
@@ -296,12 +318,13 @@ GOING LEGAL:
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
+          system_instruction: { parts: [{ text: securedPrompt }] },
           contents: [{
             parts: [
-              { text: systemPrompt },
-              { inline_data: { mime_type: "image/jpeg", data: image } }
+              { inline_data: { mime_type: "image/jpeg", data: cleanImage } }
             ]
-          }]
+          }],
+          generationConfig: { temperature: 0.7, maxOutputTokens: 4096 },
         })
       }
     );

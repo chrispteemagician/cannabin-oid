@@ -72,6 +72,12 @@
         .qa-answer.open { max-height: 500px; padding: 0 16px 16px; }
         .section-fade { opacity: 0; transform: translateY(20px); transition: opacity 0.4s, transform 0.4s; }
         .section-fade.visible { opacity: 1; transform: translateY(0); }
+        .filter-pill { background: #f1f5f9; color: #64748b; border: 2px solid #e2e8f0; border-radius: 20px; padding: 6px 14px; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.15s; }
+        .filter-pill.active { background: #16a34a; color: white; border-color: #16a34a; }
+        .filter-toggle { background: #f1f5f9; color: #64748b; border: 2px solid #e2e8f0; border-radius: 20px; padding: 6px 14px; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.15s; }
+        .filter-toggle.on { background: #dcfce7; color: #15803d; border-color: #16a34a; }
+        .club-card { background: white; border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); padding: 20px; margin-bottom: 16px; border: 2px solid transparent; transition: border-color 0.15s; }
+        .club-card:hover { border-color: #16a34a; }
     </style>
 </head>
 <body>
@@ -120,6 +126,7 @@
             <button onclick="showSection('village')" class="tab-btn" id="tab-village">Village</button>
             <button onclick="showSection('getlegal')" class="tab-btn" id="tab-getlegal">Get Legal</button>
             <button onclick="showSection('meet')" class="tab-btn" id="tab-meet">📍 Meet</button>
+            <button onclick="showSection('clubs')" class="tab-btn" id="tab-clubs">🌿 Clubs</button>
             <button onclick="window.location='/story.html'" class="tab-btn">📖 Our Story</button>
             <button onclick="showSection('admin')" class="tab-btn hidden" id="tab-admin">God Mode</button>
         </div>
@@ -1043,6 +1050,48 @@
 
     </main>
 
+    <!-- CLUBS SECTION -->
+    <div id="section-clubs" class="hidden max-w-2xl mx-auto px-4 py-8">
+        <div class="card">
+            <div class="text-center mb-5">
+                <p class="text-4xl mb-2">🌿</p>
+                <h2 class="text-2xl font-bold text-gray-800">Cannabis Clubs Directory</h2>
+                <p class="text-gray-500 text-sm mt-2">Clubs that welcome medical patients and prefer vapour over smoke. All social clubs — membership always required.</p>
+                <p class="text-gray-400 text-xs mt-1">Curated by Doc. Always verify current access rules before visiting.</p>
+            </div>
+
+            <!-- Country filters -->
+            <div class="mb-3">
+                <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Country</p>
+                <div class="flex flex-wrap gap-2">
+                    <button class="filter-pill active" id="cf-all" onclick="filterClubs('all')">All</button>
+                    <button class="filter-pill" id="cf-spain" onclick="filterClubs('spain')">🇪🇸 Spain</button>
+                    <button class="filter-pill" id="cf-netherlands" onclick="filterClubs('netherlands')">🇳🇱 Netherlands</button>
+                </div>
+            </div>
+
+            <!-- Type toggles -->
+            <div>
+                <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Filter by</p>
+                <div class="flex flex-wrap gap-2">
+                    <button class="filter-toggle" data-type="medical" onclick="toggleClubType(this)">🌡️ Medical Friendly</button>
+                    <button class="filter-toggle" data-type="vape" onclick="toggleClubType(this)">💨 Vape Friendly</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Club list rendered by JS -->
+        <div id="clubList"></div>
+
+        <!-- Submit CTA -->
+        <div class="card text-center">
+            <p class="text-3xl mb-2">➕</p>
+            <h3 class="font-bold text-gray-800 mb-1">Know a Good Club?</h3>
+            <p class="text-sm text-gray-500 mb-4">Medical-friendly, vape-welcome? WhatsApp Doc and it goes straight in the list.</p>
+            <a href="https://wa.me/447976884254?text=Club%20suggestion%20for%20cannabin-oid%3A%20" target="_blank" rel="noopener" class="btn btn-green w-full">📱 Submit a Club</a>
+        </div>
+    </div>
+
     <!-- Support The Village -->
     <div class="bg-green-50 py-8 border-t border-green-200/30">
         <div class="max-w-4xl mx-auto px-4 text-center">
@@ -1279,8 +1328,78 @@
             if (type === 'under18') alert('Please ask a parent or guardian to supervise your usage of this educational resource.');
         }
 
+        // --- CLUBS DIRECTORY ---
+        const CLUBS = [
+            {
+                name: "Dream Green",
+                city: "Arrecife",
+                region: "Lanzarote",
+                country: "spain",
+                flag: "🇪🇸",
+                medical: true,
+                vape: true,
+                description: "Members-only social club on the island of Lanzarote. Medical patients actively welcomed. Vapour-first environment — no combustion preference. Private membership required; apply in person.",
+                website: null,
+                docNote: "Personally visited by Doc",
+                verified: true
+            }
+        ];
+
+        let clubCountryFilter = 'all';
+        const clubTypeFilters = new Set();
+
+        function renderClubs() {
+            const list = document.getElementById('clubList');
+            if (!list) return;
+            const visible = CLUBS.filter(c => {
+                if (clubCountryFilter !== 'all' && c.country !== clubCountryFilter) return false;
+                if (clubTypeFilters.has('medical') && !c.medical) return false;
+                if (clubTypeFilters.has('vape') && !c.vape) return false;
+                return true;
+            });
+            if (visible.length === 0) {
+                list.innerHTML = '<div class="club-card text-center text-gray-400 py-6"><p class="text-2xl mb-2">🌿</p><p class="text-sm">No clubs match those filters yet — be the first to submit one!</p></div>';
+                return;
+            }
+            list.innerHTML = visible.map(c => `
+                <div class="club-card">
+                    <div class="flex items-start justify-between mb-2">
+                        <div>
+                            <h3 class="text-lg font-bold text-gray-800">${c.flag} ${c.name}</h3>
+                            <p class="text-sm text-gray-500">${c.city}${c.region ? ', ' + c.region : ''}</p>
+                        </div>
+                        ${c.verified ? '<span class="badge badge-featured text-xs">✓ Verified</span>' : ''}
+                    </div>
+                    <div class="flex flex-wrap gap-2 mb-3">
+                        ${c.medical ? '<span class="badge text-xs" style="background:#dcfce7;color:#15803d;border:1px solid #bbf7d0;">🌡️ Medical Friendly</span>' : ''}
+                        ${c.vape ? '<span class="badge text-xs" style="background:#e0f2fe;color:#0369a1;border:1px solid #bae6fd;">💨 Vape Friendly</span>' : ''}
+                    </div>
+                    <p class="text-sm text-gray-600 mb-2">${c.description}</p>
+                    ${c.docNote ? `<p class="text-xs text-green-600 font-semibold mt-2">👆 ${c.docNote}</p>` : ''}
+                    ${c.website ? `<a href="${c.website}" target="_blank" rel="noopener" class="btn btn-outline text-sm mt-3 w-full">Visit Website ↗</a>` : ''}
+                </div>
+            `).join('');
+        }
+
+        function filterClubs(country) {
+            clubCountryFilter = country;
+            document.querySelectorAll('[id^="cf-"]').forEach(b => b.classList.remove('active'));
+            document.getElementById('cf-' + country)?.classList.add('active');
+            renderClubs();
+        }
+
+        function toggleClubType(btn) {
+            const type = btn.dataset.type;
+            btn.classList.toggle('on');
+            if (clubTypeFilters.has(type)) clubTypeFilters.delete(type);
+            else clubTypeFilters.add(type);
+            renderClubs();
+        }
+
+        // --- END CLUBS DIRECTORY ---
+
         function showSection(section) {
-            ['oracle', 'askterp', 'village', 'getlegal', 'admin', 'meet'].forEach(s => {
+            ['oracle', 'askterp', 'village', 'getlegal', 'admin', 'meet', 'clubs'].forEach(s => {
                 document.getElementById('section-' + s)?.classList.add('hidden');
                 document.getElementById('tab-' + s)?.classList.remove('active');
             });
@@ -1289,6 +1408,7 @@
             document.getElementById('resultView')?.classList.add('hidden');
             document.getElementById('loadingView')?.classList.add('hidden');
             window.scrollTo(0, 0);
+            if (section === 'clubs') renderClubs();
         }
 
         function setMode(mode) {

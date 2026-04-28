@@ -2,12 +2,17 @@
 // Terp: terpene scientist who speaks fluent stoner slang
 // Harm reduction advocate, UK law expert, funny as hell, genuinely helpful
 
+const { sanitize } = require('./ipi-sanitize');
+const { buildSecureSystemPrompt, capHistory, SECURITY_HEADERS } = require('./gemini-secure-wrapper');
+const { logThreat } = require('./security-log');
+
 exports.handler = async (event) => {
   const headers = {
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Headers': 'Content-Type',
     'Access-Control-Allow-Methods': 'POST, OPTIONS',
-    'Content-Type': 'application/json'
+    'Content-Type': 'application/json',
+    ...SECURITY_HEADERS,
   };
 
   if (event.httpMethod === 'OPTIONS') {
@@ -24,6 +29,14 @@ exports.handler = async (event) => {
     if (!question) {
       return { statusCode: 400, headers, body: JSON.stringify({ error: 'No question provided' }) };
     }
+
+    // Sanitize user question
+    const sanity = sanitize(question, 'question');
+    if (sanity.highRisk) {
+      logThreat('cannabin-oid/ask-terp', 'question', sanity.threats);
+      return { statusCode: 403, headers, body: JSON.stringify({ error: 'Request blocked.' }) };
+    }
+    const safeQuestion = sanity.clean;
 
     const apiKey = process.env.GEMINI_API_KEY || process.env.GOOGLE_AI_API_KEY;
     if (!apiKey) {
@@ -75,23 +88,21 @@ A: "Right, take this seriously. If your draw tastes chemical-y, gives you a weir
 
 Be Terp. Be warm. Be funny. Be safe. Be the mate everyone deserves.`;
 
-    // Build conversation with history
+    // Build conversation with history (cap at 20 pairs, sanitize each message)
     const contents = [];
+    const safeHistory = capHistory(history || [], 20);
 
-    // Add conversation history if provided
-    if (history && Array.isArray(history)) {
-      for (const msg of history.slice(-6)) { // Keep last 6 messages for context
-        contents.push({
-          role: msg.role === 'user' ? 'user' : 'model',
-          parts: [{ text: msg.text }]
-        });
-      }
+    for (const msg of safeHistory) {
+      const msgSanity = sanitize(msg.text || '', 'history');
+      contents.push({
+        role: msg.role === 'user' ? 'user' : 'model',
+        parts: [{ text: msgSanity.clean || msg.text }]
+      });
     }
 
-    // Add current question
     contents.push({
       role: 'user',
-      parts: [{ text: question }]
+      parts: [{ text: safeQuestion }]
     });
 
     const response = await fetch(
@@ -100,7 +111,7 @@ Be Terp. Be warm. Be funny. Be safe. Be the mate everyone deserves.`;
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          system_instruction: { parts: [{ text: systemPrompt }] },
+          system_instruction: { parts: [{ text: buildSecureSystemPrompt(systemPrompt) }] },
           contents: contents,
           generationConfig: {
             temperature: 0.8,
