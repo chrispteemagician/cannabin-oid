@@ -27,7 +27,7 @@
         .upload-box { background: white; border: 3px dashed #cbd5e1; border-radius: 16px; padding: 32px 16px; text-align: center; cursor: pointer; transition: all 0.2s; min-height: 140px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
         .upload-box:hover { border-color: #16a34a; background: #f0fdf4; }
         .upload-box:active { transform: scale(0.98); }
-        .tab-btn { flex: 1; padding: 14px; font-weight: 600; font-size: 14px; border: none; background: transparent; cursor: pointer; min-height: 52px; }
+        .tab-btn { flex: 0 0 auto; padding: 14px 10px; font-weight: 600; font-size: 13px; border: none; background: transparent; cursor: pointer; min-height: 52px; white-space: nowrap; }
         .tab-btn.active { background: white; color: #16a34a; font-weight: 700; border-bottom: 3px solid #16a34a; }
         .tab-btn:not(.active) { color: #64748b; border-bottom: 3px solid transparent; }
         .usecase-btn { background: #f0fdf4; border: 2px solid #bbf7d0; border-radius: 12px; padding: 10px 6px; text-align: center; cursor: pointer; transition: all 0.15s; min-height: 70px; width: 100%; }
@@ -129,7 +129,7 @@
 
     <!-- Navigation Tabs -->
     <div class="bg-gray-100 border-b sticky top-0 z-40">
-        <div class="max-w-2xl mx-auto flex">
+        <div class="max-w-2xl mx-auto flex overflow-x-auto" style="-webkit-overflow-scrolling:touch; scrollbar-width:none; -ms-overflow-style:none;">
             <button onclick="showSection('oracle')" class="tab-btn active" id="tab-oracle">Identify</button>
             <button onclick="showSection('askterp')" class="tab-btn" id="tab-askterp">Ask Terp</button>
             <button onclick="showSection('village')" class="tab-btn" id="tab-village">Village</button>
@@ -1057,10 +1057,8 @@
             </div>
         </div>
 
-    </main>
-
-    <!-- CLUBS SECTION -->
-    <div id="section-clubs" class="hidden max-w-2xl mx-auto px-4 py-8">
+        <!-- CLUBS SECTION -->
+        <div id="section-clubs" class="hidden max-w-2xl mx-auto px-4 py-8">
         <div class="card">
             <div class="text-center mb-5">
                 <p class="text-4xl mb-2">🌿</p>
@@ -1115,7 +1113,9 @@
             <p class="text-sm text-gray-500 mb-4">Medical-friendly, vape-welcome? WhatsApp Doc and it goes straight in the list.</p>
             <a href="https://wa.me/447976884254?text=Club%20suggestion%20for%20cannabin-oid%3A%20" target="_blank" rel="noopener" class="btn btn-green w-full">📱 Submit a Club</a>
         </div>
-    </div>
+        </div>
+
+    </main>
 
     <!-- Support The Village -->
     <div class="bg-green-50 py-8 border-t border-green-200/30">
