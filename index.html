@@ -1094,8 +1094,8 @@
         <div class="card text-center mb-4">
             <p class="text-2xl mb-2">🤝</p>
             <h3 class="font-bold text-gray-800 mb-1">The Handshake Gets You In</h3>
-            <p class="text-sm text-gray-500 mb-1">Say these three words at any listed club — <strong class="text-gray-700">free entry + a free pre-roll</strong>.</p>
-            <p class="text-xs text-gray-400 mb-4">Dream Green (Lanzarote) and all four listed clubs are in. They know what it means.</p>
+            <p class="text-sm text-gray-500 mb-1">Say it — or mention <strong class="text-gray-700">Spannabis</strong> — and show them this page. All four Lanzarote clubs are in.</p>
+            <p class="text-xs text-gray-400 mb-4"><strong class="text-green-700">Free membership + a free pre-roll.</strong> Doc met the owners at Spannabis 2026. The deal is real.</p>
             <div id="handshakeHidden">
                 <button onclick="revealHandshake()" class="btn btn-outline w-full">👆 Tap to reveal the words</button>
             </div>
@@ -1364,10 +1364,53 @@
                 flag: "🇪🇸",
                 medical: true,
                 vape: true,
-                description: "Members-only social club on the island of Lanzarote. Medical patients actively welcomed. Vapour-first environment — no combustion preference. Private membership required; apply in person.",
+                description: "Members-only social club on Lanzarote. Medical patients actively welcomed. Vapour-first environment.",
                 website: null,
-                docNote: "Personally visited by Doc",
-                verified: true
+                docNote: "Met the owners at Spannabis 2026 — deal confirmed in person",
+                verified: true,
+                deal: true
+            },
+            {
+                name: "Medicanna House",
+                city: "Lanzarote",
+                region: null,
+                country: "spain",
+                flag: "🇪🇸",
+                medical: true,
+                vape: true,
+                description: "Cannabis social club on Lanzarote. Medically-minded crowd, welcoming to patients.",
+                website: null,
+                docNote: "Deal confirmed by owners at Spannabis 2026",
+                verified: true,
+                deal: true
+            },
+            {
+                name: "Green House",
+                city: "Lanzarote",
+                region: null,
+                country: "spain",
+                flag: "🇪🇸",
+                medical: true,
+                vape: true,
+                description: "Social club on Lanzarote. Cannabis-friendly community space.",
+                website: null,
+                docNote: "Deal confirmed by owners at Spannabis 2026",
+                verified: true,
+                deal: true
+            },
+            {
+                name: "Green Indoor Famara",
+                city: "Famara",
+                region: "Lanzarote",
+                country: "spain",
+                flag: "🇪🇸",
+                medical: true,
+                vape: true,
+                description: "Indoor social club in Famara, Lanzarote. Relaxed community vibe close to the surf coast.",
+                website: null,
+                docNote: "Deal confirmed by owners at Spannabis 2026",
+                verified: true,
+                deal: true
             }
         ];
 
@@ -1399,9 +1442,11 @@
                     <div class="flex flex-wrap gap-2 mb-3">
                         ${c.medical ? '<span class="badge text-xs" style="background:#dcfce7;color:#15803d;border:1px solid #bbf7d0;">🌡️ Medical Friendly</span>' : ''}
                         ${c.vape ? '<span class="badge text-xs" style="background:#e0f2fe;color:#0369a1;border:1px solid #bae6fd;">💨 Vape Friendly</span>' : ''}
+                        ${c.deal ? '<span class="badge text-xs" style="background:#fef9c3;color:#854d0e;border:1px solid #fde68a;">🎁 Free membership + pre-roll</span>' : ''}
                     </div>
                     <p class="text-sm text-gray-600 mb-2">${c.description}</p>
-                    ${c.docNote ? `<p class="text-xs text-green-600 font-semibold mt-2">👆 ${c.docNote}</p>` : ''}
+                    ${c.deal ? `<p class="text-xs font-bold text-green-700 mt-2 p-2 rounded-lg" style="background:#dcfce7;">Say "Feel Famous Baby" or mention Spannabis — show them this page.</p>` : ''}
+                    ${c.docNote ? `<p class="text-xs text-green-600 mt-1">🌿 ${c.docNote}</p>` : ''}
                     ${c.website ? `<a href="${c.website}" target="_blank" rel="noopener" class="btn btn-outline text-sm mt-3 w-full">Visit Website ↗</a>` : ''}
                 </div>
             `).join('');
